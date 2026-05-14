@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>SDK Solaize – Documentation HTTP Only</title>
+    <style>
+        :root {
+            --bg: #0b1020;
+            --bg-alt: #141a2a;
+            --card: #181f33;
+            --accent: #4fc3f7;
+            --accent-soft: rgba(79, 195, 247, 0.15);
+            --text: #e5e9f0;
+            --muted: #9da5c0;
+            --danger: #ff6b81;
+            --ok: #7ed957;
+            --border: #252c41;
+            --code-bg: #050814;
+            --mono: "Fira Code", Consolas, Monaco, monospace;
+            --sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: var(--sans);
+            background: radial-gradient(circle at top, #151b30 0, #050814 55%, #02030a 100%);
+            color: var(--text);
+            line-height: 1.6;
+            scroll-behavior: smooth;
+        }
+
+        /* MENU LATÉRAL */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 230px;
+            height: 100%;
+            background: #0d1326;
+            border-right: 1px solid var(--border);
+            padding: 20px;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.4);
+        }
+
+        nav h2 {
+            font-size: 16px;
+            margin-bottom: 20px;
+            color: var(--accent);
+            letter-spacing: 0.08em;
+        }
+
+        nav a {
+            display: block;
+            padding: 8px 0;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+            padding-left: 6px;
+        }
+
+        /* CONTENU PRINCIPAL */
+        .page {
+            margin-left: 260px;
+            padding: 40px 40px 80px;
+            max-width: 1100px;
+        }
+
+        .section {
+            margin-bottom: 60px;
+        }
+
+        h1, h2 {
+            letter-spacing: 0.04em;
+        }
+
+        h1 {
+            font-size: 28px;
+        }
+
+        h2 {
+            margin-top: 40px;
+            font-size: 20px;
+            color: var(--accent);
+        }
+
+        .card {
+            background: linear-gradient(145deg, rgba(255,255,255,0.02), transparent);
+            border-radius: 14px;
+            border: 1px solid var(--border);
+            padding: 18px;
+            margin-top: 20px;
+            box-shadow: 0 18px 40px rgba(0,0,0,0.55);
+        }
+
+        .code-block {
+            background: var(--code-bg);
+            border-radius: 10px;
+            padding: 12px;
+            margin-top: 10px;
+            border: 1px solid rgba(255,255,255,0.08);
+            overflow-x: auto;
+            font-family: var(--mono);
+            font-size: 13px;
+            color: #e0e6ff;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            margin-right: 6px;
+            margin-bottom: 6px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .pill-ok { color: var(--ok); border-color: var(--ok); }
+        .pill-danger { color: var(--danger); border-color: var(--danger); }
+        .pill-accent { color: var(--accent); border-color: var(--accent); }
+
+        ul {
+            margin-top: 10px;
+            color: var(--muted);
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- MENU LATÉRAL -->
+<nav>
+    <h2>📘 SDK Solaize</h2>
+    <a href="#intro">Présentation</a>
+    <a href="#compose">docker-compose SDK</a>
+    <a href="#nginx">nginx.conf SDK</a>
+    <a href="#explications">Explications (sans HTTPS)</a>
+    <a href="#resume">Résumé final</a>
+</nav>
+
+<!-- CONTENU PRINCIPAL -->
+<div class="page">
+
+    <!-- INTRO -->
+    <section id="intro" class="section">
+        <h1>SDK Solaize – Mode HTTP Only</h1>
+        <p>
+            Cette documentation présente la version SDK de la stack Solaize :  
+            <strong>100% HTTP</strong>, <strong>sans Certbot</strong>, <strong>sans Let’s Encrypt</strong>,  
+            <strong>sans HTTPS</strong>, totalement portable et reproductible.
+        </p>
+
+        <div class="pill pill-ok">Portable</div>
+        <div class="pill pill-ok">Sans HTTPS</div>
+        <div class="pill pill-ok">Sans Certbot</div>
+        <div class="pill pill-accent">Réseau unique : solaize-net</div>
+    </section>
+
+    <!-- DOCKER COMPOSE -->
+    <section id="compose" class="section">
+        <h2>docker-compose.yaml – Version SDK</h2>
+
+        <p>Voici la version complète du compose SDK, propre, stable et portable :</p>
+
+        <div class="card">
+            <div class="code-block">
+<pre>version: "3.9"
+
+services:
+
+  solaize-api:
+    build:
+      context: ./Solaize-Api
+      dockerfile: dockerfile
+    container_name: solaize-api
+    expose:
+      - "8080"
+    networks:
+      - solaize-net
+    restart: always
+    environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:8080
+
+  solaize-blazor-server:
+    build:
+      context: ./Solaize-Blazor-Server
+      dockerfile: Dockerfile
+    container_name: solaize-blazor-server
+    expose:
+      - "7000"
+    networks:
+      - solaize-net
+    environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:7000
+    depends_on:
+      solaize-api:
+        condition: service_healthy
+      solaize-mongo:
+        condition: service_started
+
+  solaize-mongo:
+    image: mongo:7.0
+    container_name: solaize-mongo
+    expose:
+      - "27017"
+    volumes:
+      - ./mongo_data:/data/db
+    networks:
+      - solaize-net
+    restart: always
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    expose:
+      - "9090"
+    networks:
+      - solaize-net
+    restart: always
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    expose:
+      - "3000"
+    networks:
+      - solaize-net
+    restart: always
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - solaize-net
+    restart: always
+    depends_on:
+      solaize-blazor-server:
+        condition: service_started
+      solaize-api:
+        condition: service_started
+      grafana:
+        condition: service_started
+      prometheus:
+        condition: service_started
+
+networks:
+  solaize-net:
+    driver: bridge</pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- NGINX -->
+    <section id="nginx" class="section">
+        <h2>nginx.conf – Reverse Proxy SDK (HTTP Only)</h2>
+
+        <p>Version propre, sans HTTPS, sans Certbot, sans Let’s Encrypt.</p>
+
+        <div class="card">
+            <div class="code-block">
+<pre>user nginx;
+worker_processes auto;
+
+events {
+    worker_connections 1024;
+}
+
+http {
+    include       /etc/nginx/mime.types;
+    default_type  application/octet-stream;
+
+    sendfile on;
+    keepalive_timeout 65;
+
+    gzip on;
+
+    server {
+        listen 80;
+        server_name _;
+
+        location / {
+            proxy_pass http://solaize-blazor-server:7000/;
+            proxy_http_version 1.1;
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+            proxy_set_header Host $host;
+        }
+
+        location /api/ {
+            proxy_pass http://solaize-api:8080/;
+        }
+
+        location /grafana/ {
+            proxy_pass http://grafana:3000/;
+        }
+
+        location /prometheus/ {
+            proxy_pass http://prometheus:9090/;
+        }
+    }
+}</pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- EXPLICATIONS -->
+    <section id="explications" class="section">
+        <h2>Pourquoi supprimer HTTPS, Certbot et Let’s Encrypt ?</h2>
+
+        <div class="card">
+            <ul>
+                <li>Le SDK doit être <strong>portable</strong> : SSD, Android, offline.</li>
+                <li>Certbot nécessite un domaine réel → impossible en local.</li>
+                <li>Let’s Encrypt impose des validations DNS/HTTP → inutilisable hors-ligne.</li>
+                <li>Les certificats expirent → plantage Nginx → restart loop.</li>
+                <li>Le mode SDK doit être <strong>simple, stable, reproductible</strong>.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- RÉSUMÉ -->
+    <section id="resume" class="section">
+        <h2>Résumé final</h2>
+
+        <div class="card">
+            <p>
+                Le SDK Solaize fonctionne désormais en <strong>HTTP only</strong>,  
+                sans aucune dépendance externe, parfaitement portable et stable.
+            </p>
+
+            <ul>
+                <li>Un seul réseau : <code>solaize-net</code></li>
+                <li>Un seul port exposé : <code>8080</code></li>
+                <li>Nginx reverse proxy propre</li>
+                <li>Stack complète : API, Blazor, Mongo, Grafana, Prometheus</li>
+                <li>Prêt pour Docker Hub, T3/T7, Android</li>
+            </ul>
+        </div>
+    </section>
+
+</div>
+
+</body>
+</html>

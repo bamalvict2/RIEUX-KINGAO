@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Workflow Docker - EPARVIER</title>
+</head>
+<body>
+  <h1>Workflow Docker - Projet EPARVIER</h1>
+  <ol>
+    <li>Ouvrir un terminal.</li>
+    <li>Aller dans le dossier racine du projet :
+      <pre>cd /chemin/vers/EPARVIER</pre>
+    </li>
+    <li>Builder l’image de l’API :
+      <pre>docker build -t solaizeapi -f SolaizeApi/Dockerfile .</pre>
+    </li>
+    <li>Builder l’image du Blazor :
+      <pre>docker build -t blazor -f SolaizeCockpit/Dockerfile .</pre>
+    </li>
+    <li>Vérifier les images :
+      <pre>docker images</pre>
+    </li>
+    <li>Lancer les conteneurs :
+      <pre>docker compose up -d</pre>
+    </li>
+    <li>Vérifier les conteneurs :
+      <pre>docker ps</pre>
+    </li>
+    <li>Accéder à l’API sur http://localhost:5010</li>
+    <li>Accéder à Blazor sur http://localhost:5110</li>
+    <li>Arrêter l’infrastructure :
+      <pre>docker compose down</pre>
+    </li>
+  </ol>
+</body>
+</html>
+
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Workflow Docker - KINGDOMAINE</title>
+</head>
+<body>
+  <h1>Workflow Docker - Projet KINGDOMAINE</h1>
+  <ol>
+    <li>Ouvrir un terminal.</li>
+    <li>Aller dans le dossier racine du projet :
+      <pre>cd /chemin/vers/KINGDOMAINE</pre>
+    </li>
+    <li>Builder l’image de l’API :
+      <pre>docker build -t kingdomapi -f KingdomApi/Dockerfile .</pre>
+    </li>
+    <li>Builder l’image du front :
+      <pre>docker build -t kingdomui -f KingdomUI/Dockerfile .</pre>
+    </li>
+    <li>Vérifier les images :
+      <pre>docker images</pre>
+    </li>
+    <li>Lancer les conteneurs :
+      <pre>docker compose up -d</pre>
+    </li>
+    <li>Vérifier les conteneurs :
+      <pre>docker ps</pre>
+    </li>
+    <li>Accéder à l’API sur http://localhost:PORT_API</li>
+    <li>Accéder à l’interface sur http://localhost:PORT_UI</li>
+    <li>Arrêter l’infrastructure :
+      <pre>docker compose down</pre>
+    </li>
+  </ol>
+</body>
+</html>
+
+

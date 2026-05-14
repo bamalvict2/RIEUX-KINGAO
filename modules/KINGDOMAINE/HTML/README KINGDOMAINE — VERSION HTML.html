@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>KINGDOMAINE — Gestion des clés SSH</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #111;
+        color: #eee;
+        line-height: 1.6;
+        padding: 20px;
+    }
+    h1, h2, h3 {
+        color: #00c8ff;
+    }
+    .section {
+        background: #1a1a1a;
+        padding: 20px;
+        margin-bottom: 25px;
+        border-left: 5px solid #00c8ff;
+        border-radius: 6px;
+    }
+    code {
+        background: #222;
+        padding: 4px 6px;
+        border-radius: 4px;
+        color: #00ff9d;
+    }
+    pre {
+        background: #222;
+        padding: 10px;
+        border-radius: 6px;
+        overflow-x: auto;
+        color: #00ff9d;
+    }
+    .tag {
+        display: inline-block;
+        background: #00c8ff;
+        color: #000;
+        padding: 3px 8px;
+        border-radius: 4px;
+        font-weight: bold;
+        margin-right: 5px;
+    }
+</style>
+</head>
+<body>
+
+<h1>👑 KINGDOMAINE — Gestion des clés SSH</h1>
+<p>
+KINGDOMAINE est un système de gestion cryptographique basé sur deux types de clés SSH :
+<strong>la SOUPLE</strong> et <strong>la RIGIDE</strong>.  
+Il garantit une compatibilité totale avec les environnements FIPS tout en offrant flexibilité et performance.
+</p>
+
+<div class="section">
+<h2>🟩 1. KINGSECURE — La SOUPLE</h2>
+<p>
+KINGSECURE est la clé <strong>adaptative</strong> du royaume.  
+Elle change automatiquement selon l’état du système.
+</p>
+
+<h3>🔧 Comportement</h3>
+<ul>
+    <li>FIPS <strong>activé</strong> → RSA 4096 (conforme FIPS)</li>
+    <li>FIPS <strong>désactivé</strong> → Ed25519 (rapide, moderne)</li>
+</ul>
+
+<h3>🎯 Objectif</h3>
+<ul>
+    <li>Flexibilité</li>
+    <li>Performance</li>
+    <li>Adaptation automatique</li>
+</ul>
+
+<h3>📁 Emplacement</h3>
+<pre>~/.ssh/KINGSECURE</pre>
+
+<h3>🧠 Résumé</h3>
+<p><span class="tag">SOUPLE</span> Suit les règles du système. Change quand FIPS change.</p>
+</div>
+
+<div class="section">
+<h2>🟥 2. KING‑PRO — La RIGIDE</h2>
+<p>
+KING‑PRO est la clé <strong>professionnelle</strong>, <strong>invariable</strong>, <strong>toujours conforme FIPS</strong>.
+</p>
+
+<h3>🔧 Caractéristiques</h3>
+<ul>
+    <li>Toujours RSA 4096</li>
+    <li>Toujours conforme FIPS</li>
+    <li>Ne dépend jamais du système</li>
+    <li>Ne change jamais une fois créée</li>
+</ul>
+
+<h3>🎯 Objectif</h3>
+<ul>
+    <li>Production</li>
+    <li>GitHub</li>
+    <li>Bastions</li>
+    <li>Serveurs</li>
+    <li>Environnements réglementés</li>
+</ul>
+
+<h3>📁 Emplacement</h3>
+<pre>~/.ssh/KING-PRO</pre>
+
+<h3>🧠 Résumé</h3>
+<p><span class="tag">RIGIDE</span> Stable. Prévisible. Conforme. Ne casse jamais.</p>
+</div>
+
+<div class="section">
+<h2>🔐 3. Pourquoi deux clés ?</h2>
+<p>
+Parce que KINGDOMAINE combine :
+</p>
+<ul>
+    <li>la <strong>souplesse</strong> (KINGSECURE)</li>
+    <li>la <strong>rigidité</strong> (KING‑PRO)</li>
+    <li>la <strong>conformité FIPS</strong></li>
+    <li>la <strong>performance</strong></li>
+</ul>
+<p>
+La sécurité doit être flexible quand c’est possible, rigide quand c’est nécessaire.
+</p>
+</div>
+
+<div class="section">
+<h2>🧩 4. Désactivation FIPS</h2>
+<p>
+Grâce à KING‑PRO, tu peux désactiver FIPS sans casser SSH.
+</p>
+
+<ul>
+    <li>KING‑PRO continue de fonctionner (RSA 4096)</li>
+    <li>KINGSECURE bascule automatiquement en Ed25519</li>
+    <li>Aucun accès n’est perdu</li>
+</ul>
+
+<h3>Commande utilisée</h3>
+<pre>fips-mode-setup --disable</pre>
+</div>
+
+<div class="section">
+<h2>🧪 5. Vérifications intégrées</h2>
+
+<h3>✔ Vérification FIPS système</h3>
+<pre>/proc/sys/crypto/fips_enabled</pre>
+
+<h3>✔ Vérification KING‑PRO</h3>
+<ul>
+    <li>RSA</li>
+    <li>4096 bits</li>
+    <li>Conforme FIPS</li>
+</ul>
+
+<h3>✔ Vérification des clés publiques</h3>
+<pre>ls ~/.ssh/*.pub</pre>
+</div>
+
+<div class="section">
+<h2>🛠️ 6. Fonctions principales</h2>
+<ul>
+    <li>Générer clé standard</li>
+    <li>Générer KINGSECURE (SOUPLE)</li>
+    <li>Générer KING‑PRO (RIGIDE)</li>
+    <li>Vérifier KING‑PRO (FIPS)</li>
+    <li>Tester SSH GitHub</li>
+    <li>Désactiver FIPS</li>
+    <li>Afficher clé publique</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🧠 7. Philosophie KINGDOMAINE</h2>
+<p>
+<strong>La sécurité doit être flexible quand c’est possible, rigide quand c’est nécessaire.</strong>
+</p>
+<p>
+KINGSECURE = flexibilité<br>
+KING‑PRO = rigidité<br>
+KINGDOMAINE = harmonie entre les deux
+</p>
+</div>
+
+<div class="section">
+<h2>🚀 8. Conclusion</h2>
+<p>
+KINGDOMAINE te donne un système cryptographique :
+</p>
+<ul>
+    <li>souple pour le quotidien</li>
+    <li>rigide pour la production</li>
+    <li>compatible FIPS</li>
+    <li>automatique et intelligent</li>
+    <li>stable et résilient</li>
+</ul>
+</div>
+
+</body>
+</html>

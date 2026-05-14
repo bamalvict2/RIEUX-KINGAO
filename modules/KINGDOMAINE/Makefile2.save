@@ -1,0 +1,79 @@
+# ============================
+#   EPARVIER MAKEFILE v2
+#   Cockpit DevOps by Bernard
+# ============================
+
+GREEN=\033[0;32m
+RED=\033[0;31m
+YELLOW=\033[1;33m
+BLUE=\033[0;34m
+NC=\033[0m
+
+# ============================
+#   CONTENEURS EPARVIER
+# ============================
+
+stop-noise:
+	@echo -e "$(YELLOW)[STOP] Arrêt des services inutiles...$(NC)"
+	docker stop mongo-express || true
+	docker stop mongodb-exporter || true
+	docker stop prometheus || true
+	docker stop grafana || true
+	docker stop blazor || true
+	docker stop solaizeapi || true
+
+start-core:
+	@echo -e "$(GREEN)[START] Démarrage du noyau EPARVIER...$(NC)"
+	docker start mongo || true
+	docker start solaizeapi || true
+	docker start blazor || true
+
+restart-core:
+	@echo -e "$(BLUE)[RESTART] Redémarrage du noyau EPARVIER...$(NC)"
+	docker stop solaizeapi || true
+	docker stop blazor || true
+	docker start solaizeapi || true
+	docker start blazor || true
+
+status:
+	@echo -e "$(BLUE)[STATUS] Conteneurs actifs :$(NC)"
+	docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+
+logs-api:
+	@echo -e "$(GREEN)[LOGS] Logs SolaizeAPI...$(NC)"
+	docker logs solaizeapi -f
+
+ports:
+	@echo -e "$(BLUE)[PORTS] Ports ouverts :$(NC)"
+	sudo lsof -i -P -n | grep LISTEN
+
+# ============================
+#   NETTOYAGE PROFOND
+# ============================
+
+clean-containers:
+	@echo -e "$(RED)[CLEAN] Suppression des conteneurs arrêtés...$(NC)"
+	docker container prune -f
+
+clean-images:
+	@echo -e "$(RED)[CLEAN] Suppression des images inutilisées...$(NC)"
+	docker image prune -f
+
+clean-images-deep:
+	@echo -e "$(RED)[CLEAN] Suppression TOTALE des images orphelines...$(NC)"
+	docker image prune -a -f
+
+clean-volumes:
+	@echo -e "$(RED)[CLEAN] Suppression des volumes non utilisés...$(NC)"
+	docker volume prune -f
+
+clean-networks:
+	@echo -e "$(RED)[CLEAN] Suppression des réseaux inutilisés...$(NC)"
+	dock
+#   HARD RESET (optionnel)
+# ============================
+
+hard-reset:
+	@echo -e "$(RED)[DANGER] Hard reset complet du Docker Engine$(NC)"
+	docker stop $$(docker ps -aq) || true
+	docker system prune -a --volumes -f

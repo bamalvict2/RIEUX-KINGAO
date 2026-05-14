@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>EPARVIERS – Architecture Globale</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      line-height: 1.4;
+    }
+    h1, h2 {
+      color: #38bdf8;
+      margin-bottom: 10px;
+    }
+    h2 {
+      margin-top: 40px;
+      color: #a855f7;
+    }
+    .row {
+      display: flex;
+      gap: 20px;
+      margin: 15px 0;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .box {
+      border: 1px solid #4b5563;
+      border-radius: 8px;
+      padding: 10px 15px;
+      min-width: 180px;
+      text-align: center;
+      background: #111827;
+      box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    }
+    .box-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #f97316;
+    }
+    .arrow {
+      color: #9ca3af;
+      font-size: 28px;
+      font-weight: bold;
+    }
+    .section {
+      width: 90%;
+      max-width: 1000px;
+      border: 1px solid #334155;
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 30px;
+      background: #1e293b;
+      box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    }
+    .subtitle {
+      color: #fbbf24;
+      font-weight: bold;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    pre {
+      background: #0f172a;
+      padding: 15px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+      overflow-x: auto;
+      color: #e5e7eb;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>EPARVIERS – Architecture Globale & Flux</h1>
+
+  <!-- ===================== -->
+  <!-- SECTION 1 : FLUX GLOBAL -->
+  <!-- ===================== -->
+  <div class="section">
+    <div class="subtitle">Flux Global (PRJ1 – Local / Docker)</div>
+
+    <div class="row">
+      <div class="box">
+        <div class="box-title">Navigateur</div>
+        <div>Client</div>
+      </div>
+      <div class="arrow">⟶</div>
+      <div class="box">
+        <div class="box-title">Nginx</div>
+        <div>Reverse proxy</div>
+        <div>/ → Blazor</div>
+        <div>/api → API</div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="box">
+        <div class="box-title">SolaizeCockpit</div>
+        <div>Blazor Server</div>
+        <div>UI / Cockpit</div>
+      </div>
+      <div class="arrow">⟶</div>
+      <div class="box">
+        <div class="box-title">SolaizeApi</div>
+        <div>ASP.NET Web API</div>
+        <div>Logique métier</div>
+      </div>
+      <div class="arrow">⟶</div>
+      <div class="box">
+        <div class="box-title">MongoDB</div>
+        <div>SolaizeDb / Items</div>
+        <div>Serveur maître</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== -->
+  <!-- SECTION 2 : MONITORING -->
+  <!-- ===================== -->
+  <div class="section">
+    <div class="subtitle">Monitoring</div>
+
+    <div class="row">
+      <div class="box">
+        <div class="box-title">SolaizeApi</div>
+        <div>Expose métriques</div>
+      </div>
+      <div class="arrow">⟶</div>
+      <div class="box">
+        <div class="box-title">Prometheus</div>
+        <div>Scrape métriques</div>
+      </div>
+      <div class="arrow">⟶</div>
+      <div class="box">
+        <div class="box-title">Grafana</div>
+        <div>Dashboards</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== -->
+  <!-- SECTION 3 : PRJ1 LOCAL -->
+  <!-- ===================== -->
+  <div class="section">
+    <h2>PRJ1 – Cockpit Local (SSD T3)</h2>
+
+    <pre>
+Cockpit portable sur SSD T3
+Docker Compose + Nginx + Mongo
+API .NET 8 + Blazor Server
+Prometheus + Grafana
+Certbot + DDNS
+Réseau interne : solaize-net
+    </pre>
+
+    <div class="row">
+      <div class="box"><div class="box-title">API .NET 8</div></div>
+      <div class="box"><div class="box-title">Blazor Server</div></div>
+      <div class="box"><div class="box-title">MongoDB</div></div>
+      <div class="box"><div class="box-title">Prom/Graf</div></div>
+    </div>
+  </div>
+
+  <!-- ===================== -->
+  <!-- SECTION 4 : PRJ2 CLOUD -->
+  <!-- ===================== -->
+  <div class="section">
+    <h2>PRJ2 – Architecture Externe / Cloud</h2>
+
+    <pre>
+API .NET 8 externe
+MongoDB Atlas (ou cluster)
+MAUI Android comme client mobile
+Reverse proxy cloud (Ingress)
+Kubernetes (plus tard)
+    </pre>
+
+    <div class="row">
+      <div class="box">
+        <div class="box-title">Ingress / Reverse Proxy</div>
+      </div>
+      <div class="arrow">⟶</div>
+      <div class="box">
+        <div class="box-title">API .NET 8 (Cloud)</div>
+      </div>
+      <div class="arrow">⟶</div>
+      <div class="box">
+        <div class="box-title">MongoDB Atlas</div>
+      </div>
+      <div class="arrow">⟶</div>
+      <div class="box">
+        <div class="box-title">MAUI Android</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== -->
+  <!-- SECTION 5 : RELATION PRJ1 / PRJ2 -->
+  <!-- ===================== -->
+  <div class="section">
+    <h2>Relation entre PRJ1 et PRJ2</h2>
+
+    <pre>
+PRJ1 = cockpit local portable pour :
+  - développement
+  - démonstration
+  - labo
+  - monitoring interne
+  - fonctionnement offline (SSD T3)
+
+PRJ2 = architecture externe pour :
+  - accès mobile (MAUI)
+  - accès distant
+  - scalabilité
+  - production
+  - cloud / Kubernetes
+
+Les deux projets :
+  - partagent la même logique métier
+  - utilisent la même API (structure)
+  - peuvent évoluer en parallèle
+  - ne se remplacent pas : ils se complètent
+    </pre>
+  </div>
+
+</body>
+</html>

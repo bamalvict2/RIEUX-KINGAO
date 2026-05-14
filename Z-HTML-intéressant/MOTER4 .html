@@ -1,0 +1,84 @@
+                           🌍 INTERNET
+                                │
+                                │ HTTPS (443)
+                                ▼
+                     ┌──────────────────────┐
+                     │   Cloudflare Tunnel  │
+                     │  (sortie publique)   │
+                     └──────────┬───────────┘
+                                │
+                                │ HTTPS → ton domaine DuckDNS
+                                ▼
+                   https://solaize.duckdns.org
+                                │
+                ┌───────────────┴────────────────┐
+                │                                │
+                ▼                                ▼
+        ┌────────────────┐              ┌──────────────────┐
+        │  API C#        │              │  Blazor Server    │
+        │  Port 5010     │              │  Port 5110        │
+        └───────┬────────┘              └─────────┬────────┘
+                │                                   │
+                │ HTTP interne                      │ HTTP interne
+                ▼                                   ▼
+        ┌────────────────┐                ┌──────────────────┐
+        │   MongoDB      │                │   Mongo Express   │
+        │   Port 27017   │                │   Port 8081       │
+        └────────────────┘                └───────────────────┘
+
+
+──────────────────────────────────────────────────────────────────────────────
+                     🧠  ZONE MONITORING (INTERNE)
+──────────────────────────────────────────────────────────────────────────────
+
+                ┌──────────────────────────────────────────┐
+                │              Prometheus                  │
+                │              Port 9090                   │
+                └───────────────┬──────────────────────────┘
+                                │
+                                │ Scrape interne + externe
+                                ▼
+
+   ┌──────────────────────┬────────────────────────┬────────────────────────┬────────────────────────┐
+   │                      │                        │                        │                        │
+   ▼                      ▼                        ▼                        ▼                        ▼
+Node Exporter      cAdvisor                 MongoDB Exporter        Blackbox Exporter         Alertmanager
+Port 9100          Port 8080                Port 9216               Port 9115                 Port 9093
+(Machine)          (Containers)             (Mongo)                 (Tests externes)          (Alertes)
+                                                                    │
+                                                                    │ HTTPS → Tunnel → API
+                                                                    ▼
+                                                        https://solaize.duckdns.org/health
+
+
+──────────────────────────────────────────────────────────────────────────────
+                     📊  ZONE VISUALISATION (INTERNE)
+──────────────────────────────────────────────────────────────────────────────
+
+                        ┌──────────────────────────┐
+                        │         Grafana          │
+                        │         Port 3000        │
+                        └─────────────┬────────────┘
+                                      │
+                                      │ Dashboards
+                                      ▼
+                               👨‍✈️  Toi au cockpit
+
+
+──────────────────────────────────────────────────────────────────────────────
+                     🔁  SYNTHÈSE DES FLUX
+──────────────────────────────────────────────────────────────────────────────
+
+EXTERNE → INTERNE :
+- HTTPS 443 → Cloudflare Tunnel → API C# (5010)
+- HTTPS 443 → Cloudflare Tunnel → Blazor (5110)
+
+INTERNE → EXTERNE :
+- Blackbox → Tunnel → API externe
+- Prometheus → Blackbox → Tunnel → API externe
+
+INTERNE ↔ INTERNE :
+- API ↔ Mongo (27017)
+- Prometheus ↔ Exporters (9100, 8080, 9216, 9115)
+- Grafana ↔ Prometheus (9090)
+

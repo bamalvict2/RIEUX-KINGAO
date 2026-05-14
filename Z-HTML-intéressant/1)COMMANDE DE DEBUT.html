@@ -1,0 +1,60 @@
+
+FIREFOX 
+firefox-esr &
+========================
+
+1. Voir où tu es
+bash
+
+git status
+
+2. Voir toutes les branches + celle active
+bash
+
+git branch
+
+3. Push automatique de la branche courante
+bash
+
+git push
+
+(si un upstream existe déjà)
+
+=============================
+🧭 Rappel cockpitifié : choisir la branche avant de pusher
+
+Tu veux pousser KING-DEV → tu switches :
+bash
+
+git checkout KING-DEV
+git push origin KING-DEV
+
+Tu veux pousser main → tu switches :
+bash
+
+git checkout main
+git push origin main
+=========================
+ceation brnch  --- git checkout -b nom_de_ta_branche
+
+===================================================
+ Analyse des permissions que tu as affichées
+Code
+
+drwx--x--x 4 root root 4096 avril 23 09:11 /opt/containerd
+
+Décomposons :
+
+    d → c’est un dossier
+
+    rwx (pour root) → root peut lire, écrire, exécuter
+
+    --x (pour le groupe) → le groupe peut seulement entrer dans le dossier, pas lister
+
+    --x (pour les autres) → les autres peuvent seulement entrer, pas lister
+
+    propriétaire : root
+
+    groupe : root
+
+Ce type de permission est très courant pour des dossiers système sensibles, car il empêche un utilisateur normal de voir le contenu.

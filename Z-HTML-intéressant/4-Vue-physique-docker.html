@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>EPARVIER – Architecture Docker</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        padding: 20px;
+        line-height: 1.6;
+    }
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+    .container {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        margin-top: 40px;
+    }
+    .box {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        width: 280px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .title {
+        font-size: 20px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #005bbb;
+    }
+    .arrow {
+        text-align: center;
+        font-size: 30px;
+        margin: 20px 0;
+        color: #444;
+    }
+    .network {
+        margin-top: 40px;
+        text-align: center;
+        font-size: 18px;
+        padding: 10px;
+        background: #ddd;
+        border-radius: 8px;
+    }
+</style>
+</head>
+<body>
+
+<h1>EPARVIER – Architecture interne Docker</h1>
+
+<div class="container">
+    <div class="box">
+        <div class="title">solaize-blazor-server<br>(Cockpit)</div>
+        <ul>
+            <li>ItemsService (HTTP)</li>
+            <li>UploadService (HTTP)</li>
+            <li>Consomme DTO Shared</li>
+            <li>Appelle l’API via HttpClient</li>
+        </ul>
+    </div>
+
+    <div class="arrow">⬅️ HTTP interne ➡️</div>
+
+    <div class="box">
+        <div class="title">solaize-api<br>(Backend)</div>
+        <ul>
+            <li>Controllers REST</li>
+            <li>ItemService</li>
+            <li>UploadController</li>
+            <li>Accès MongoDB</li>
+            <li>Stockage fichiers (volume)</li>
+        </ul>
+    </div>
+
+    <div class="arrow">⬇️ MongoDB interne</div>
+
+    <div class="box">
+        <div class="title">mongo<br>(Base de données)</div>
+        <ul>
+            <li>SolaizeDb</li>
+            <li>Collection Items</li>
+            <li>Stocke PhotoFileName</li>
+            <li>Gère ObjectId</li>
+        </ul>
+    </div>
+</div>
+
+<div class="network">
+    Réseau Docker interne : <strong>epavier_default</strong><br>
+    Aucun trafic ne sort sur Internet
+</div>
+
+</body>
+</html>

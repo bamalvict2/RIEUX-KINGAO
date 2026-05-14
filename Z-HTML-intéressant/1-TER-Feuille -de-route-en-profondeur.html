@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Feuille de route KINGDOMAINE - BernardOps</title>
+  <style>
+    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.5; margin: 2rem; background:#0b1020; color:#f5f5f5; }
+    h1, h2, h3 { color:#ffd86b; }
+    h1 { border-bottom:1px solid #444; padding-bottom:0.3rem; }
+    code { background:#1b2238; padding:0.1rem 0.3rem; border-radius:3px; }
+    pre { background:#1b2238; padding:0.8rem; border-radius:5px; overflow-x:auto; }
+    .section { margin-bottom:2.5rem; }
+    .tag { display:inline-block; padding:0.1rem 0.5rem; border-radius:999px; font-size:0.75rem; text-transform:uppercase; letter-spacing:0.06em; }
+    .tag-core { background:#264653; color:#f4a261; }
+    .tag-ops { background:#1d3557; color:#a8dadc; }
+    .tag-risk { background:#5a1b2c; color:#f28482; }
+    .tag-next { background:#14532d; color:#bbf7d0; }
+    ul { margin-top:0.3rem; }
+    .step { margin-bottom:1.2rem; }
+    .step h3 { margin-bottom:0.2rem; }
+    .pill { display:inline-block; padding:0.15rem 0.5rem; border-radius:999px; background:#111827; font-size:0.75rem; margin-right:0.3rem; }
+    .mono { font-family: "Cascadia Code", "Fira Code", monospace; }
+  </style>
+</head>
+<body>
+
+<h1>KINGDOMAINE - Feuille de route profonde</h1>
+<p><span class="tag tag-core">Vision</span> <span class="tag tag-ops">Supervision</span> <span class="tag tag-risk">Réplicats</span></p>
+
+<div class="section">
+  <h2>1. Vision d’ensemble KINGDOMAINE</h2>
+  <p>Objectif : un domaine personnel <strong>stable, supervisé, réplicable</strong>, avec un front métier (C#/Razor/Blazor) et un front Ops (Grafana), exposés via Cloudflare/DuckDNS, utilisables aussi depuis Android.</p>
+  <ul>
+    <li><strong>Cœur métier :</strong> services C# (.NET), Razor/Blazor, logique EPARVIER.</li>
+    <li><strong>Exposition :</strong> Cloudflare Tunnel + DuckDNS (fallback / tests).</li>
+    <li><strong>Supervision :</strong> Prometheus + Grafana + exporters (app, système, blackbox).</li>
+    <li><strong>Réplicats :</strong> versions figées (Android / prod stable) vs versions évolutives (dev / expérimentation).</li>
+    <li><strong>Sauvegardes :</strong> Git remote Travail + T3 (tampon FUSE) + archives tar.gz.</li>
+  </ul>
+</div>
+
+<div class="section">
+  <h2>2. Couches de l’architecture KINGDOMAINE</h2>
+
+  <div class="step">
+    <h3>2.1 Couche Infra & OS</h3>
+    <p><span class="tag tag-core">Base</span></p>
+    <ul>
+      <li><strong>Machine hôte :</strong> Windows 11 (T3/T7), VMware, disques externes (T3/T7/T8/T9).</li>
+      <li><strong>VM :</strong> Ubuntu KINGDOMAINE (C# + Docker + Prometheus + Grafana).</li>
+      <li><strong>Partages :</strong> VMware FUSE <code>.host:/UBUNTUSAVEW11 → /mnt/UBUNTUSAVEW11</code>.</li>
+      <li><strong>Objectif :</strong> infra reproductible, montée/descente sans douleur.</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3>2.2 Couche Applicative C# / Razor / Blazor</h3>
+    <p><span class="tag tag-core">Métier</span></p>
+    <ul>
+      <li>Services C# exposant API + Razor/Blazor pour le front web.</li>
+      <li>Configuration claire des ports (ex : <code>5000/5001</code> interne, reverse proxy éventuel).</li>
+      <li>Logs structurés (JSON si possible) pour corrélation avec Prometheus/Grafana.</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3>2.3 Couche Réseau & DNS (Cloudflare / DuckDNS)</h3>
+    <p><span class="tag tag-ops">Accès externe</span></p>
+    <ul>
+      <li><strong>Cloudflare Tunnel :</strong> entrée principale (quand OK).</li>
+      <li><strong>DuckDNS :</strong> entrée alternative / de secours.</li>
+      <li><strong>Scripts de test :</strong> petit <code>.sh</code> qui vérifie Cloudflare KO / DuckDNS OK.</li>
+      <li>À terme : ces tests deviennent des <strong>probes blackbox Prometheus</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3>2.4 Couche Supervision (Prometheus / Grafana)</h3>
+    <p><span class="tag tag-ops">Cockpit</span></p>
+    <ul>
+      <li><strong>Prometheus :</strong> collecte métriques système, app, blackbox.</li>
+      <li><strong>Grafana :</strong> front Ops, dashboards par couche (infra, app, DNS, réplicats).</li>
+      <li><strong>Exporters :</strong> node_exporter, blackbox_exporter, métriques .NET.</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3>2.5 Couche Réplicats & Versions</h3>
+    <p><span class="tag tag-risk">Stabilité</span></p>
+    <ul>
+      <li><strong>Réplicat “Android stable” :</strong> version serveur figée, API stables.</li>
+      <li><strong>Réplicat “Prod stable” :</strong> version validée, peu de changements.</li>
+      <li><strong>Réplicat “Dev / Lab” :</strong> Razor, Grafana, exporters en évolution.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section">
+  <h2>3. Supervision en profondeur (Prometheus / Grafana)</h2>
+
+  <div class="step">
+    <h3>3.1 Stack de base monitoring</h3>
+    <p><span class="tag tag-ops">Étape 1</span></p>
+    <ul>
+      <li>Créer un <code>docker-compose.monitoring.yml</code> avec :</li>
+    </ul>
+    <pre class="mono">
+prometheus
+grafana
+node_exporter (ou équivalent)
+blackbox_exporter
+    </pre>
+    <ul>
+      <li>Configurer Prometheus pour scrapper :
+        <ul>
+          <li>la VM KINGDOMAINE (CPU, RAM, disque),</li>
+          <li>les services C# (.NET metrics endpoint),</li>
+          <li>les probes blackbox (Cloudflare, DuckDNS, endpoints HTTP).</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3>3.2 Dashboards Grafana “double front”</h3>
+    <p><span class="tag tag-ops">Front Ops</span></p>
+    <ul>
+      <li><strong>Dashboard 1 - Infra KINGDOMAINE :</strong> CPU, RAM, disque, uptime.</li>
+      <li><strong>Dashboard 2 - App C# :</strong> temps de réponse, erreurs HTTP, requêtes/s.</li>
+      <li><strong>Dashboard 3 - DNS / Tunnel :</strong> Cloudflare vs DuckDNS (probes blackbox).</li>
+      <li><strong>Dashboard 4 - Réplicats / Backups :</strong> succès/échecs, taille tar.gz, timestamps.</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3>3.3 Intégration du petit .sh de test</h3>
+    <p><span class="tag tag-ops">Transition artisan → Prometheus</span></p>
+    <ul>
+      <li>Option 1 : transformer le <code>.sh</code> en endpoint texte exposant des métriques.</li>
+      <li>Option 2 : utiliser blackbox_exporter pour tester directement les URLs Cloudflare/DuckDNS.</li>
+      <li>Objectif : voir dans Grafana <strong>l’historique</strong> des KO/OK, pas seulement l’instantané.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section">
+  <h2>4. Réplicats & Android figé</h2>
+
+  <div class="step">
+    <h3>4.1 Principe des réplicats</h3>
+    <p><span class="tag tag-risk">Séparation des mondes</span></p>
+    <ul>
+      <li><strong>Réplicat Android :</strong> API stables, pas de breaking changes.</li>
+      <li><strong>Réplicat Prod :</strong> version validée, utilisée au quotidien.</li>
+      <li><strong>Réplicat Dev :</strong> terrain de jeu pour Razor, Grafana, exporters.</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3>4.2 Stratégie d’URL / routage</h3>
+    <p><span class="tag tag-core">Clarté</span></p>
+    <ul>
+      <li>Exemples :
+        <ul>
+          <li><code>https://android.kingdomaine/</code> → réplicat Android figé.</li>
+          <li><code>https://prod.kingdomaine/</code> → réplicat Prod stable.</li>
+          <li><code>https://lab.kingdomaine/</code> → réplicat Dev.</li>
+        </ul>
+      </li>
+      <li>Android pointe toujours vers le même host / même version.</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3>4.3 Cycle de vie d’une évolution</h3>
+    <p><span class="tag tag-next">Workflow</span></p>
+    <ul>
+      <li>1. Développer sur réplicat Dev (Razor, Grafana, exporters).</li>
+      <li>2. Superviser via Grafana (stabilité, erreurs, perf).</li>
+      <li>3. Promouvoir vers Prod si OK.</li>
+      <li>4. Décider si Android doit changer de version ou rester figé.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section">
+  <h2>5. Flux opérationnels “au fil de l’eau”</h2>
+
+  <div class="step">
+    <h3>5.1 Sauvegardes & FUSE</h3>
+    <p><span class="tag tag-ops">Sécurité</span></p>
+    <ul>
+      <li>Script universel de sauvegarde EPARVIER → <code>/mnt/UBUNTUSAVEW11/EPARVIER/...</code></li>
+      <li>Archives <code>BernardBackup-YYYYMMDD-HHMM.tar.gz</code> sur T3.</li>
+      <li>Git remote Travail à jour pour le code.</li>
+      <li>Possibilité de remonter FUSE “dans les deux sens” pour restaurer.</li>
+    </ul>
+  </div>
+
+  <div class="step">
+    <h3>5.2 Routine quotidienne KINGDOMAINE</h3>
+    <p><span class="tag tag-next">Rituel</span></p>
+    <ul>
+      <li>1. Vérifier Grafana (dashboards clés) en début de session.</li>
+      <li>2. Travailler sur EPARVIER / C# / Razor.</li>
+      <li>3. Sauvegarde Git + tar.gz (script universel).</li>
+      <li>4. Vérifier que les probes Cloudflare/DuckDNS sont OK.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section">
+  <h2>6. Prochaines étapes concrètes</h2>
+  <p><span class="tag tag-next">Fil conducteur</span></p>
+  <ol>
+    <li><strong>Créer le docker-compose monitoring</strong> (Prometheus, Grafana, node_exporter, blackbox_exporter).</li>
+    <li><strong>Ajouter les premiers jobs Prometheus</strong> (KINGDOMAINE, C#, Cloudflare, DuckDNS).</li>
+    <li><strong>Construire 1 dashboard Grafana “Infra + DNS”</strong> pour voir la santé globale.</li>
+    <li><strong>Définir les 3 réplicats</strong> (Android, Prod, Dev) et leurs URLs.</li>
+    <li><strong>Documenter dans EPARVIER</strong> cette feuille de route comme référence KINGDOMAINE.</li>
+  </ol>
+</div>
+
+</body>
+</html>

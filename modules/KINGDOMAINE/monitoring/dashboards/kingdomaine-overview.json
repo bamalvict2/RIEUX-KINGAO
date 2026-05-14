@@ -1,0 +1,93 @@
+{
+  "title": "KINGDOMAINE - Overview",
+  "timezone": "browser",
+  "refresh": "10s",
+  "panels": [
+    {
+      "type": "stat",
+      "title": "CPU Usage",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "100 - (avg by (instance) (rate(node_cpu_seconds_total{job=\"node_exporter\",mode=\"idle\"}[5m])) * 100)"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "RAM Used",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "(node_memory_MemTotal_bytes{job=\"node_exporter\"} - node_memory_MemAvailable_bytes{job=\"node_exporter\"}) / node_memory_MemTotal_bytes{job=\"node_exporter\"} * 100"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "Load Average",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "node_load1{job=\"node_exporter\"}"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "Disk IO",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "rate(node_disk_reads_completed_total{job=\"node_exporter\"}[5m])"
+        },
+        {
+          "expr": "rate(node_disk_writes_completed_total{job=\"node_exporter\"}[5m])"
+        }
+      ]
+    },
+    {
+      "type": "graph",
+      "title": "Network Traffic",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "rate(node_network_receive_bytes_total{job=\"node_exporter\"}[5m])"
+        },
+        {
+          "expr": "rate(node_network_transmit_bytes_total{job=\"node_exporter\"}[5m])"
+        }
+      ]
+    },
+    {
+      "type": "table",
+      "title": "Docker Containers",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "rate(container_cpu_usage_seconds_total{job=\"cadvisor\"}[5m])"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "MongoDB UP",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "mongodb_up{job=\"mongodb_exporter\"}"
+        }
+      ]
+    },
+    {
+      "type": "stat",
+      "title": "Prometheus Health",
+      "datasource": "Prometheus",
+      "targets": [
+        {
+          "expr": "up{job=\"prometheus\"}"
+        }
+      ]
+    }
+  ]
+}

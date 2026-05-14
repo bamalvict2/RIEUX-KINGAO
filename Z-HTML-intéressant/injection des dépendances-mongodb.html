@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Injection MongoDB - Organigramme</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f4f4f4;
+        padding: 20px;
+    }
+    .title {
+        text-align: center;
+        font-size: 28px;
+        margin-bottom: 30px;
+        font-weight: bold;
+    }
+    .box {
+        background: white;
+        padding: 15px 20px;
+        border-radius: 8px;
+        border-left: 6px solid #0078D7;
+        margin: 20px auto;
+        width: 70%;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .arrow {
+        text-align: center;
+        font-size: 30px;
+        margin: 10px 0;
+        color: #555;
+    }
+    .code {
+        background: #eee;
+        padding: 10px;
+        border-radius: 6px;
+        font-family: Consolas, monospace;
+        font-size: 14px;
+        white-space: pre-wrap;
+    }
+</style>
+</head>
+<body>
+
+<div class="title">Organigramme — Injection de dépendances MongoDB</div>
+
+<div class="box">
+    <strong>1. docker-compose (variables d’environnement)</strong>
+    <div class="code">
+Mongo__ConnectionString=mongodb://solaize-mongo:27017
+Mongo__Database=SolaizeDb
+Mongo__Collection=Items
+    </div>
+    <em>→ Prioritaires sur appsettings.json</em>
+</div>
+
+<div class="arrow">⬇️</div>
+
+<div class="box">
+    <strong>2. appsettings.json (valeurs par défaut)</strong>
+    <div class="code">
+"Mongo": {
+  "ConnectionString": "mongodb://solaize-mongo:27017",
+  "Database": "SolaizeDb",
+  "Collection": "Items"
+}
+    </div>
+    <em>→ Utilisé si aucune variable d’environnement ne remplace</em>
+</div>
+
+<div class="arrow">⬇️</div>
+
+<div class="box">
+    <strong>3. Program.cs — Binding de MongoSettings</strong>
+    <div class="code">
+builder.Services.Configure&lt;MongoSettings&gt;(
+    builder.Configuration.GetSection("Mongo")
+);
+    </div>
+    <em>→ ASP.NET Core crée un objet MongoSettings</em>
+</div>
+
+<div class="arrow">⬇️</div>
+
+<div class="box">
+    <strong>4. Program.cs — Création du MongoClient</strong>
+    <div class="code">
+builder.Services.AddSingleton&lt;IMongoClient&gt;(sp =&gt; {
+    var settings = sp.GetRequiredService&lt;IOptions&lt;MongoSettings&gt;&gt;().Value;
+    return new MongoClient(settings.ConnectionString);
+});
+    </div>
+    <em>→ Un seul client MongoDB pour toute l’application</em>
+</div>
+
+<div class="arrow">⬇️</div>
+
+<div class="box">
+    <strong>5. Program.cs — Enregistrement du ItemService</strong>
+    <div class="code">
+builder.Services.AddScoped&lt;ItemService&gt;();
+    </div>
+    <em>→ Un ItemService par requête HTTP</em>
+</div>
+
+<div class="arrow">⬇️</div>
+
+<div class="box">
+    <strong>6. ItemService — Injection automatique</strong>
+    <div class="code">
+public ItemService(IMongoClient client, IOptions&lt;MongoSettings&gt; options)
+    </div>
+    <em>→ ASP.NET Core fournit automatiquement IMongoClient + MongoSettings</em>
+</div>
+
+<div class="arrow">⬇️</div>
+
+<div class="box">
+    <strong>7. ItemService — Construction de la collection</strong>
+    <div class="code">
+var settings = options.Value;
+var db = client.GetDatabase(settings.Database);
+_items = db.GetCollection&lt;Item&gt;(settings.Collection);
+    </div>
+    <em>→ _items est prêt pour le CRUD MongoDB</em>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Feuille de route – EPARVIER / KINGDOMAINE / Cloudflare Tunnel</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background:#111; color:#eee; margin:0; padding:20px; }
+    h1, h2, h3 { color:#7fffd4; margin-bottom:4px; }
+    h1 { border-bottom:1px solid #444; padding-bottom:6px; }
+    section, .section { border:1px solid #444; padding:10px 12px; margin-bottom:10px; background:#161b22; }
+    .tag { display:inline-block; padding:2px 6px; margin-left:6px; font-size:11px; border-radius:3px; background:#333; color:#ccc; }
+    .ok { color:#7fffd4; }
+    .todo { color:#ffcc66; }
+    ul { margin:4px 0 4px 18px; padding:0; }
+    li { margin:2px 0; }
+    .step { font-weight:bold; }
+    .small { font-size:12px; color:#aaa; }
+    code { background:#1f242d; padding:0.15rem 0.35rem; border-radius:4px; }
+  </style>
+</head>
+<body>
+
+<h1>Feuille de route – TDD .NET 8 + EPARVIER + Cloudflare Tunnel</h1>
+<p class="small">
+  Base : .NET 8, Docker, VS Code, SolaizeAPI + SolaizeCockpit.<br>
+  Objectif : architecture cockpitifiée, sécurisée, accessible en HTTPS via Cloudflare Tunnel.
+</p>
+
+<!-- ========================= -->
+<!-- 0. SOCLE .NET 8           -->
+<!-- ========================= -->
+
+<section>
+  <h2>0. Socle .NET 8 & Orchestration <span class="tag ok">VALIDÉ</span></h2>
+  <ul>
+    <li><span class="step">0.1</span> Environnement : Ubuntu + .NET 8 + Docker + VS Code.</li>
+    <li><span class="step">0.2</span> Program.cs minimal (Swagger, CORS, Auth, Controllers, <code>app.Run()</code>).</li>
+    <li><span class="step">0.3</span> Package <code>JwtBearer</code> dans SolaizeAPI uniquement.</li>
+    <li><span class="step">0.4</span> Dockerfile API propre.</li>
+    <li><span class="step">0.5</span> SolaizeAPI UP, Swagger OK.</li>
+  </ul>
+</section>
+
+<!-- ========================= -->
+<!-- 1. API ITEMS / UPLOAD     -->
+<!-- ========================= -->
+
+<section>
+  <h2>1. API – Cœur fonctionnel Items / Upload <span class="tag todo">À DÉTAILLER</span></h2>
+  <ul>
+    <li><span class="step">1.1</span> Items v2 : DTO, validation, service dédié.</li>
+    <li><span class="step">1.2</span> Upload v2 : validation MIME, service dédié.</li>
+    <li><span class="step">1.3</span> Mongo : settings, client, collections.</li>
+    <li><span class="step">1.4</span> Endpoints cohérents TDD.</li>
+  </ul>
+</section>
+
+<!-- ========================= -->
+<!-- 2. AUTH / JWT / RBAC      -->
+<!-- ========================= -->
+
+<section>
+  <h2>2. Authentification & Sécurité <span class="tag todo">À DÉTAILLER</span></h2>
+  <ul>
+    <li><span class="step">2.1</span> Login API : AuthController + JWT.</li>
+    <li><span class="step">2.2</span> JWT : claims, clé, durée.</li>
+    <li><span class="step">2.3</span> Refresh Token : modèle + Mongo.</li>
+    <li><span class="step">2.4</span> Roles : Admin / User.</li>
+    <li><span class="step">2.5</span> RBAC avancé : policies + permissions.</li>
+  </ul>
+</section>
+
+<!-- ========================= -->
+<!-- 3. BLAZOR COCKPIT         -->
+<!-- ========================= -->
+
+<section>
+  <h2>3. Cockpit Blazor & Orchestration <span class="tag todo">À DÉTAILLER</span></h2>
+  <ul>
+    <li><span class="step">3.1</span> HttpClient → <code>http://solaize-api:8080/</code>.</li>
+    <li><span class="step">3.2</span> AuthState : stockage token.</li>
+    <li><span class="step">3.3</span> Login UI : /auth/login.</li>
+    <li><span class="step">3.4</span> UI conditionnelle : <code>AuthorizeView</code>.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>3bis. SolaizeFront – Construction du Cockpit <span class="tag todo">À DÉTAILLER</span></h2>
+  <ul>
+    <li><span class="step">F1</span> Structure : MainLayout, NavMenu, Sidebar, Footer.</li>
+    <li><span class="step">F2</span> Pages : Home, Dashboard, API Status, Login, Settings.</li>
+    <li><span class="step">F3</span> UI : Cards, Alerts, Loaders, Tables.</li>
+    <li><span class="step">F4</span> Services : ApiService, AuthState, ConfigService.</li>
+    <li><span class="step">F5</span> Auth : Bearer auto + AuthorizeView.</li>
+    <li><span class="step">F6</span> UI conditionnelle : rôles / permissions.</li>
+    <li><span class="step">F7</span> Styles : Dark Mode cockpit.</li>
+    <li><span class="step">F8</span> Tests TDD front.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>3ter. Navigation & Layout <span class="tag todo">À DÉTAILLER</span></h2>
+  <ul>
+    <li><span class="step">L1</span> MainLayout.</li>
+    <li><span class="step">L2</span> NavMenu dynamique.</li>
+    <li><span class="step">L3</span> Sidebar cockpit.</li>
+    <li><span class="step">L4</span> Footer : version + état API.</li>
+    <li><span class="step">L5</span> App.razor + AuthorizeRouteView.</li>
+    <li><span class="step">L6</span> Dark Mode global.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>3quater. Dashboard Cockpit <span class="tag todo">À DÉTAILLER</span></h2>
+  <ul>
+    <li><span class="step">D1</span> Widget API.</li>
+    <li><span class="step">D2</span> Widget Mongo.</li>
+    <li><span class="step">D3</span> Widget Auth.</li>
+    <li><span class="step">D4</span> Widget Items.</li>
+    <li><span class="step">D5</span> Widget Upload.</li>
+    <li><span class="step">D6</span> Widget Logs.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>3quinquies. Intégration API – Services Blazor <span class="tag todo">À DÉTAILLER</span></h2>
+  <ul>
+    <li><span class="step">A1</span> ApiService CRUD.</li>
+    <li><span class="step">A2</span> AuthService.</li>
+    <li><span class="step">A3</span> ConfigService.</li>
+    <li><span class="step">A4</span> HttpClient interne.</li>
+    <li><span class="step">A5</span> Bearer automatique.</li>
+    <li><span class="step">A6</span> Gestion erreurs.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>3sexies. Pages avancées <span class="tag todo">À DÉTAILLER</span></h2>
+  <ul>
+    <li><span class="step">P1</span> Items CRUD.</li>
+    <li><span class="step">P2</span> Upload.</li>
+    <li><span class="step">P3</span> API Status.</li>
+    <li><span class="step">P4</span> Users (Admin).</li>
+    <li><span class="step">P5</span> Logs.</li>
+    <li><span class="step">P6</span> Settings.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>3septies. UX / UI <span class="tag todo">À DÉTAILLER</span></h2>
+  <ul>
+    <li><span class="step">U1</span> Dark Mode cockpit.</li>
+    <li><span class="step">U2</span> Composants réutilisables.</li>
+    <li><span class="step">U3</span> Animations légères.</li>
+    <li><span class="step">U4</span> Responsive.</li>
+    <li><span class="step">U5</span> Accessibilité.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>3octies. TDD côté Front <span class="tag todo">À DÉTAILLER</span></h2>
+  <ul>
+    <li><span class="step">TF1</span> Mock HttpClient.</li>
+    <li><span class="step">TF2</span> Tests Login.</li>
+    <li><span class="step">TF3</span> Tests UI conditionnelle.</li>
+    <li><span class="step">TF4</span> Tests Dashboard.</li>
+    <li><span class="step">TF5</span> Tests Items.</li>
+  </ul>
+</section>
+
+<!-- ========================= -->
+<!-- 4. OBSERVABILITÉ          -->
+<!-- ========================= -->
+
+<section>
+  <h2>4. Observabilité & Sécurité avancée <span class="tag todo">À DÉTAILLER</span></h2>
+  <ul>
+    <li><span class="step">4.1</span> Prometheus / Grafana.</li>
+    <li><span class="step">4.2</span> Audit Trail.</li>
+    <li><span class="step">4.3</span> User Management.</li>
+
+    <!-- 🔥 Mise à jour Cloudflare -->
+    <li><span class="step">4.4</span> <strong>HTTPS via Cloudflare Tunnel + Nginx interne</strong>.</li>
+
+    <li><span class="step">4.5</span> Zero-Trust & HA.</li>
+  </ul>
+</section>
+
+<!-- ========================= -->
+<!-- 5. CLEAN ARCHI            -->
+<!-- ========================= -->
+
+<section>
+  <h2>5. Évolution C# & Refactor <span class="tag todo">ÉVOLUTIF</span></h2>
+  <ul>
+    <li><span class="step">5.1</span> Clean Architecture.</li>
+    <li><span class="step">5.2</span> Tests unitaires.</li>
+    <li><span class="step">5.3</span> Extensions Program.cs.</li>
+    <li><span class="step">5.4</span> Documentation technique.</li>
+  </ul>
+</section>
+
+<!-- ========================= -->
+<!-- 6. ROADMAP CLOUDFLARE     -->
+<!-- ========================= -->
+
+<div class="section">
+    <h2>6. Roadmap Cloudflare Tunnel – KINGDOMAINE / EPARVIER</h2>
+
+    <h3>Phase 1 — Mise en place (VALIDÉE)</h3>
+    <p><strong>Objectif :</strong> rendre EPARVIER accessible en HTTPS depuis l’extérieur, sans ports ouverts.</p>
+    <ul>
+        <li>Migration du domaine vers Cloudflare (DNS).</li>
+        <li>Installation de <code>cloudflared</code> dans la VM Ubuntu.</li>
+        <li>Création du tunnel sortant sécurisé.</li>
+        <li>Configuration du fichier <code>config.yml</code>.</li>
+        <li>Intégration avec Nginx (port <code>4443</code>).</li>
+        <li>Mise en service du tunnel Cloudflare.</li>
+        <li>Validation de l’accès externe via <code>https://eparvier.mondomaine.com</code>.</li>
+    </ul>
+    <p><strong>Statut :</strong> ✔ Terminé, stable, validé.</p>
+
+    <h3>Phase 2 — Stabilisation & Monitoring</h3>
+    <ul>
+        <li>Healthcheck Cloudflare.</li>
+        <li>Surveillance latence.</li>
+        <li>Logs Cloudflare.</li>
+        <li>Procédure diagnostic KINGDOMAINE.</li>
+    </ul>
+
+    <h3>Phase 3 — Sécurisation avancée</h3>
+    <ul>
+        <li>Cloudflare Zero Trust.</li>
+        <li>Auth Google / GitHub / Microsoft.</li>
+        <li>ACL Cloudflare.</li>
+        <li>WAF Cloudflare.</li>
+    </ul>
+
+    <h3>Phase 4 — Optimisation Nginx</h3>
+    <ul>
+        <li>Buffers optimisés.</li>
+        <li>Cache statique.</li>
+        <li>Blocs /api /grafana /prometheus.</li>
+        <li>Headers sécurité.</li>
+    </ul>
+
+    <h3>Phase 5 — Intégration KINGDOMAINE</h3>
+    <ul>
+        <li>Section VPN applicatif intégrée.</li>
+        <li>Historique technique intégré.</li>
+        <li>Architecture finale EPARVIER.</li>
+        <li>Schéma visuel.</li>
+        <li>Procédure maintenance.</li>
+    </ul>
+
+    <h3>Phase 6 — Long terme</h3>
+    <ul>
+        <li>Cloudflare Access pour API.</li>
+        <li>Audit log connexions.</li>
+        <li>Sous-domaines dédiés.</li>
+        <li>Tunnel secondaire.</li>
+        <li>Monitoring Prometheus/Grafana.</li>
+    </ul>
+</div>
+
+<!-- ========================= -->
+<!-- 7. ROADMAP FINALE         -->
+<!-- ========================= -->
+
+<section>
+  <h2>7. Roadmap finale – Ordre d’exécution <span class="tag ok">STRUCTURÉ</span></h2>
+  <ul>
+    <li><span class="step">R1</span> API Items + Upload + Mongo.</li>
+    <li><span class="step">R2</span> Auth + JWT + Refresh + RBAC.</li>
+    <li><span class="step">R3</span> SolaizeFront : Login + Dashboard + API Status.</li>
+    <li><span class="step">R4</span> Pages Items + Upload + Users.</li>
+    <li><span class="step">R5</span> Observabilité (Prometheus/Grafana).</li>
+
+    <!-- 🔥 Mise à jour Cloudflare -->
+    <li><span class="step">R6</span> Sécurité avancée (Cloudflare Tunnel + Zero Trust + Nginx interne).</li>
+
+    <li><span class="step">R7</span> Clean Architecture + Tests TDD.</li>
+  </ul>
+</section>
+
+</body>
+</html>
