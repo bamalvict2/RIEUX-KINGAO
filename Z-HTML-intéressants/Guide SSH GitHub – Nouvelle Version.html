@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Guide SSH GitHub – Nouvelle Version</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        code {
+            background: #222;
+            color: #0f0;
+            padding: 4px 6px;
+            border-radius: 4px;
+            display: block;
+            margin: 6px 0;
+            white-space: pre-wrap;
+        }
+        .section {
+            background: white;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 5px solid #0078D7;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Guide Complet : Création et Vérification d’une Clé SSH GitHub (Version Moderne)</h1>
+
+<div class="section">
+    <h2>1. Générer une clé SSH moderne (ed25519)</h2>
+    <p>Commande recommandée par GitHub :</p>
+    <code>ssh-keygen -t ed25519 -C "votre_email_github"</code>
+    <p>Valider le chemin par défaut, puis entrer une passphrase.</p>
+</div>
+
+<div class="section">
+    <h2>2. Ajouter la clé à l’agent SSH</h2>
+    <code>ssh-add ~/.ssh/id_ed25519</code>
+    <p>Vérifier que la clé est bien chargée :</p>
+    <code>ssh-add -l</code>
+</div>
+
+<div class="section">
+    <h2>3. Ajouter la clé publique à GitHub</h2>
+    <p>Afficher la clé publique :</p>
+    <code>cat ~/.ssh/id_ed25519.pub</code>
+    <p>Copier → GitHub → Settings → SSH and GPG keys → New SSH key</p>
+</div>
+
+<div class="section">
+    <h2>4. Configurer le fichier ~/.ssh/config</h2>
+    <p>Configuration recommandée (port 443 pour contourner les blocages réseau) :</p>
+    <code>
+Host github.com<br>
+&nbsp;&nbsp;&nbsp;&nbsp;HostName ssh.github.com<br>
+&nbsp;&nbsp;&nbsp;&nbsp;User git<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Port 443<br>
+&nbsp;&nbsp;&nbsp;&nbsp;IdentityFile ~/.ssh/id_ed25519<br>
+&nbsp;&nbsp;&nbsp;&nbsp;IdentitiesOnly yes
+    </code>
+</div>
+
+<div class="section">
+    <h2>5. Tester la connexion SSH</h2>
+    <code>ssh -T git@github.com</code>
+    <p>Réponse attendue :</p>
+    <code>Hi &lt;username&gt;! You've successfully authenticated...</code>
+</div>
+
+<div class="section">
+    <h2>6. Vérifier les remotes Git</h2>
+    <code>git remote -v</code>
+</div>
+
+<div class="section">
+    <h2>7. Pousser une branche vers GitHub</h2>
+    <code>git push -u origin nom_de_branche</code>
+</div>
+
+</body>
+</html>

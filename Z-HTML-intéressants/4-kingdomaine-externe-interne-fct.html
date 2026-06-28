@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Architecture KINGDOMAINE – Interne / Externe / Monitoring</title>
+  <style>
+    body { font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; line-height: 1.5; margin: 2rem; color: #222; }
+    h1, h2, h3 { color: #1b4b7a; }
+    code { background: #f4f4f4; padding: 0.1rem 0.3rem; border-radius: 3px; }
+    .bloc { border: 1px solid #ddd; border-radius: 6px; padding: 1rem 1.2rem; margin-bottom: 1.5rem; }
+    .tag { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 999px; font-size: 0.8rem; background: #eef3ff; color: #1b4b7a; margin-right: 0.3rem; }
+    ul { margin-top: 0.4rem; }
+  </style>
+</head>
+<body>
+
+  <h1>Architecture KINGDOMAINE – Interne, Externe et Monitoring</h1>
+
+  <div class="bloc">
+    <h2>1. Deux mondes bien séparés</h2>
+    <p>Ton architecture KINGDOMAINE est organisée en deux univers clairement séparés :</p>
+
+    <h3>Monde interne – API C# locale</h3>
+    <span class="tag">Interne</span><span class="tag">HTTP</span><span class="tag">Kestrel</span><span class="tag">Docker</span>
+    <ul>
+      <li>API .NET qui tourne en <strong>HTTP local</strong> (ex : <code>http://localhost:5010</code>).</li>
+      <li>Mode <strong>Development</strong> : certaines routes (comme <code>/health</code>) ne sont pas exposées.</li>
+      <li>Utilisée pour le développement, les tests, la logique métier, les pages Razor internes.</li>
+      <li>Non exposée au public, non accessible via Internet.</li>
+    </ul>
+
+    <h3>Monde externe – API publique via Cloudflare</h3>
+    <span class="tag">Externe</span><span class="tag">HTTPS</span><span class="tag">Cloudflare</span><span class="tag">Production</span>
+    <ul>
+      <li>API accessible via ton domaine (ex : <code>https://solaize.duckdns.org</code>).</li>
+      <li>Mode <strong>Production</strong> : la route <code>/health</code> est exposée et renvoie <strong>200 OK</strong>.</li>
+      <li>Protégée par <strong>Cloudflare</strong> (tunnel, proxy, SSL, DNS).</li>
+      <li>C’est ce que voient les utilisateurs réels et les clients externes.</li>
+    </ul>
+  </div>
+
+  <div class="bloc">
+    <h2>2. Une vraie étanchéité entre interne et externe</h2>
+    <p>Il existe une <strong>étanchéité logique</strong> entre :</p>
+    <ul>
+      <li>l’API locale en HTTP (interne),</li>
+      <li>et l’API publique en HTTPS via Cloudflare (externe).</li>
+    </ul>
+    <p>Concrètement :</p>
+    <ul>
+      <li>Les routes, les ports et les modes (Dev/Prod) ne sont pas les mêmes.</li>
+      <li>Le monde interne peut évoluer sans casser l’externe.</li>
+      <li>Le monde externe peut être monitoré et mis à jour sans toucher à l’interne.</li>
+      <li>Cette séparation est <strong>souhaitable</strong> : plus de sécurité, moins de complexité.</li>
+    </ul>
+  </div>
+
+  <div class="bloc">
+    <h2>3. Rôle de Kestrel dans cette séparation</h2>
+    <p><strong>Kestrel</strong> est le serveur web interne de .NET. Il permet :</p>
+    <ul>
+      <li>de faire tourner l’API en <strong>HTTP local</strong> pour le développement,</li>
+      <li>tout en ayant une version <strong>Production</strong> exposée en <strong>HTTPS</strong> via Cloudflare,</li>
+      <li>sans mélanger les deux environnements.</li>
+    </ul>
+    <p>Grâce à Kestrel, tu peux :</p>
+    <ul>
+      <li>modifier ton API locale, redémarrer Docker, tester des routes internes,</li>
+      <li>sans impacter l’API publique utilisée par les clients.</li>
+    </ul>
+  </div>
+
+  <div class="bloc">
+    <h2>4. Monitoring externe avec Prometheus et Grafana</h2>
+    <span class="tag">Prometheus</span><span class="tag">Grafana</span><span class="tag">Blackbox Exporter</span>
+    <p>Le monitoring se concentre sur le <strong>monde externe</strong> :</p>
+    <ul>
+      <li><strong>Blackbox Exporter</strong> teste ton API comme un vrai client externe :
+        <ul>
+          <li>DNS, Cloudflare, HTTPS, certificat SSL, route <code>/health</code>, temps de réponse.</li>
+        </ul>
+      </li>
+      <li><strong>Prometheus</strong> collecte ces métriques.</li>
+      <li><strong>Grafana</strong> affiche :
+        <ul>
+          <li>disponibilité (uptime),</li>
+          <li>latence (p50, p90, p99),</li>
+          <li>codes HTTP (2xx, 4xx, 5xx),</li>
+          <li>état du tunnel Cloudflare, DNS, SSL, etc.</li>
+        </ul>
+      </li>
+    </ul>
+    <p>Important : ce monitoring externe ne dépend pas de l’API locale en HTTP.  
+    Tu peux donc surveiller l’externe sans jamais toucher à ton code C# interne.</p>
+  </div>
+
+  <div class="bloc">
+    <h2>5. Ce que tu peux faire en parallèle</h2>
+
+    <h3>Côté externe – avec Grafana</h3>
+    <ul>
+      <li>Créer des dashboards pour :
+        <ul>
+          <li>disponibilité HTTPS,</li>
+          <li>latence,</li>
+          <li>erreurs HTTP,</li>
+          <li>Cloudflare, DNS, SSL, etc.</li>
+        </ul>
+      </li>
+      <li>Construire un vrai <strong>cockpit externe</strong> pour KINGDOMAINE.</li>
+    </ul>
+
+    <h3>Côté interne – avec ton API C#</h3>
+    <ul>
+      <li>Créer des <strong>pages Razor internes</strong> (outils, admin, debug).</li>
+      <li>Ajouter des endpoints internes non exposés au public.</li>
+      <li>Faire évoluer ta logique métier librement.</li>
+    </ul>
+
+    <p>Les deux mondes peuvent évoluer, dialoguer et être mis à jour <strong>sans se gêner mutuellement</strong>.</p>
+  </div>
+
+  <div class="bloc">
+    <h2>6. Résumé en une phrase</h2>
+    <p>
+      <strong>Ton API locale en C# (HTTP) et ton monitoring externe (Prometheus + Grafana + Cloudflare + Blackbox) sont
+      étanches, complémentaires et peuvent évoluer en parallèle sans conflit : interne pour le métier, externe pour la
+      disponibilité réelle.</strong>
+    </p>
+  </div>
+
+</body>
+</html>

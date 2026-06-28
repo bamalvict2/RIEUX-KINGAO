@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Feuille de Route - Cockpit Blazor & Grafana</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; line-height: 1.6; }
+        h1, h2, h3 { color: #2c3e50; }
+        .phase { background: #ecf0f1; padding: 15px; border-left: 5px solid #2980b9; margin-bottom: 25px; }
+        ul { margin-left: 20px; }
+        .important { color: #c0392b; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<h1>🚀 Feuille de Route - Cockpit Blazor + Grafana</h1>
+<p>Objectif : Construire un cockpit interne convivial (Blazor/Razor) et un cockpit externe visuel (Grafana), sans doublons, avec une architecture propre et modulaire.</p>
+
+<div class="phase">
+    <h2>🟦 PHASE 1 — Stabiliser l’infrastructure Docker</h2>
+    <h3>1.1 — Finaliser EPARVIER (Application)</h3>
+    <ul>
+        <li>API .NET</li>
+        <li>Blazor Server</li>
+        <li>MongoDB</li>
+        <li>Mongo Express</li>
+        <li>Loki</li>
+        <li>Promtail</li>
+    </ul>
+
+    <h3>1.2 — Finaliser KINGDOMAINE (Monitoring)</h3>
+    <ul>
+        <li>Prometheus</li>
+        <li>Grafana</li>
+        <li>Node Exporter</li>
+        <li>cAdvisor</li>
+        <li>MongoDB Exporter</li>
+        <li>Blackbox Exporter</li>
+    </ul>
+
+    <h3>1.3 — Vérifications</h3>
+    <ul>
+        <li>Prometheus → EPARVIER</li>
+        <li>Grafana → Prometheus</li>
+        <li>Grafana → Loki</li>
+        <li>Exporters → Prometheus</li>
+    </ul>
+
+    <h3>1.4 — Tests via infra.sh</h3>
+    <ul>
+        <li>start/stop</li>
+        <li>logs</li>
+        <li>healthcheck</li>
+        <li>test-monitoring</li>
+    </ul>
+</div>
+
+<div class="phase">
+    <h2>🟩 PHASE 2 — Construire le Cockpit Interne (Blazor)</h2>
+
+    <h3>2.1 — Créer la structure du menu</h3>
+    <ul>
+        <li>Cockpit</li>
+        <li>Supervision</li>
+        <li>Logs</li>
+        <li>Metrics</li>
+        <li>Conteneurs</li>
+        <li>MongoDB</li>
+        <li>API Status</li>
+        <li>Paramètres</li>
+    </ul>
+
+    <h3>2.2 — Page Cockpit (Vue d’ensemble)</h3>
+    <ul>
+        <li>Status API</li>
+        <li>Status Blazor</li>
+        <li>Status Mongo</li>
+        <li>Status Loki</li>
+        <li>Status Prometheus</li>
+        <li>Status Grafana</li>
+        <li>Status Exporters</li>
+    </ul>
+
+    <h3>2.3 — Page Supervision (Grafana intégré)</h3>
+    <ul>
+        <li>Intégration via iframe</li>
+        <li>Sélecteur de dashboards</li>
+        <li>Mode plein écran</li>
+    </ul>
+
+    <h3>2.4 — Page Logs (Loki)</h3>
+    <ul>
+        <li>Requêtes Loki API</li>
+        <li>Filtres par conteneur</li>
+        <li>Affichage en temps réel</li>
+    </ul>
+
+    <h3>2.5 — Page Metrics (Prometheus)</h3>
+    <ul>
+        <li>Requêtes Prometheus API</li>
+        <li>Graphiques internes</li>
+        <li>CPU / RAM / Disque</li>
+        <li>Uptime / erreurs API</li>
+    </ul>
+</div>
+
+<div class="phase">
+    <h2>🟧 PHASE 3 — Cockpit Externe (Grafana)</h2>
+
+    <h3>3.1 — Créer les dashboards</h3>
+    <ul>
+        <li>Dashboard Docker / cAdvisor</li>
+        <li>Dashboard MongoDB Exporter</li>
+        <li>Dashboard Blackbox Exporter</li>
+        <li>Dashboard API (temps de réponse, erreurs)</li>
+        <li>Dashboard Logs Loki</li>
+    </ul>
+
+    <h3>3.2 — Configurer les alertes</h3>
+    <ul>
+        <li>API down</li>
+        <li>MongoDB down</li>
+        <li>CPU > 80%</li>
+        <li>RAM > 80%</li>
+        <li>Erreur HTTP > 5%</li>
+    </ul>
+
+    <h3>3.3 — Intégration dans Blazor</h3>
+    <ul>
+        <li>Iframe Grafana</li>
+        <li>Dashboards sélectionnables</li>
+        <li>Mode sombre / clair</li>
+    </ul>
+</div>
+
+<div class="phase">
+    <h2>🟪 PHASE 4 — Éviter les doublons</h2>
+
+    <h3>4.1 — Règle simple</h3>
+    <p><span class="important">Blazor = actions + état instantané</span></p>
+    <p><span class="important">Grafana = visualisation + historique</span></p>
+
+    <h3>4.2 — Ce que Blazor doit faire</h3>
+    <ul>
+        <li>Healthchecks</li>
+        <li>Status simple</li>
+        <li>Logs filtrés</li>
+        <li>Boutons d’action</li>
+        <li>Résumé des services</li>
+    </ul>
+
+    <h3>4.3 — Ce que Grafana doit faire</h3>
+    <ul>
+        <li>Graphiques détaillés</li>
+        <li>Tendances</li>
+        <li>Logs avancés</li>
+        <li>Alertes</li>
+    </ul>
+</div>
+
+<div class="phase">
+    <h2>🟫 PHASE 5 — Finalisation</h2>
+
+    <h3>5.1 — Tests finaux</h3>
+    <ul>
+        <li>Test API</li>
+        <li>Test Mongo</li>
+        <li>Test Loki</li>
+        <li>Test Prometheus</li>
+        <li>Test Grafana</li>
+    </ul>
+
+    <h3>5.2 — Optimisations</h3>
+    <ul>
+        <li>Cache Blazor</li>
+        <li>Optimisation des requêtes Prometheus</li>
+        <li>Optimisation des requêtes Loki</li>
+        <li>Dashboards Grafana propres</li>
+    </ul>
+
+    <h3>5.3 — Documentation</h3>
+    <ul>
+        <li>Architecture</li>
+        <li>Infra.sh</li>
+        <li>Pages Blazor</li>
+        <li>Dashboards Grafana</li>
+    </ul>
+</div>
+
+</body>
+</html>

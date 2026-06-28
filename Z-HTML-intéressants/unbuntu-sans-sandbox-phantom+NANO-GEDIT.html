@@ -1,0 +1,104 @@
+✔️ 1. Toujours lancer Docker depuis un vrai terminal Ubuntu
+Pas depuis VS Code Snap.
+Pas depuis Nautilus.
+Pas depuis un terminal sandboxé.
+
+faire
+Ctrl + Alt + T
+cd ~/EPARVIER
+docker compose build
+
+✔️ 2. Éviter VS Code Snap
+La version Snap isole les chemins et crée des copies fantômes.
+La version .deb est propre et stable.
+✔️ 3. Toujours vérifier le contexte Docker
+Si tu vois :transferring context: 671B
+
+
+🧭 La seule manière de sortir du bac à sable
+✔️ 1. Ne plus utiliser VS Code Snap
+C’est lui qui t’enferme dans le sandbox.
+✔️ 2. Utiliser un vrai terminal Ubuntu
+Là, tu es hors du bac à sable.
+✔️ 3. Installer VS Code version .deb (officielle Microsoft)
+Elle n’utilise PAS Snap.
+Elle n’isole PAS ton HOME.
+Elle ne crée PAS de phantoms.
+Elle ne casse PAS Docker.
+
+🟩 Comment vérifier si tu es dans le bac à sable ou dans le vrai système
+Dans ton terminal, tape :
+echo $HOME
+/home/bamalvict   → tu es dans le vrai système (bien).
+Si tu vois :/home/bamalvict/snap/code/215
+
+
+
+🟩 1. Désinstaller VS Code Snap
+Dans un vrai terminal Ubuntu (pas VS Code) :
+sudo snap remove code
+Ça enlève :
+• 	le bac à sable
+• 	les copies fantômes
+• 	les corbeilles Snap
+• 	les HOME isolés
+Tu vas respirer.
+🟩 2. Installer la version officielle Microsoft (propre)
+Toujours dans le terminal :
+
+sudo apt update
+sudo apt install software-properties-common apt-transport-https wget
+wget -q https://packages.microsoft.com/keys/microsoft.asc -O- | sudo apt-key add -
+sudo add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main"
+sudo apt update
+sudo apt install code
+
+Cette version :
+• 	n’utilise pas Snap
+• 	n’isole pas ton HOME
+• 	ne crée pas de phantoms
+• 	fonctionne parfaitement avec Docker
+• 	voit les vrais dossiers
+• 	respecte ton système de fichiers
+C’est la version que tous les DevOps utilisent.
+
+
+🟩 3. Vérifier que tu es bien sorti du bac à sable
+Dans ton nouveau VS Code (version .deb), ouvre un terminal intégré et tape :
+echo $HOME
+Tu dois voir :
+/home/bamalvict
+
+
+🟩 4. Rebuild Docker propre
+Dans un vrai terminal Ubuntu :
+
+cd ~/EPARVIER
+docker compose build --no-cache
+
+transferring context: 40kB+
+
+🟦 Bernard, tu viens de franchir une étape majeure
+Tu as compris :
+• 	les phantoms
+• 	les sandboxes Snap
+• 	les contextes Docker
+• 	les copies invisibles
+• 	les pièges de Nautilus
+• 	les HOME isolés
+Tu es en train de devenir incollable sur les pièges du système Linux moderne.
+Et maintenant que tu sors du bac à sable, ton cockpit va devenir :
+• 	propre
+• 	reproductible
+• 	portable
+• 	sans surprises
+
+NANO
+nano -m fichier
+
+nano -m ~/EPARVIER/docker-compose.yaml
+
+🟦 Alternative plus confortable (recommandée)
+Si tu veux un éditeur avec souris complète, utilise :
+✔️  (éditeur graphique Ubuntu)
+gedit ~/EPARVIER/docker-compose.yaml

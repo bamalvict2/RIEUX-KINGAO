@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>TDD Solaize – API, Cockpit, Monitoring, Docker</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f5f5f5;
+      color: #222;
+      line-height: 1.5;
+    }
+    header {
+      background: #1f2933;
+      color: #f9fafb;
+      padding: 16px 24px;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 22px;
+    }
+    header p {
+      margin: 4px 0 0;
+      font-size: 13px;
+      color: #d1d5db;
+    }
+    main {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px 12px 40px;
+    }
+    section {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 16px 18px;
+      margin-bottom: 16px;
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 18px;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 4px;
+    }
+    h3 {
+      margin-top: 14px;
+      font-size: 15px;
+    }
+    h4 {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+    p {
+      margin: 6px 0;
+      font-size: 13px;
+    }
+    ul {
+      margin: 6px 0 6px 18px;
+      padding: 0;
+      font-size: 13px;
+    }
+    li {
+      margin: 2px 0;
+    }
+    code {
+      font-family: "Cascadia Code", Consolas, monospace;
+      font-size: 12px;
+      background: #f3f4f6;
+      padding: 1px 3px;
+      border-radius: 3px;
+    }
+    pre {
+      background: #111827;
+      color: #e5e7eb;
+      padding: 10px 12px;
+      border-radius: 4px;
+      overflow-x: auto;
+      font-size: 12px;
+      line-height: 1.4;
+      margin: 8px 0;
+    }
+    .tag {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 999px;
+      font-size: 11px;
+      background: #e5e7eb;
+      color: #111827;
+      margin-right: 4px;
+    }
+    .tag-api { background: #dbeafe; color: #1d4ed8; }
+    .tag-cockpit { background: #dcfce7; color: #166534; }
+    .tag-monitor { background: #fef3c7; color: #92400e; }
+    .tag-docker { background: #e0f2fe; color: #0369a1; }
+    .box {
+      border-left: 3px solid #9ca3af;
+      padding-left: 8px;
+      margin: 8px 0;
+      font-size: 13px;
+    }
+    .box-critique { border-color: #b91c1c; background: #fef2f2; }
+    .box-ok { border-color: #15803d; background: #ecfdf3; }
+    .ascii {
+      font-family: "Cascadia Code", Consolas, monospace;
+      font-size: 11px;
+      white-space: pre;
+      background: #f3f4f6;
+      padding: 8px 10px;
+      border-radius: 4px;
+      margin: 8px 0;
+    }
+    .subtle {
+      font-size: 11px;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+<header>
+  <h1>TDD – Solaize SDK (API, Cockpit, Monitoring, Docker)</h1>
+  <p>Vue technique cockpitifiée – API .NET, Blazor Server, MongoDB, Grafana, Prometheus, Nginx, Docker Compose.</p>
+</header>
+
+<main>
+
+  <!-- A. TDD complet (vue globale) -->
+  <section id="tdd-global">
+    <h2>A. Vue globale – Architecture technique complète</h2>
+
+    <h3>1. Composants principaux</h3>
+    <ul>
+      <li><span class="tag tag-api">API</span> <strong>SolaizeApi</strong> – .NET 8, REST, MongoDB, Swagger.</li>
+      <li><span class="tag tag-cockpit">Cockpit</span> <strong>SolaizeCockpit</strong> – Blazor Server, UI opérateur.</li>
+      <li><span class="tag tag-docker">Infra</span> <strong>MongoDB</strong> – stockage Items.</li>
+      <li><span class="tag tag-monitor">Monitoring</span> <strong>Prometheus</strong> – collecte métriques.</li>
+      <li><span class="tag tag-monitor">Monitoring</span> <strong>Grafana</strong> – dashboards.</li>
+      <li><span class="tag tag-docker">Infra</span> <strong>Nginx</strong> – reverse proxy / frontal HTTP.</li>
+      <li><span class="tag tag-docker">Docker</span> <strong>docker-compose.yml</strong> – orchestration.</li>
+    </ul>
+
+    <h3>2. Flux principaux</h3>
+    <div class="ascii">
+Blazor (Cockpit)  ──→  API (SolaizeApi)  ──→  MongoDB
+      │                    │
+      │                    └──→  /metrics (Prometheus)  ──→  Grafana
+      │
+      └──→  via Nginx (optionnel, frontal unique)
+    </div>
+
+    <h3>3. Ports et endpoints</h3>
+    <ul>
+      <li><strong>API</strong> : interne <code>http://solaize-api:8080</code>, exposé <code>8080:8080</code>, Swagger <code>/swagger</code>.</li>
+      <li><strong>Cockpit</strong> : interne <code>http://solaize-blazor-server:80</code>, exposé <code>5000:80</code>.</li>
+      <li><strong>MongoDB</strong> : <code>27017:27017</code>.</li>
+      <li><strong>Prometheus</strong> : <code>9090:9090</code>.</li>
+      <li><strong>Grafana</strong> : <code>3000:3000</code>.</li>
+      <li><strong>Nginx</strong> : <code>80:80</code> (si utilisé comme frontal unique).</li>
+    </ul>
+
+    <h3>4. Fichiers critiques</h3>
+    <ul>
+      <li><strong>API</strong> : <code>SolaizeApi/Program.cs</code>, <code>Controllers/</code>, <code>Services/</code>, <code>MongoSettings.cs</code>, <code>appsettings.json</code>, <code>Dockerfile</code>.</li>
+      <li><strong>Cockpit</strong> : <code>SolaizeCockpit/Program.cs</code>, <code>Pages/</code>, <code>Dockerfile</code>.</li>
+      <li><strong>Monitoring</strong> : <code>prometheus.yml</code> (scrape API), dashboards Grafana.</li>
+      <li><strong>Infra</strong> : <code>docker-compose.yml</code>, config Nginx.</li>
+    </ul>
+
+    <div class="box box-critique">
+      <strong>Point bloquant global :</strong> si l’un des services (API, Mongo, Prometheus, Grafana, Cockpit) n’est pas sur le réseau
+      <code>solaize-net</code> ou n’a pas le bon port, la chaîne se casse.
+    </div>
+  </section>
+
+  <!-- B. Modules séparés -->
+  <section id="modules">
+    <h2>B. Modules – API, Cockpit, Monitoring, Docker</h2>
+
+    <h3>1. Module API (.NET 8 – SolaizeApi)</h3>
+    <h4>1.1. Program.cs – pipeline minimal complet</h4>
+    <pre>var builder = WebApplication.CreateBuilder(args);
+
+// MongoSettings
+builder.Services.Configure&lt;MongoSettings&gt;(
+    builder.Configuration.GetSection("Mongo")
+);
+
+// MongoClient
+builder.Services.AddSingleton&lt;IMongoClient&gt;(sp =&gt;
+{
+    var settings = sp.GetRequiredService&lt;IOptions&lt;MongoSettings&gt;&gt;().Value;
+    return new MongoClient(settings.ConnectionString);
+});
+
+// Services
+builder.Services.AddScoped&lt;ItemService&gt;();
+builder.Services.AddScoped&lt;UploadService&gt;();
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+builder.Services.AddCors(o =&gt;
+    o.AddPolicy("AllowAll", p =&gt; p.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader())
+);
+
+var app = builder.Build();
+
+app.UseSwagger();
+app.UseSwaggerUI();
+
+app.UseCors("AllowAll");
+
+app.MapControllers();
+
+app.Run();</pre>
+
+    <div class="box box-critique">
+      <strong>Point bloquant API :</strong> l’oubli de <code>app.UseSwagger()</code>, <code>app.MapControllers()</code> ou <code>app.Run()</code>
+      rend l’API silencieuse (démarre puis s’arrête, exit 0, aucun log).
+    </div>
+
+    <h4>1.2. appsettings.json – Mongo</h4>
+    <pre>{
+  "Mongo": {
+    "ConnectionString": "mongodb://solaize-mongo:27017",
+    "Database": "SolaizeDb",
+    "Collection": "Items"
+  },
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Warning"
+    }
+  }
+}</pre>
+
+    <div class="box">
+      <strong>Point de vigilance :</strong> les noms de sections doivent correspondre exactement à <code>MongoSettings</code> et à
+      <code>builder.Configuration.GetSection("Mongo")</code>.
+    </div>
+
+    <h4>1.3. Dockerfile API</h4>
+    <pre>FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+COPY *.csproj ./
+RUN dotnet restore
+
+COPY . ./
+RUN dotnet publish -c Release -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /app
+COPY --from=build /app/publish .
+ENV ASPNETCORE_URLS=http://+:8080
+EXPOSE 8080
+ENTRYPOINT ["dotnet", "SolaizeApi.dll"]</pre>
+
+    <div class="box box-critique">
+      <strong>Point bloquant build API :</strong> le <em>context</em> Docker doit être <code>./SolaizeApi</code>. Sinon, Docker compile un projet vide.
+    </div>
+
+    <h3>2. Module Cockpit (Blazor Server – SolaizeCockpit)</h3>
+    <h4>2.1. Dockerfile Cockpit</h4>
+    <pre>FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+COPY . .
+RUN dotnet restore
+RUN dotnet publish -c Release -o /app/publish
+
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
+WORKDIR /app
+COPY --from=build /app/publish .
+ENV ASPNETCORE_URLS=http://+:80
+EXPOSE 80
+ENTRYPOINT ["dotnet", "SolaizeCockpit.dll"]</pre>
+
+    <h4>2.2. Appel de l’API depuis Blazor</h4>
+    <div class="box">
+      <strong>Règle :</strong> dans Docker, Blazor doit appeler l’API via le nom de service
+      <code>http://solaize-api:8080</code>, pas <code>localhost</code>.
+    </div>
+
+    <h3>3. Module Monitoring (Prometheus + Grafana)</h3>
+    <h4>3.1. Prometheus – scrape API</h4>
+    <pre>scrape_configs:
+  - job_name: "solaize-api"
+    static_configs:
+      - targets: ["solaize-api:8080"]</pre>
+
+    <div class="box box-critique">
+      <strong>Point bloquant Prometheus :</strong> si l’API n’expose pas <code>/metrics</code> ou si la cible est mauvaise,
+      aucun dashboard Grafana ne sera alimenté.
+    </div>
+
+    <h4>3.2. Grafana – datasource</h4>
+    <p>Datasource Prometheus pointant vers <code>http://prometheus:9090</code>.</p>
+
+    <h3>4. Module Docker / Compose</h3>
+    <h4>4.1. docker-compose.yml – extrait clé</h4>
+    <pre>services:
+  solaize-api:
+    build:
+      context: ./SolaizeApi
+      dockerfile: Dockerfile
+    container_name: solaize-api
+    ports:
+      - "8080:8080"
+    networks:
+      - solaize-net
+    restart: always
+    environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:8080
+      - ConnectionStrings__Mongo=mongodb://solaize-mongo:27017
+      - Mongo__Database=SolaizeDb
+      - Mongo__Collection=Items
+
+  solaize-blazor-server:
+    build:
+      context: ./SolaizeCockpit
+      dockerfile: Dockerfile
+    container_name: solaize-blazor-server
+    ports:
+      - "5000:80"
+    networks:
+      - solaize-net
+    restart: always
+    depends_on:
+      - solaize-api</pre>
+
+    <div class="box box-critique">
+      <strong>Point bloquant Docker :</strong> un mauvais <code>context</code> ou un mauvais <code>dockerfile</code> produit des images
+      incohérentes (API vide, comportement silencieux).
+    </div>
+  </section>
+
+  <!-- C. Organigramme ASCII (cheminement) -->
+  <section id="organigramme">
+    <h2>C. Organigramme ASCII – Cheminement complet</h2>
+
+    <h3>1. Vue d’ensemble</h3>
+    <div class="ascii">
++-------------------------------------------------------------+
+|                         UTILISATEUR                         |
++---------------------------+---------------------------------+
+                            |
+                            v
+                   +--------------------+
+                   |  Blazor Cockpit    |
+                   |  (SolaizeCockpit)  |
+                   +--------------------+
+                            |
+                            | HTTP (port 5000 externe)
+                            v
+                   +--------------------+
+                   |      Nginx         |   (optionnel)
+                   +--------------------+
+                            |
+                            v
+                   +--------------------+
+                   |   API .NET 8       |
+                   |   (SolaizeApi)     |
+                   |   port 8080        |
+                   +--------------------+
+                      |            |
+        CRUD Items    |            |  /metrics (si exposé)
+                      v            v
+               +-------------+   +-----------------+
+               |   MongoDB   |   |   Prometheus    |
+               +-------------+   +-----------------+
+                                      |
+                                      v
+                                +-----------+
+                                | Grafana   |
+                                +-----------+
+    </div>
+
+    <h3>2. Cheminement Dockerfile API</h3>
+    <div class="ascii">
+[Dockerfile API]
+   |
+   +--> FROM dotnet/sdk:8.0  (build)
+   |         |
+   |         +--> COPY *.csproj
+   |         +--> dotnet restore
+   |         +--> COPY . .
+   |         +--> dotnet publish -c Release -o /app/publish
+   |
+   +--> FROM dotnet/aspnet:8.0 (runtime)
+             |
+             +--> COPY --from=build /app/publish .
+             +--> ENV ASPNETCORE_URLS=http://+:8080
+             +--> EXPOSE 8080
+             +--> ENTRYPOINT ["dotnet", "SolaizeApi.dll"]
+    </div>
+
+    <h3>3. Cheminement logique Program.cs API</h3>
+    <div class="ascii">
+[Program.cs]
+   |
+   +--> Configure MongoSettings (section "Mongo")
+   |
+   +--> Register MongoClient (IOptions&lt;MongoSettings&gt;)
+   |
+   +--> Register Services (ItemService, UploadService)
+   |
+   +--> AddControllers, AddSwaggerGen, AddCors
+   |
+   +--> Build app
+   |
+   +--> UseSwagger + UseSwaggerUI
+   |
+   +--> UseCors("AllowAll")
+   |
+   +--> MapControllers()
+   |
+   +--> Run()   <-- point critique : garde l'API vivante
+    </div>
+
+    <div class="box box-critique">
+      <strong>Point bloquant TDD :</strong> toute absence d’une étape dans ce cheminement (ex. <code>Run()</code>) doit être
+      visible dans le TDD comme un risque critique.
+    </div>
+  </section>
+
+  <!-- D. Version manager-friendly -->
+  <section id="manager">
+    <h2>D. Version manager-friendly – Résumé architecture</h2>
+
+    <h3>1. Objectif</h3>
+    <p>
+      Le système Solaize fournit un cockpit opérationnel (Blazor) connecté à une API .NET, avec stockage MongoDB
+      et supervision par Prometheus/Grafana, le tout orchestré par Docker Compose.
+    </p>
+
+    <h3>2. Vue simple</h3>
+    <ul>
+      <li><strong>Cockpit</strong> : interface utilisateur pour consulter et manipuler les Items.</li>
+      <li><strong>API</strong> : cœur métier, expose des endpoints REST, parle à MongoDB.</li>
+      <li><strong>MongoDB</strong> : base de données des Items.</li>
+      <li><strong>Prometheus</strong> : collecte des métriques techniques.</li>
+      <li><strong>Grafana</strong> : tableaux de bord de supervision.</li>
+      <li><strong>Docker Compose</strong> : lance tous les services ensemble, de manière reproductible.</li>
+    </ul>
+
+    <h3>3. Points de contrôle clés</h3>
+    <ul>
+      <li><strong>Swagger disponible</strong> sur l’API → prouve que l’API tourne et que les endpoints sont exposés.</li>
+      <li><strong>Cockpit accessible</strong> → prouve que Blazor est déployé et que la chaîne front fonctionne.</li>
+      <li><strong>MongoDB accessible</strong> → prouve que les données sont persistées.</li>
+      <li><strong>Prometheus + Grafana opérationnels</strong> → prouve que la supervision est en place.</li>
+      <li><strong>docker-compose up --build</strong> → un seul point d’entrée pour lancer tout le système.</li>
+    </ul>
+
+    <h3>4. Risques majeurs (en langage simple)</h3>
+    <ul>
+      <li><strong>API silencieuse</strong> : si la configuration de démarrage est incomplète, l’API démarre puis s’arrête sans erreur visible.</li>
+      <li><strong>Mauvais câblage</strong> : si les services ne sont pas sur le même réseau ou n’ont pas les bons ports, ils ne se voient pas.</li>
+      <li><strong>Monitoring absent</strong> : sans Prometheus/Grafana, on ne voit pas les problèmes avant qu’ils ne deviennent critiques.</li>
+    </ul>
+
+    <p class="subtle">
+      Ce TDD sert de carte de navigation : il montre les composants, leurs liens, les fichiers critiques et les
+      points de rupture possibles. Il doit être mis à jour à chaque évolution majeure.
+    </p>
+  </section>
+
+</main>
+</body>
+</html>

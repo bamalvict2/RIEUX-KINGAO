@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Moteur KINGDOMAINE</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#111; color:#eee; }
+    .zone { border:1px solid #555; border-radius:8px; padding:10px 15px; margin:10px; }
+    .title { font-weight:bold; margin-bottom:6px; }
+    .row { display:flex; gap:10px; flex-wrap:wrap; }
+    .box { border:1px solid #777; border-radius:6px; padding:6px 10px; margin:4px 0; background:#1b1b1b; }
+    .ext { border-color:#ff9800; }
+    .int { border-color:#03a9f4; }
+    .mix { border-color:#8bc34a; }
+  </style>
+</head>
+<body>
+  <h1>Moteur KINGDOMAINE (4 temps)</h1>
+
+  <div class="zone">
+    <div class="title">1️⃣ Admission (EXTERNE)</div>
+    <div class="row">
+      <div class="box ext">DuckDNS<br><small>Nom public</small></div>
+      <div class="box ext">Cloudflare Tunnel<br><small>Entrée HTTPS</small></div>
+    </div>
+  </div>
+
+  <div class="zone">
+    <div class="title">2️⃣ Compression (INTERNE)</div>
+    <div class="row">
+      <div class="box int">API C# (SolaizeApi)<br><small>/health, logique métier</small></div>
+      <div class="box int">Blazor Server<br><small>Cockpit web</small></div>
+      <div class="box int">MongoDB<br><small>Données</small></div>
+    </div>
+  </div>
+
+  <div class="zone">
+    <div class="title">3️⃣ Explosion (MIXTE)</div>
+    <div class="row">
+      <div class="box mix">Prometheus<br><small>Scrape toutes les métriques</small></div>
+      <div class="box mix">Blackbox Exporter<br><small>Teste l’extérieur (DNS, Tunnel, API)</small></div>
+      <div class="box mix">Node Exporter<br><small>Machine KINGDOMAINE</small></div>
+      <div class="box mix">cAdvisor<br><small>Containers Docker</small></div>
+      <div class="box mix">MongoDB Exporter<br><small>Base Mongo</small></div>
+    </div>
+  </div>
+
+  <div class="zone">
+    <div class="title">4️⃣ Échappement (EXPOSITION)</div>
+    <div class="row">
+      <div class="box mix">Grafana<br><small>Dashboards</small></div>
+      <div class="box ext">Cloudflare Tunnel<br><small>Expose cockpit/API vers Internet</small></div>
+    </div>
+  </div>
+</body>
+</html>
+
+          [ EXTERNE ]
+   ┌───────────────────────────┐
+   │   Utilisateur / Internet  │
+   └─────────────┬─────────────┘
+                 │ HTTPS
+           DuckDNS + Cloudflare
+                 │
+                 ▼
+        https://ton-domaine/...
+                 │
+        ┌────────┴────────┐
+        │                 │
+        ▼                 ▼
+   API C# (5010)     Blazor (5110)
+        │                 │
+        └───────┬────────┘
+                │
+                ▼
+             MongoDB
+                │
+   ┌────────────┴────────────┐
+   │         INTERNE          │
+   │                          │
+   │  Node Exporter           │
+   │  cAdvisor                │
+   │  MongoDB Exporter        │
+   │  Blackbox Exporter  ─────┼─→ teste l’URL externe (via Tunnel + DNS)
+   │                          │
+   └────────────┬─────────────┘
+                ▼
+           Prometheus
+                ▼
+             Grafana
+                ▼
+           Toi au cockpit

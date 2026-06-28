@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Moteur KINGDOMAINE – Vue complète</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#111; color:#eee; margin:0; padding:20px; }
+    h1, h2, h3 { color:#ffeb3b; }
+    a { color:#03a9f4; }
+    .zone { border:1px solid #555; border-radius:8px; padding:10px 15px; margin:15px 0; background:#181818; }
+    .title { font-weight:bold; margin-bottom:6px; color:#ffc107; }
+    .row { display:flex; gap:10px; flex-wrap:wrap; }
+    .box { border:1px solid #777; border-radius:6px; padding:6px 10px; margin:4px 0; background:#1f1f1f; min-width:160px; }
+    .ext { border-color:#ff9800; }
+    .int { border-color:#03a9f4; }
+    .mix { border-color:#8bc34a; }
+    small { color:#bbb; }
+    table { border-collapse:collapse; width:100%; margin-top:8px; }
+    th, td { border:1px solid #555; padding:6px 8px; font-size:0.9rem; }
+    th { background:#222; }
+    pre { background:#000; padding:10px; border-radius:6px; overflow:auto; }
+    .tag { display:inline-block; padding:2px 6px; border-radius:4px; font-size:0.8rem; margin-left:4px; }
+    .tag-int { background:#03a9f4; color:#000; }
+    .tag-ext { background:#ff9800; color:#000; }
+    .tag-mix { background:#8bc34a; color:#000; }
+  </style>
+</head>
+<body>
+
+  <h1>Moteur KINGDOMAINE – Vue complète</h1>
+  <p>Architecture hybride interne/externe, pensée comme un moteur 4 temps : admission, compression, explosion, échappement.</p>
+
+  <!-- 1. Schéma visuel (moteur 4 temps) -->
+  <div class="zone">
+    <h2>1️⃣ Schéma visuel du moteur KINGDOMAINE</h2>
+
+    <div class="zone">
+      <div class="title">1️⃣ Admission <span class="tag tag-ext">EXTERNE</span></div>
+      <div class="row">
+        <div class="box ext">
+          DuckDNS<br>
+          <small>Nom public dynamique</small>
+        </div>
+        <div class="box ext">
+          Cloudflare Tunnel<br>
+          <small>Entrée HTTPS vers KINGDOMAINE</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="zone">
+      <div class="title">2️⃣ Compression <span class="tag tag-int">INTERNE</span></div>
+      <div class="row">
+        <div class="box int">
+          API C# (SolaizeApi)<br>
+          <small>/health, logique métier</small>
+        </div>
+        <div class="box int">
+          Blazor Server<br>
+          <small>Cockpit web</small>
+        </div>
+        <div class="box int">
+          MongoDB<br>
+          <small>Données applicatives</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="zone">
+      <div class="title">3️⃣ Explosion <span class="tag tag-mix">MIXTE</span></div>
+      <div class="row">
+        <div class="box mix">
+          Prometheus<br>
+          <small>Scrape toutes les métriques</small>
+        </div>
+        <div class="box mix">
+          Blackbox Exporter<br>
+          <small>Teste DNS, Tunnel, API externe</small>
+        </div>
+        <div class="box mix">
+          Node Exporter<br>
+          <small>Machine KINGDOMAINE</small>
+        </div>
+        <div class="box mix">
+          cAdvisor<br>
+          <small>Containers Docker</small>
+        </div>
+        <div class="box mix">
+          MongoDB Exporter<br>
+          <small>Base Mongo</small>
+        </div>
+      </div>
+    </div>
+
+    <div class="zone">
+      <div class="title">4️⃣ Échappement <span class="tag tag-mix">EXPOSITION</span></div>
+      <div class="row">
+        <div class="box mix">
+          Grafana<br>
+          <small>Dashboards de pilotage</small>
+        </div>
+        <div class="box ext">
+          Cloudflare Tunnel<br>
+          <small>Expose cockpit/API vers Internet</small>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Cycle détaillé -->
+  <div class="zone">
+    <h2>2️⃣ Cycle détaillé : démarrage → fonctionnement → surveillance → exposition</h2>
+
+    <h3>Temps 1 — Démarrage (Admission)</h3>
+    <ul>
+      <li>DuckDNS est configuré et pointe vers ton IP publique.</li>
+      <li>Cloudflare Tunnel est up et attaché à ton domaine.</li>
+      <li>Le trafic extérieur peut atteindre ton tunnel.</li>
+    </ul>
+
+    <h3>Temps 2 — Fonctionnement (Compression)</h3>
+    <ul>
+      <li>Compose EPARVIER lancé : MongoDB, API C#, Blazor démarrent.</li>
+      <li>Les ports internes (5010, 5110, 27017…) sont ouverts.</li>
+      <li>Le “moteur applicatif” tourne en local.</li>
+    </ul>
+
+    <h3>Temps 3 — Surveillance (Explosion)</h3>
+    <ul>
+      <li>Compose MONITORING lancé : Prometheus, exporters, Blackbox démarrent.</li>
+      <li>Prometheus scrappe API, Mongo, Node, cAdvisor, Blackbox.</li>
+      <li>Blackbox appelle l’API via l’URL publique (Tunnel + DNS).</li>
+      <li>Les alertes se déclenchent si quelque chose déraille.</li>
+    </ul>
+
+    <h3>Temps 4 — Exposition (Échappement)</h3>
+    <ul>
+      <li>Grafana expose les dashboards de pilotage.</li>
+      <li>Cloudflare Tunnel peut exposer cockpit Blazor et/ou Grafana.</li>
+      <li>Tu consultes KINGDOMAINE depuis l’extérieur, en HTTPS.</li>
+    </ul>
+  </div>
+
+  <!-- 3. Tableau des dépendances -->
+  <div class="zone">
+    <h2>3️⃣ Tableau des dépendances (qui attend quoi au démarrage)</h2>
+    <table>
+      <tr>
+        <th>Composant</th>
+        <th>Dépendances principales</th>
+      </tr>
+      <tr>
+        <td>DuckDNS</td>
+        <td>Aucune (config DNS)</td>
+      </tr>
+      <tr>
+        <td>Cloudflare Tunnel</td>
+        <td>DuckDNS (optionnel), API/Blazor accessibles en local</td>
+      </tr>
+      <tr>
+        <td>MongoDB</td>
+        <td>Aucune (stockage)</td>
+      </tr>
+      <tr>
+        <td>API C# (SolaizeApi)</td>
+        <td>MongoDB</td>
+      </tr>
+      <tr>
+        <td>Blazor Server</td>
+        <td>API C#, éventuellement MongoDB</td>
+      </tr>
+      <tr>
+        <td>Prometheus</td>
+        <td>Exporters + API C# + Blackbox accessibles</td>
+      </tr>
+      <tr>
+        <td>Blackbox Exporter</td>
+        <td>Tunnel + DNS + API externe accessibles</td>
+      </tr>
+      <tr>
+        <td>Node Exporter</td>
+        <td>Juste la machine KINGDOMAINE</td>
+      </tr>
+      <tr>
+        <td>cAdvisor</td>
+        <td>Docker en fonctionnement</td>
+      </tr>
+      <tr>
+        <td>MongoDB Exporter</td>
+        <td>MongoDB accessible</td>
+      </tr>
+      <tr>
+        <td>Grafana</td>
+        <td>Prometheus (datasource)</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- 4. Diagramme des flux internes ↔ externes -->
+  <div class="zone">
+    <h2>4️⃣ Diagramme des flux internes ↔ externes</h2>
+    <pre>
+          [ EXTERNE ]
+   ┌───────────────────────────┐
+   │   Utilisateur / Internet  │
+   └─────────────┬─────────────┘
+                 │ HTTPS
+           DuckDNS + Cloudflare
+                 │
+                 ▼
+        https://ton-domaine/...
+                 │
+        ┌────────┴────────┐
+        │                 │
+        ▼                 ▼
+   API C# (5010)     Blazor (5110)
+        │                 │
+        └───────┬────────┘
+                │
+                ▼
+             MongoDB
+                │
+   ┌────────────┴────────────┐
+   │         INTERNE          │
+   │                          │
+   │  Node Exporter           │
+   │  cAdvisor                │
+   │  MongoDB Exporter        │
+   │  Blackbox Exporter  ─────┼─→ teste l’URL externe (via Tunnel + DNS)
+   │                          │
+   └────────────┬─────────────┘
+                ▼
+           Prometheus
+                ▼
+             Grafana
+                ▼
+           Toi au cockpit
+    </pre>
+  </div>
+
+</body>
+</html>

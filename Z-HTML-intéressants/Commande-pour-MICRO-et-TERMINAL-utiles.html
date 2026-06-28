@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <title>Commandes terminal utiles — Vérifier emplacement et fichiers</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    :root{
+      --bg:#0b1220; --card:#071026; --muted:#9aa4b2; --accent:#f59e0b; --code:#0f1724;
+      --border:#122033; --text:#e6eef6; --mono: "JetBrains Mono", "Fira Code", monospace;
+    }
+    body{font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; background:var(--bg); color:var(--text); margin:0; padding:28px;}
+    header{margin-bottom:18px;}
+    h1{font-size:20px; margin:0 0 6px; color:var(--accent);}
+    p.lead{margin:0 0 12px; color:var(--muted);}
+    .grid{display:grid; grid-template-columns:1fr; gap:14px; max-width:980px;}
+    .card{background:var(--card); border:1px solid var(--border); padding:14px; border-radius:8px;}
+    table{width:100%; border-collapse:collapse; font-size:14px;}
+    th,td{padding:10px 12px; text-align:left; border-bottom:1px solid rgba(255,255,255,0.03);}
+    th{color:#fff; background:rgba(255,255,255,0.02); font-weight:600;}
+    code.cmd{background:var(--code); color:#cfe8ff; padding:6px 8px; border-radius:6px; font-family:var(--mono); font-size:13px;}
+    pre.example{background:#071827; padding:10px; border-radius:6px; overflow:auto; color:#dbeafe; font-family:var(--mono); font-size:13px;}
+    .note{color:var(--muted); font-size:13px; margin-top:8px;}
+    footer{margin-top:16px; color:var(--muted); font-size:13px;}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Commandes terminal utiles pour vérifier emplacement et fichiers</h1>
+    <p class="lead">Liste compacte des commandes à utiliser pour savoir où tu es, lister les fichiers, vérifier les dates et trouver des fichiers.</p>
+  </header>
+
+  <main class="grid">
+    <section class="card">
+      <h2>Chemin courant</h2>
+      <table>
+        <tr><th>Commande</th><th>Usage</th></tr>
+        <tr>
+          <td><code class="cmd">pwd</code></td>
+          <td>Affiche le chemin absolu du dossier courant.</td>
+        </tr>
+      </table>
+      <pre class="example">$ pwd
+/home/bernard/EPARVIER/Stack-Solaize</pre>
+    </section>
+
+    <section class="card">
+      <h2>Lister les fichiers</h2>
+      <table>
+        <tr><th>Commande</th><th>Usage</th></tr>
+        <tr>
+          <td><code class="cmd">ls -la</code></td>
+          <td>Liste tous les fichiers (y compris cachés) avec permissions et dates.</td>
+        </tr>
+        <tr>
+          <td><code class="cmd">ls -lh --sort=time</code></td>
+          <td>Liste lisible par taille et triée par date (les plus récents en haut).</td>
+        </tr>
+      </table>
+      <pre class="example">$ ls -la
+drwxr-xr-x  6 bernard bernard 4.0K Apr 12 15:30 .
+-rw-r--r--  1 bernard bernard 1.2K Apr 12 15:28 docker-compose.yml
+-rw-r--r--  1 bernard bernard  512 Apr 12 15:20 README</pre>
+    </section>
+
+    <section class="card">
+      <h2>Vérifier un fichier précis</h2>
+      <table>
+        <tr><th>Commande</th><th>Usage</th></tr>
+        <tr>
+          <td><code class="cmd">stat <em>nom_du_fichier</em></code></td>
+          <td>Affiche date de modification, taille et autres métadonnées du fichier.</td>
+        </tr>
+        <tr>
+          <td><code class="cmd">file <em>nom_du_fichier</em></code></td>
+          <td>Indique le type de fichier (texte, binaire, encodage).</td>
+        </tr>
+      </table>
+      <pre class="example">$ stat docker-compose.yml
+  File: docker-compose.yml
+  Size: 1234       Blocks: 8          IO Block: 4096 regular file
+  Modify: 2026-04-12 15:28:10.000000000 +0200</pre>
+    </section>
+
+    <section class="card">
+      <h2>Contrôle avec Git</h2>
+      <table>
+        <tr><th>Commande</th><th>Usage</th></tr>
+        <tr>
+          <td><code class="cmd">git status</code></td>
+          <td>Montre les fichiers modifiés/non commités dans le dépôt.</td>
+        </tr>
+        <tr>
+          <td><code class="cmd">git diff <em>nom_du_fichier</em></code></td>
+          <td>Affiche les différences entre l'état modifié et la version committée.</td>
+        </tr>
+      </table>
+      <pre class="example">$ git status
+On branch main
+Changes not staged for commit:
+  modified: docker-compose.yml</pre>
+    </section>
+
+    <section class="card">
+      <h2>Trouver des fichiers</h2>
+      <table>
+        <tr><th>Commande</th><th>Usage</th></tr>
+        <tr>
+          <td><code class="cmd">find . -name "docker-compose*.yml"</code></td>
+          <td>Recherche des fichiers par nom dans le dossier courant et sous-dossiers.</td>
+        </tr>
+        <tr>
+          <td><code class="cmd">grep -R "services:" .</code></td>
+          <td>Recherche récursive par contenu (ici cherche la clé <code>services:</code>).</td>
+        </tr>
+      </table>
+      <pre class="example">$ find . -name "docker-compose*.yml"
+./docker-compose.yml
+./deploy/docker-compose.prod.yml</pre>
+    </section>
+
+    <section class="card">
+      <h2>Utilitaires disque et tailles</h2>
+      <table>
+        <tr><th>Commande</th><th>Usage</th></tr>
+        <tr>
+          <td><code class="cmd">du -sh *</code></td>
+          <td>Affiche la taille de chaque élément du dossier courant (lisible).</td>
+        </tr>
+        <tr>
+          <td><code class="cmd">find . -type f -size +50M -exec ls -lh {} \;</code></td>
+          <td>Trouve les fichiers plus gros que 50 Mo et affiche leurs détails.</td>
+        </tr>
+      </table>
+      <pre class="example">$ du -sh *
+4.0K    .git
+1.2K    docker-compose.yml
+120M    data</pre>
+    </section>
+
+    <section class="card">
+      <h2>Vérifier si micro a sauvegardé</h2>
+      <p class="note">Si tu as fait <code class="cmd">Ctrl+S</code> dans micro, le fichier est écrit sur disque. Pour confirmer la date de modification :</p>
+      <pre class="example">$ stat docker-compose.yml
+Modify: 2026-04-12 15:28:10.000000000 +0200</pre>
+    </section>
+
+    <section class="card">
+      <h2>Commande unique pratique</h2>
+      <p class="note">Copie-colle cette commande pour afficher en une fois le chemin courant, la liste et les 5 fichiers les plus récents :</p>
+      <pre class="example">pwd && echo && ls -lh --sort=time | head -n 10</pre>
+    </section>
+  </main>
+
+  <footer>
+    Tu veux que je te fournisse aussi une version prête à coller dans ton terminal qui affiche chemin, liste détaillée et 5 fichiers récents en une seule ligne ?
+  </footer>
+</body>
+</html>

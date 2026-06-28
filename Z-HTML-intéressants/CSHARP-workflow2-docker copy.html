@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Workflow Docker Multi-Projets .NET</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; margin: 20px; max-width: 900px; }
+    h1, h2, h3 { color: #234; }
+    code { background: #f4f4f4; padding: 2px 4px; border-radius: 3px; }
+    pre { background: #f4f4f4; padding: 10px; border-radius: 5px; overflow-x: auto; }
+    .box { border: 1px solid #ccc; padding: 10px; border-radius: 5px; margin: 20px 0; }
+    a { color: #1a4; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+<h1>Workflow complet : Dockerfile → Image → Conteneur (multi-projets .NET)</h1>
+
+<h2>Sommaire</h2>
+<ul>
+  <li><a href="#structure">1. Structure du projet</a></li>
+  <li><a href="#dockerfile">2. Etape 1 : Le Dockerfile construit une image</a></li>
+  <li><a href="#compose">3. Etape 2 : docker-compose orchestre les images</a></li>
+  <li><a href="#build">4. Etape 3 : Construction des images</a></li>
+  <li><a href="#run">5. Etape 4 : Creation des conteneurs</a></li>
+  <li><a href="#stop">6. Etape 5 : Arreter les conteneurs</a></li>
+  <li><a href="#resume">7. Resume visuel du workflow</a></li>
+</ul>
+
+<div class="box" id="structure">
+  <h2>1. Structure du projet</h2>
+  <p>Voici la structure reelle de ton dossier <strong>EPARVIER</strong> :</p>
+  <pre>EPARVIER/
+ ├── docker-compose.yaml
+ ├── SolaizeApi/
+ │    └── Dockerfile
+ ├── SolaizeCockpit/
+ │    └── Dockerfile
+ ├── Solaize.Shared/
+ └── ...</pre>
+  <p>
+    <strong>EPARVIER</strong> est le dossier racine.  
+    C'est le <strong>contexte Docker</strong> utilise pour construire toutes les images.
+  </p>
+</div>
+
+<div class="box" id="dockerfile">
+  <h2>2. Etape 1 : Le Dockerfile construit une image</h2>
+  <p>
+    Chaque projet (API, Cockpit…) possede son propre <code>Dockerfile</code>.
+    Ce fichier decrit <strong>comment construire l'image</strong>.
+  </p>
+
+  <p>Exemple (SolaizeApi/Dockerfile) :</p>
+  <pre>COPY SolaizeApi/SolaizeApi.csproj SolaizeApi/
+COPY Solaize.Shared/Solaize.Shared.csproj Solaize.Shared/
+RUN dotnet restore
+COPY . .
+RUN dotnet publish -c Release -o /app</pre>
+
+  <p>
+    Le Dockerfile utilise des chemins <strong>relatifs au contexte</strong> (EPARVIER), pas a son dossier.
+  </p>
+</div>
+
+<div class="box" id="compose">
+  <h2>3. Etape 2 : docker-compose orchestre les images</h2>
+  <p>
+    Le fichier <code>docker-compose.yaml</code> dit a Docker :
+  </p>
+  <ul>
+    <li>quel Dockerfile utiliser</li>
+    <li>ou il se trouve</li>
+    <li>comment nommer l'image</li>
+    <li>comment lancer le conteneur</li>
+  </ul>
+
+  <p>Exemple :</p>
+  <pre>services:
+  api:
+    build:
+      context: .
+      dockerfile: SolaizeApi/Dockerfile
+    image: solaizeapi
+    ports:
+      - "5000:80"</pre>
+
+  <p>
+    <strong>context: .</strong> = Docker voit tout EPARVIER  
+    <strong>dockerfile:</strong> = chemin du Dockerfile  
+    <strong>image:</strong> = nom final de l'image  
+  </p>
+</div>
+
+<div class="box" id="build">
+  <h2>4. Etape 3 : Construction des images</h2>
+  <p>Depuis le dossier <code>EPARVIER</code> :</p>
+  <pre>docker compose build</pre>
+
+  <p>Docker fait alors :</p>
+  <ol>
+    <li>Lit le docker-compose</li>
+    <li>Va chercher chaque Dockerfile</li>
+    <li>Construit chaque image (API, Cockpit…)</li>
+    <li>Les stocke localement</li>
+  </ol>
+
+  <p>Resultat visible avec :</p>
+  <pre>docker images</pre>
+</div>
+
+<div class="box" id="run">
+  <h2>5. Etape 4 : Creation des conteneurs</h2>
+  <p>
+    Une fois les images construites, Docker peut creer les conteneurs.
+  </p>
+
+  <pre>docker compose up</pre>
+
+  <p>Docker fait alors :</p>
+  <ol>
+    <li>Prend l'image <code>solaizeapi</code></li>
+    <li>Cree un conteneur base dessus</li>
+    <li>Ouvre les ports definis</li>
+    <li>Fait pareil pour Cockpit, Mongo, Grafana…</li>
+  </ol>
+
+  <p>Les conteneurs apparaissent avec :</p>
+  <pre>docker ps</pre>
+</div>
+
+<div class="box" id="stop">
+  <h2>6. Etape 5 : Arreter les conteneurs</h2>
+  <pre>docker compose down</pre>
+</div>
+
+<div class="box" id="resume">
+  <h2>7. Resume visuel du workflow</h2>
+  <pre>
+Dockerfile  →  Image  →  Conteneur  →  Application qui tourne
+   ↑            ↑           ↑
+   |            |           |
+   |            |           └── docker compose up
+   |            └── docker compose build
+   └── decrit comment construire l'image
+  </pre>
+</div>
+
+</body>
+</html>

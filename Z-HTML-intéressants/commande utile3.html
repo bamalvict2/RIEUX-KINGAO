@@ -1,0 +1,339 @@
+
+
+🔹 Stoppe tout propremen
+docker compose down
+
+🔹 Reconstruis l’API (et seulement l’API si tu veux)
+docker compose build solaize-api
+
+Ou reconstruis tout :
+docker compose up -d --build
+
+docker compose up -d --build
+docker logs -f solaize-apidocker compose down
+docker system prune -f
+docker compose up -d🟧 
+3) Vérification cockpit
+🔹 Depuis ton navigateur
+http://localhost:8080/api/items
+
+🔹 Depuis ton cockpit Blazor
+La page Items doit charger.
+🔹 Depuis Prometheus
+http://localhost:9090docker compose down
+docker system prune -f
+docker compose up -d🔹 Depuis Grafana
+http://localhost:3000docker compose down
+docker system prune -f
+docker compose up -dpour tout voir 
+bamalvict@KINGDOMAINE:~/EPARVIER$ ls -R .
+
+🟩 2) Supprimer les containers orphelins (optionnel mais recommandé)
+docker system prune -f
+
+docker images
+
+docker image prune -a -f
+docker rmi prom/prometheus:latest
+docker rmi grafana/grafana:latest
+
+------------------------------------------------------------------
+docker stop solaize-mongo solaize-api solaize-blazor-server nginx
+docker rm -f solaize-mongo solaize-api solaize-blazor-server nginx
+
+
+
+
+
+
+
+make up
+make rebuild
+---------------------
+nano Makefile
+make status
+make up
+make logs
+make clean-images-deep
+make clean-volumes
+----
+make up
+make rebuild
+
+-----------------
+nano EPARVIER.sh
+chmod +x EPARVIER.sh
+./EPARVIER.sh
+
+
+
+
+gedit ~/EPARVIER/docker-compose.yml
+docker compose config
+docker compose down
+docker compose up -d
+docker ps --format "table {{.Names}}\t{{.Status}}"
+
+
+
+
+
+
+dotnet clean
+dotnet restore
+dotnet build      → compile ton code localement
+docker build      → publie + embarque dans l’image
+
+dotnet publish -c Release
+bin/Release/net8.0/publish/
+
+Dans le dossier où se trouve ton Dockerfile 
+docker build -t solaizeapi .
+
+docker image prune -a -f
+docker rmi prom/prometheus:latest
+docker rmi grafana/grafana:latest
+dotnet build
+
+
+
+
+ou plus lite
+docker compose down
+docker system prune -f
+docker compose up -d
+
+si mauvais build
+Relance une build
+docker compose build --no-cache sans les  autres
+
+
+logs
+docker compose logs -f solaize-blazor-server
+docker compose logs -f solaize-api
+
+
+docker compose down
+docker compose down --remove-orphans
+docker compose build --no-cache 
+docker compose build
+
+ Tu es maintenant dans l’état parfait pour relancer la stack
+
+docker compose down -v
+docker compose up -d
+
+
+docker compose down -v
+docker compose build --no-cache
+docker compose up -d
+
+
+
+bamalvict@KINGDOMAINE:~/EPARVIER$ find SolaizeCockpit -maxdepth 3 -type f
+
+
+
+Si pb acec mongo_data
+👉 1) Supprimer le dossier  (recommandé
+sudo rm -rf mongo_data
+Puis recrée-le proprement :
+mkdir mongo_data
+sudo chmod -R 777 mongo_data
+
+🟧 ✔️ Solution encore plus propre : exclure mongo_data du build
+Créer un  .dockerignore à la racine :
+mongo_data/
+et 
+sudo rm -rf mongo_data
+mkdir mongo_data
+sudo chmod -R 777 mongo_data
+
+Ainsi Docker ne scanne plus ce dossier
+👉 plus d’erreur
+👉 build plus rapide
+👉 plus propre
+C’est la solution professionnelle.
+TU FAIS nano .dockerignore ctrlx et save y et tu mets dedans mongo_data/
+
+
+
+
+
+
+
+
+Monitoring 
+cd ~/EPARVIER/monitoring
+docker compose -f docker-compose.monitoring.yml up -d
+
+docker stop blackbox_exporter
+docker rm blackbox_exporter
+
+
+cd ~/EPARVIER/monitoring
+docker compose -f docker-compose.monitoring.yml up -d
+
+
+
+
+docker build -t solaizeapi -f SolaizeApi/Dockerfile .
+
+docker build -t blazor -f SolaizeCockpit/Dockerfile .
+
+
+
+
+
+docker network create infra-net
+
+cd EPARVIER
+docker compose up -d
+docker network inspect infra-net
+cd ../KINGDOMAINE
+docker compose up -d
+docker exec -it prometheus ping solaizeapi
+docker exec -it grafana ping loki
+docker exec -it cadvisor ping mongo
+
+
+docker network rm rieux-net
+docker network rm infra-net
+
+
+
+
+
+
+solaizeapi:
+  build:
+    context: .
+    dockerfile: SolaizeApi/Dockerfile
+  image: eparvier-solaize-api
+  container_name: solaizeapi
+  restart: always
+  environment:
+    ASPNETCORE_URLS: http://0.0.0.0:5010
+  ports:
+    - "5010:5010"
+  depends_on:
+    - mongo
+  networks:
+    - eparvier-net
+
+
+blazor:
+  build:
+    context: .
+    dockerfile: SolaizeCockpit/Dockerfile
+  image: eparvier-solaize-blazor-server
+  container_name: blazor
+  restart: always
+  environment:
+    ASPNETCORE_URLS: http://0.0.0.0:5110
+  ports:
+    - "5110:5110"
+  depends_on:
+    - solaizeapi
+  networks:
+    - eparvier-net
+
+
+tout nettoyer:
+docker container prune
+docker compose down
+docker compose up -d
+docker system prune
+docker system prune -a
+
+
+
+
+
+
+
+
+
+Grafana → http://localhost:3000
+
+Prometheus → http://localhost:9090
+
+
+
+
+
+
+
+
+DOSSIER VIDE LOCAL EN GIT POUR RECUPERER LE CODE DEPUIS LE REPO D'UNE BRANCHE
+🟩 Méthode PROPRE : créer un dossier vierge Nana5 et cloner la bonne branche
+
+Tu fais :
+Code
+
+mkdir Nana5
+cd Nana5
+git clone -b fin-compile git@github.com:bamalvict2/EPAR-API-SERVER.git .
+
+Explications :
+
+    mkdir Nana5 → tu crées un dossier vide
+
+    cd Nana5 → tu entres dedans
+
+    git clone -b fin-compile … . → tu clones directement la branche fin-compile dans ce dossier
+
+Le . à la fin signifie :
+➡️ cloner dans le dossier actuel, pas dans un sous-dossier
+
+Et le -b fin-compile signifie :
+➡️ cloner directement la branche fin-compile
+🟦 Résultat : tu récupères EXACTEMENT ce que tu vois sur GitHub
+
+✔ ton API
+✔ ton cockpit
+✔ tout ton code C#
+✔ toutes les dépendances
+✔ l’historique Git
+✔ la branche correcte
+✔ le remote configuré
+✔ prêt pour git pull / git push
+🟧 Si tu veux vérifier ensuite :
+Code
+
+git branch
+
+Tu dois voir :
+Code
+
+* fin-compile
+
+Et :
+Code
+
+git remote -v
+
+Tu dois voir :
+Code
+
+origin  git@github.com:bamalvict2/EPAR-API-SERVER.git
+
+🟨 Résumé ultra simple
+
+Tu veux repartir propre → tu crées Nana5 vide → tu clones la bonne branche :
+Code
+
+mkdir Nana5
+cd Nana5
+git clone -b fin-compile git@github.com:bamalvict2/EPAR-API-SERVER.git .
+
+Et tu récupères tout ton projet complet, comme sur GitHub.
+
+
+
+
+
+
+
+
+

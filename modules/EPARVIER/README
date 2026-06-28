@@ -1,0 +1,30 @@
+# EPARVIER — Solaize Cockpit
+
+EPARVIER est un environnement complet composé de :
+
+- **Solaize API** (ASP.NET Core)
+- **Solaize Blazor Server** (interface cockpit)
+- **MongoDB** (base de données)
+- **Prometheus** (metrics)
+- **Grafana** (dashboard)
+
+L’ensemble tourne via **Docker Compose**.
+
+---
+
+## 🚀 Architecture
+
+| Service                | Port local | Image / Tech |
+|------------------------|------------|--------------|
+| Solaize API            | 8080       | .NET 8       |
+| Solaize Blazor Server  | 5000       | .NET 8       |
+| MongoDB                | 27017      | mongo:7.0    |
+| Prometheus             | 9090       | prom/prometheus |
+| Grafana                | 3000       | grafana/grafana |
+
+---
+
+## 🐳 Lancer l’environnement
+
+```bash
+docker compose up -d --build

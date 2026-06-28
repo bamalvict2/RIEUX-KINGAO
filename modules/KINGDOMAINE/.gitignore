@@ -1,0 +1,38 @@
+# KINGDOMAINE — .gitignore cockpitifié
+
+# Logs
+logs/
+*.log
+*.err
+*.out
+
+# Monitoring cache / runtime
+cache/
+state/
+runtime/
+tmp/
+*.tmp
+
+# Docker / Compose data
+docker-data/
+dump/
+volumes/
+
+# Secrets
+*.env
+.env.*
+*.key
+*.pem
+id_ed25519
+id_rsa
+
+# Editor / OS
+.vscode/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Backups
+*.bak
+*.save

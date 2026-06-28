@@ -1,0 +1,45 @@
+# --- LOGS GLOBAUX ---
+logs/
+*.log
+
+# --- TEMP & CACHE ---
+tmp/
+temp/
+cache/
+*.tmp
+*.bak
+*.pid
+
+# --- RUNTIME ---
+run/
+state/
+*.sock
+
+# --- ENV & SECRETS ---
+.env
+.env.*
+secrets/
+*.key
+*.pem
+
+# --- SYSTEMD OUTPUT ---
+*.journal
+
+# --- MODULES GENERATED FILES ---
+modules/**/output/
+modules/**/generated/
+modules/**/runtime/
+
+# --- EDITORS ---
+.vscode/
+.idea/
+*.swp
+
+# --- OS SPECIFIC ---
+.DS_Store
+Thumbs.db
+
+# --- BACKUP ---
+*.old
+*.save
+*.backup
