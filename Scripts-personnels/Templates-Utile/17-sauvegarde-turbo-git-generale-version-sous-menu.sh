@@ -116,16 +116,24 @@ remote_menu() {
         read -p "Nom du remote : " rname
         git fetch "$rname"
         ;;
-      8)
+
+      8)        
         git branch -vv
         read -p "Nom du remote : " rname
         read -p "Branche locale : " branch
-        ask_yes_no "Définir l'upstream ?"
-        case $? in
-          0) git push -u "$rname" "$branch" ;;
-          1) git push "$rname" "$branch" ;;
-        esac
+
+        echo -n "Définir l'upstream (ENTER = non, URL/branche = oui) : "
+        read upstream
+
+        if [[ -z "$upstream" ]]; then
+        # Pas d’upstream → push normal
+          git push "$rname" "$branch"
+        else
+          # Upstream automatique
+          git push -u "$rname" "$branch"
+        fi
         ;;
+
       9)
         git remote -v
         read -p "Nom du remote : " rname
