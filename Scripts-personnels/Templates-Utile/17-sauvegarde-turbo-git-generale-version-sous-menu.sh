@@ -3,6 +3,23 @@
 # ============================
 #   🧠 BernardOps — Git Cockpit PRO MAX
 # ============================
+    Pense bête
+    git remote -v
+    git branch -vv
+    git status --short
+    git log --oneline --graph --decorate --all
+    git add -A
+    git commit -m "Message de commit"
+    git push -u origin $(git branch --show-current)
+    git pull origin $(git branch --show-current)
+    git fetch origin
+    git merge origin/$(git branch --show-current)
+    git branch --merged
+    git branch --no-merged
+    git remote add origin <url>
+    git remote set-url origin <url>
+
+# ============================
 
 # Vérifier si on est dans un dépôt Git
 if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
