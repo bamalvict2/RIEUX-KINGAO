@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Feuille de route KINGDOMAINE</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #020617;
+      color: #e5e7eb;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+      color: #facc15;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+      margin-top: 2rem;
+      color: #38bdf8;
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      margin-top: 1.2rem;
+      color: #f97316;
+    }
+
+    p {
+      margin: 0.4rem 0 0.8rem;
+      color: #cbd5f5;
+    }
+
+    .section {
+      margin-top: 1.5rem;
+      padding: 1rem 1.2rem;
+      border-radius: 0.75rem;
+      border: 1px solid #1f2937;
+      background: #0b1120;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    ul {
+      margin: 0.4rem 0 0.8rem;
+      padding-left: 1.2rem;
+      color: #d1d5db;
+    }
+
+    li {
+      margin-bottom: 0.25rem;
+    }
+
+    code {
+      background: #111827;
+      padding: 0.1rem 0.3rem;
+      border-radius: 0.25rem;
+      font-size: 0.85rem;
+      color: #e5e7eb;
+    }
+
+    .label {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #6b7280;
+      margin-bottom: 0.4rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>KINGDOMAINE – Feuille de route profonde</h1>
+  <p>Vision, couches, supervision, réplicats et flux opérationnels pour le domaine EPARVIER.</p>
+
+  <div class="section">
+    <h2>1. Vision d’ensemble</h2>
+    <p>
+      Domaine personnel stable, supervisé, réplicable, avec front métier (C#/Razor/Blazor) et front Ops (Grafana),
+      exposés via Cloudflare/DuckDNS, utilisables aussi depuis Android.
+    </p>
+    <ul>
+      <li>Cœur métier : services C# (.NET), Razor/Blazor, logique EPARVIER.</li>
+      <li>Exposition : Cloudflare Tunnel + DuckDNS (fallback / tests).</li>
+      <li>Supervision : Prometheus + Grafana + exporters (app, système, blackbox).</li>
+      <li>Réplicats : Android / Prod stable / Dev.</li>
+      <li>Sauvegardes : Git remote Travail + T3 (FUSE) + archives <code>tar.gz</code>.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>2. Couches de l’architecture</h2>
+
+    <h3>2.1 Infra & OS</h3>
+    <ul>
+      <li>Windows 11 (T3/T7), VMware, disques externes T3/T7/T8/T9.</li>
+      <li>VM Ubuntu KINGDOMAINE (C#, Docker, Prometheus, Grafana).</li>
+      <li>Partages FUSE <code>.host:/UBUNTUSAVEW11 → /mnt/UBUNTUSAVEW11</code>.</li>
+      <li>Objectif : infra reproductible, montée/descente sans douleur.</li>
+    </ul>
+
+    <h3>2.2 Applicatif C# / Razor / Blazor</h3>
+    <ul>
+      <li>Services C# exposant API + Razor/Blazor pour le front web.</li>
+      <li>Ports clairs (ex : 5000/5001 interne, reverse proxy éventuel).</li>
+      <li>Logs structurés (JSON) pour corrélation avec Prometheus/Grafana.</li>
+    </ul>
+
+    <h3>2.3 Réseau & DNS (Cloudflare / DuckDNS)</h3>
+    <ul>
+      <li>Cloudflare Tunnel : entrée principale.</li>
+      <li>DuckDNS : entrée alternative / secours.</li>
+      <li>Petit script <code>.sh</code> pour tester Cloudflare KO / DuckDNS OK.</li>
+      <li>À terme : probes blackbox Prometheus.</li>
+    </ul>
+
+    <h3>2.4 Supervision (Prometheus / Grafana)</h3>
+    <ul>
+      <li>Prometheus : métriques système, app, blackbox.</li>
+      <li>Grafana : front Ops, dashboards par couche.</li>
+      <li>Exporters : <code>node_exporter</code>, <code>blackbox_exporter</code>, métriques .NET.</li>
+    </ul>
+
+    <h3>2.5 Réplicats & Versions</h3>
+    <ul>
+      <li>Android stable : API figées.</li>
+      <li>Prod stable : version validée.</li>
+      <li>Dev / Lab : terrain de jeu (Razor, Grafana, exporters).</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>3. Supervision en profondeur</h2>
+
+    <h3>3.1 Stack monitoring</h3>
+    <p class="label">docker-compose.monitoring.yml</p>
+    <ul>
+      <li>Prometheus, Grafana, node_exporter, blackbox_exporter.</li>
+      <li>Scrape VM KINGDOMAINE, services C#, probes Cloudflare/DuckDNS.</li>
+    </ul>
+
+    <h3>3.2 Dashboards Grafana</h3>
+    <ul>
+      <li>Infra : CPU, RAM, disque, uptime.</li>
+      <li>App C# : temps de réponse, erreurs HTTP, requêtes/s.</li>
+      <li>DNS / Tunnel : Cloudflare vs DuckDNS (blackbox).</li>
+      <li>Réplicats / Backups : succès/échecs, taille tar.gz, timestamps.</li>
+    </ul>
+
+    <h3>3.3 Intégration du script de test</h3>
+    <ul>
+      <li>Option 1 : exposer des métriques via un endpoint texte.</li>
+      <li>Option 2 : utiliser directement <code>blackbox_exporter</code>.</li>
+      <li>Objectif : historique KO/OK visible dans Grafana.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>4. Réplicats & Android figé</h2>
+
+    <h3>4.1 Principe</h3>
+    <ul>
+      <li>Android : API stables, pas de breaking changes.</li>
+      <li>Prod : version validée, quotidienne.</li>
+      <li>Dev : expérimentation.</li>
+    </ul>
+
+    <h3>4.2 URLs / routage</h3>
+    <ul>
+      <li><code>https://android.kingdomaine/</code> → réplicat Android.</li>
+      <li><code>https://prod.kingdomaine/</code> → Prod stable.</li>
+      <li><code>https://lab.kingdomaine/</code> → Dev.</li>
+    </ul>
+
+    <h3>4.3 Cycle de vie</h3>
+    <ul>
+      <li>Dev sur réplicat Lab.</li>
+      <li>Supervision via Grafana.</li>
+      <li>Promotion vers Prod si OK.</li>
+      <li>Décision pour Android (changer ou rester figé).</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>5. Flux opérationnels</h2>
+
+    <h3>5.1 Sauvegardes & FUSE</h3>
+    <ul>
+      <li>Script universel de sauvegarde EPARVIER → <code>/mnt/UBUNTUSAVEW11/EPARVIER/...</code></li>
+      <li>Archives <code>BernardBackup-YYYYMMDD-HHMM.tar.gz</code> sur T3.</li>
+      <li>Git remote Travail à jour.</li>
+      <li>FUSE dans les deux sens pour restaurer.</li>
+    </ul>
+
+    <h3>5.2 Routine quotidienne</h3>
+    <ul>
+      <li>Regarder Grafana en début de session.</li>
+      <li>Travailler sur EPARVIER / C# / Razor.</li>
+      <li>Sauvegarde Git + tar.gz.</li>
+      <li>Vérifier probes Cloudflare/DuckDNS.</li>
+    </ul>
+  </div>
+
+  <div class="section">
+    <h2>6. Prochaines étapes</h2>
+    <ul>
+      <li>Créer le docker-compose monitoring.</li>
+      <li>Ajouter jobs Prometheus (KINGDOMAINE, C#, Cloudflare, DuckDNS).</li>
+      <li>Construire un dashboard “Infra + DNS”.</li>
+      <li>Définir les 3 réplicats et leurs URLs.</li>
+      <li>Documenter cette feuille de route comme référence KINGDOMAINE.</li>
+    </ul>
+  </div>
+</body>
+</html>
+
+
+
+#+ arborescence 
+#!/bin/bash
+
+echo "📁 Création arborescence KING-AO..."
+
+# Racine
+mkdir -p KING-AO
+cd KING-AO
+
+# Modules
+mkdir -p modules/eparvier-metier
+mkdir -p modules/kingdomaine
+
+touch modules/eparvier-metier/Dockerfile
+touch modules/kingdomaine/Dockerfile
+touch modules/kingdomaine/README.md
+
+# Actions METIER
+mkdir -p actions/metier
+touch actions/metier/start.sh
+touch actions/metier/stop.sh
+touch actions/metier/status.sh
+touch actions/metier/logs.sh
+touch actions/metier/rebuild.sh
+touch actions/metier/sync.sh
+
+# Actions KINGDOMAINE
+mkdir -p actions/kingdomaine
+touch actions/kingdomaine/start.sh
+touch actions/kingdomaine/stop.sh
+touch actions/kingdomaine/status.sh
+touch actions/kingdomaine/logs.sh
+touch actions/kingdomaine/rebuild.sh
+touch actions/kingdomaine/sync.sh
+
+# Actions orchestrateur
+mkdir -p actions/orchestrator
+touch actions/orchestrator/menu.sh
+touch actions/orchestrator/cockpit.sh
+touch actions/orchestrator/utils.sh
+
+# Cockpit HTML
+mkdir -p cockpit
+touch cockpit/index.html
+touch cockpit/kingdomaine.html
+touch cockpit/metier.html
+
+# Docs
+mkdir -p docs
+touch docs/kingdomaine-plan.md
+touch docs/architecture.md
+
+# Logs + config
+mkdir -p logs
+mkdir -p config
+
+# Script principal KING-AO
+touch KING-AO.sh
+
+echo "✅ Arborescence KING-AO + KINGDOMAINE créée."
+
+
+KING-AO/
+ ├── monitoring/
+ │     ├── docker-compose.yml
+ │     ├── prometheus.yml
+ │     ├── loki-config.yml
+ │     └── promtail-config.yml

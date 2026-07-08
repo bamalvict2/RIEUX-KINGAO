@@ -1,130 +1,76 @@
-🔥 Bernard, maintenant que eparvierPro est propre…
-Tu veux qu’on passe à l’intégration EPARVIER PRO dans le menu KING‑AO ?
-(start / stop / status / logs)
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Récap Monitoring KING-AO</title>
+<style>
+body { font-family: Arial; background: #f4f4f4; padding: 20px; }
+h1 { color: #333; }
+.section { background: #fff; padding: 15px; margin-bottom: 20px; border-radius: 8px; }
+h2 { color: #444; }
+ul { line-height: 1.6; }
+.code { background: #eee; padding: 10px; border-radius: 5px; }
+</style>
+</head>
+<body>
+
+<h1>Récap Monitoring KING-AO</h1>
+
+<div class="section">
+<h2>📦 Conteneurs actifs</h2>
+<ul>
+<li>Grafana — Port 3000 — <strong>Up</strong></li>
+<li>Prometheus — Port 9090 — <strong>Up</strong></li>
+<li>cAdvisor — Port 8080 — <strong>Up</strong></li>
+<li>Promtail — Agent de logs — <strong>Up</strong></li>
+<li>Loki 2.9.3 — Port 3100 — <strong>Up</strong></li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🗄 Backend Loki</h2>
+<ul>
+<li>Version : <strong>2.9.3 (stable)</strong></li>
+<li>Backend : <strong>boltdb-shipper</strong></li>
+<li>Schema : <strong>v11</strong></li>
+<li>Storage : <strong>filesystem</strong></li>
+<li>Compactor : <strong>simple</strong></li>
+</ul>
+</div>
+
+<div class="section">
+<h2>📡 Flux de logs</h2>
+<ul>
+<li>Promtail → Loki (HTTP)</li>
+<li>Loki → Grafana (datasource)</li>
+<li>Grafana → Explore → Logs OK</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>📊 Monitoring système</h2>
+<ul>
+<li>cAdvisor → Prometheus</li>
+<li>Prometheus → Grafana (dashboards)</li>
+</ul>
+</div>
+
+<div class="section">
+<h2>🔒 Sécurité / Reverse Proxy</h2>
+<p>Pas de Nginx pour l’instant — accès direct aux ports locaux.</p>
+</div>
+
+<div class="section">
+<h2>🚀 Prochaines étapes possibles</h2>
+<ul>
+<li>Ajouter Nginx pour un portail unique</li>
+<li>Ajouter HTTPS</li>
+<li>Installer Loki 3.x + TSDB quand la release sera officielle</li>
+<li>Créer un dashboard Grafana complet pour les logs</li>
+</ul>
+</div>
+
+</body>
+</html>
 
-Je peux te générer le menu ACTIONS complet, cockpitifié, comme tu aimes.
 
-
-
-
-
-🧩 1. Ce qu’on a déjà fait ensemble
-✔ Mise à jour des .gitignore
-
-On a exclu :
-
-    bin/
-
-    obj/
-
-    .vs/
-
-    .idea/
-
-    logs/
-
-    temp/
-
-    caches KING‑AO
-
-    montages VMware
-
-    fichiers secrets / tokens
-
-    dossiers générés automatiquement
-
-👉 Résultat : ton repo KING‑AO est propre, sans bruit, sans fichiers temporaires.
-✔ Mise à jour des .dockerignore
-
-On a exclu :
-
-    tout ce qui ne doit pas entrer dans l’image
-
-    les modules locaux
-
-    les montages host
-
-    les dossiers EPARVIER / KINGDOMAINE non nécessaires
-
-    les fichiers de dev
-
-👉 Résultat : tes builds Docker sont plus rapides, plus légers, plus sûrs.
-🧩 2. Ce qu’il reste à faire pour finaliser le GIT de KING‑AO
-
-Voici les étapes cockpitifiées :
-
-    Initialiser le repo KING‑AO
-
-    Créer la structure des branches
-
-    Commit initial propre
-
-    Push vers GitHub / GitLab
-
-    Activer CI/CD KING‑AO
-
-    Brancher EPARVIER PRO dans KING‑AO
-
-🧨 3. KING‑AO est maintenant prêt à être versionné
-
-Tu as :
-
-    EPARVIER METIER propre
-
-    KINGDOMAINE eparvierPro propre
-
-    KING‑AO Ghost Hunter opérationnel
-
-    .gitignore à jour
-
-    .dockerignore à jour
-
-    environnement Firefox propre (sans pollution Edge)
-
-Tu es dans l’état parfait pour giter KING‑AO.
-🟦 Bernard… prochaine étape ?
-
-Tu veux :
-
-    Créer le repo KING‑AO maintenant
-
-    Générer le commit initial
-
-    Pousser vers GitHub/GitLab
-
-    Intégrer EPARVIER PRO dans le menu KING‑AO
-
-Tu me dis, et j’exécute.
-
-
-
-
-
-    Pousser vers GitHub/GitLab
-
-    Intégrer EPARVIER PRO dans le menu KING‑AO
-
-Tu me dis quand tu as fait le cd /opt/KING-AO, et on continue la séquence.
-
-
-
-
-
------------
-🎯 Ton fichier ssh-tools.sh est maintenant complet, propre, modulaire et PRO.
-
-Il fonctionne parfaitement avec :
-
-    ssh-core.sh
-
-    ssh-menu.sh
-
-    utils.sh
-
-🚀 Tu veux maintenant que je génère :
-
-    Le fichier complet ssh-menu.sh
-
-    Le fichier complet utils.sh
-
-Lequel tu veux ?

@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Mémo Tailscale & NAT</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --panel: #111827;
+            --accent: #38bdf8;
+            --accent-soft: #0ea5e9;
+            --text: #e5e7eb;
+            --muted: #9ca3af;
+            --border: #1f2937;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: radial-gradient(circle at top, #1e293b 0, #020617 55%);
+            color: var(--text);
+        }
+
+        .page {
+            max-width: 960px;
+            margin: 40px auto;
+            padding: 0 16px;
+        }
+
+        .card {
+            background: linear-gradient(145deg, #020617 0, #0b1120 40%, #020617 100%);
+            border-radius: 18px;
+            border: 1px solid var(--border);
+            box-shadow: 0 24px 60px rgba(15, 23, 42, 0.9);
+            padding: 28px 28px 32px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .badge {
+            width: 52px;
+            height: 52px;
+            border-radius: 16px;
+            background: radial-gradient(circle at 30% 20%, #38bdf8 0, #0ea5e9 30%, #0f172a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #0b1120;
+            font-weight: 700;
+            font-size: 22px;
+            box-shadow: 0 0 0 1px rgba(56, 189, 248, 0.4),
+                        0 18px 40px rgba(8, 47, 73, 0.9);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 24px;
+            letter-spacing: 0.03em;
+        }
+
+        .subtitle {
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 14px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+            gap: 24px;
+            margin-top: 24px;
+        }
+
+        .panel {
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 14px;
+            border: 1px solid rgba(31, 41, 55, 0.9);
+            padding: 18px 18px 20px;
+        }
+
+        .panel h2 {
+            margin: 0 0 10px;
+            font-size: 16px;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: var(--accent);
+        }
+
+        .panel h3 {
+            margin: 14px 0 6px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--muted);
+        }
+
+        p {
+            margin: 4px 0 8px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(15, 118, 178, 0.18);
+            border: 1px solid rgba(56, 189, 248, 0.5);
+            color: var(--accent);
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: 8px;
+        }
+
+        .pill span.icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 999px;
+            background: radial-gradient(circle at 30% 20%, #38bdf8 0, #0ea5e9 40%, #0f172a 100%);
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 6px 0 4px;
+        }
+
+        li {
+            position: relative;
+            padding-left: 18px;
+            margin-bottom: 4px;
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        li::before {
+            content: "•";
+            position: absolute;
+            left: 4px;
+            top: 0;
+            color: var(--accent-soft);
+            font-size: 14px;
+        }
+
+        .highlight {
+            color: var(--accent);
+            font-weight: 500;
+        }
+
+        .flow {
+            margin-top: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .step {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            font-size: 13px;
+        }
+
+        .step-index {
+            min-width: 22px;
+            height: 22px;
+            border-radius: 999px;
+            border: 1px solid rgba(56, 189, 248, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: var(--accent);
+            background: rgba(8, 47, 73, 0.7);
+        }
+
+        .step-text {
+            color: var(--muted);
+        }
+
+        .quote {
+            margin-top: 16px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px dashed rgba(56, 189, 248, 0.5);
+            background: rgba(15, 23, 42, 0.7);
+            font-size: 13px;
+            color: var(--accent-soft);
+        }
+
+        .footer {
+            margin-top: 22px;
+            font-size: 12px;
+            color: var(--muted);
+            text-align: right;
+        }
+
+        .footer span {
+            color: var(--accent-soft);
+        }
+
+        @media (max-width: 780px) {
+            .grid {
+                grid-template-columns: minmax(0, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="page">
+    <div class="card">
+        <div class="header">
+            <div class="badge">N</div>
+            <div>
+                <h1>Mémo — Tailscale & Traversée de NAT</h1>
+                <div class="subtitle">
+                    Comprendre comment ton G20 parle à KING‑AO même derrière des box et de la 4G.
+                </div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <!-- Colonne gauche : NAT classique vs Tailscale -->
+            <div class="panel">
+                <h2>Vue cockpit</h2>
+
+                <h3>NAT classique (box / routeur)</h3>
+                <p>
+                    <span class="highlight">Rôle :</span> traduire les IP locales pour sortir sur Internet, 
+                    et bloquer les connexions entrantes.
+                </p>
+                <ul>
+                    <li>Donne une IP locale (192.168.x.x, 10.x.x.x).</li>
+                    <li>Traduit cette IP pour accéder à Internet.</li>
+                    <li>Bloque les connexions entrantes par défaut.</li>
+                    <li>Oblige à ouvrir des ports (port forwarding) → surface d’attaque.</li>
+                </ul>
+
+                <h3>Tailscale (NAT moderne + VPN mesh)</h3>
+                <p>
+                    <span class="highlight">Rôle :</span> créer un réseau privé mondial entre tes appareils, 
+                    en traversant les NAT automatiquement.
+                </p>
+                <ul>
+                    <li>Donne une IP privée Tailscale à chaque appareil (ex : 100.84.x.x, 100.116.x.x).</li>
+                    <li>Relie tes appareils comme s’ils étaient dans le même LAN.</li>
+                    <li>Traverse les NAT sans ouvrir de ports.</li>
+                    <li>Chiffre tout le trafic entre les appareils.</li>
+                </ul>
+
+                <div class="quote">
+                    <strong>En une phrase :</strong>  
+                    Tailscale remplace le port forwarding par un LAN privé chiffré, 
+                    qui traverse les NAT automatiquement.
+                </div>
+            </div>
+
+            <!-- Colonne droite : pipeline Tailscale -->
+            <div class="panel">
+                <h2>Pipeline Tailscale pour traverser les NAT</h2>
+
+                <div class="pill">
+                    <span class="icon"></span>
+                    <span>Étapes en cascade</span>
+                </div>
+
+                <h3>1. Hole punching</h3>
+                <p>
+                    Les deux appareils (G20, KING‑AO) envoient des paquets vers Tailscale pour
+                    <span class="highlight">ouvrir une fenêtre temporaire</span> dans chaque NAT.
+                </p>
+                <p>
+                    Tailscale leur dit ensuite : « envoyez-vous des paquets directement à travers ces fenêtres ».  
+                    Les NAT voient des paquets attendus → ils les laissent passer.
+                </p>
+
+                <h3>2. STUN</h3>
+                <p>
+                    Tailscale utilise STUN pour découvrir :
+                </p>
+                <ul>
+                    <li>Ton IP publique.</li>
+                    <li>Le port que ton NAT a ouvert.</li>
+                    <li>Le type de NAT (symétrique, restrictif, etc.).</li>
+                </ul>
+                <p>
+                    STUN sert à comprendre <span class="highlight">comment percer ton NAT</span>.
+                </p>
+
+                <h3>3. DERP (relai sécurisé)</h3>
+                <p>
+                    Si le NAT est trop strict (certains opérateurs mobiles, hotspots), Tailscale utilise un
+                    <span class="highlight">serveur DERP</span> comme relai chiffré.
+                </p>
+                <ul>
+                    <li>G20 → envoie les paquets à DERP.</li>
+                    <li>KING‑AO → envoie les paquets à DERP.</li>
+                    <li>DERP relie les deux flux de manière sécurisée.</li>
+                </ul>
+
+                <div class="flow">
+                    <div class="step">
+                        <div class="step-index">1</div>
+                        <div class="step-text">
+                            Tailscale tente le <span class="highlight">hole punching</span> (connexion directe).
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-index">2</div>
+                        <div class="step-text">
+                            Il utilise <span class="highlight">STUN</span> pour comprendre ton NAT et ajuster la stratégie.
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-index">3</div>
+                        <div class="step-text">
+                            Si nécessaire, il bascule sur <span class="highlight">DERP</span> pour garantir la connexion.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="quote">
+                    Résultat : ton G20 peut parler à KING‑AO, même en 4G derrière des box,  
+                    comme s’ils étaient dans le même réseau local.
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Mémo perso <span>Bernard · KING‑AO</span> — Tailscale = NAT moderne + VPN mesh.
+        </div>
+    </div>
+</div>
+</body>
+</html>

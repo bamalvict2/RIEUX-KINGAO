@@ -10,6 +10,8 @@ gne# ▶️ Lancer lancer un SH  -tous -ou un répertoire
 
 4)Rends tous les .sh ecécutable le script :
 chmod +x *.sh
+chmod +x create-kingao.sh  nom du fichier à rendre exécutable
+
 
 # ########            . ~/.bashrc ### POUR rendre mon bashrc actif dans le terminal
 

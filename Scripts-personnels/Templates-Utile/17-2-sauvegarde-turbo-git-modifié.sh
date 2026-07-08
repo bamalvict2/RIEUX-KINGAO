@@ -197,6 +197,30 @@ turbo_menu() {
 }
 
 
+# ============================
+#   ⚡ FONCTIONS UTILITAIRES
+# ============================
+
+check_ssh_key() {
+  if ! ssh-add -l >/dev/null 2>&1; then
+    echo "❌ Aucune clé SSH chargée !"
+    echo "👉 Charge ta clé : ssh-add ~/.ssh/id_ed25519_SOLAIZE"
+    return 1
+  fi
+  return 0
+}
+
+fix_remote_if_https() {
+  remote="$1"
+  url=$(git remote get-url "$remote")
+
+  if [[ "$url" == https* ]]; then
+    echo "⚠️ Remote HTTPS détecté → conversion automatique en SSH"
+    ssh_url="git@github.com:${url#https://github.com/}"
+    git remote set-url "$remote" "$ssh_url"
+    echo "🔁 Remote converti : $ssh_url"
+  fi
+}
 
 # ============================
 #   ⚡ TURBO PUSH
@@ -209,6 +233,9 @@ turbo_push() {
   echo "🚀 TURBO PUSH"
   echo "📌 Branche : $branch"
   echo "📡 Remote : $remote"
+
+  check_ssh_key || return
+  fix_remote_if_https "$remote"
 
   git push -u "$remote" "$branch"
   echo "✅ Turbo Push terminé."
@@ -226,6 +253,9 @@ turbo_pull() {
   echo "📌 Branche : $branch"
   echo "📡 Remote : $remote"
 
+  check_ssh_key || return
+  fix_remote_if_https "$remote"
+
   git pull "$remote" "$branch"
   echo "✅ Turbo Pull terminé."
 }
@@ -242,6 +272,9 @@ turbo_sync() {
   echo "📌 Branche : $branch"
   echo "📡 Remote : $remote"
 
+  check_ssh_key || return
+  fix_remote_if_https "$remote"
+
   git pull "$remote" "$branch"
   git push "$remote" "$branch"
 
@@ -249,7 +282,7 @@ turbo_sync() {
 }
 
 # ============================
-#   ⚡ TURBO STATUS
+#   📊 TURBO STATUS
 # ============================
 
 turbo_status() {
@@ -258,20 +291,34 @@ turbo_status() {
 }
 
 # ============================
-#   ⚡ TURBO COMMIT
+#   📝 TURBO COMMIT
 # ============================
 
 turbo_commit() {
   echo "📝 TURBO COMMIT"
   git status --short
 
+  # Vérification modifications
+  if git diff --quiet && git diff --cached --quiet; then
+    echo "⚠️ Rien à commit."
+    return
+  fi
+
   read -p "Message de commit rapide : " msg
+
+  if [[ -z "$msg" ]]; then
+    echo "❌ Message vide → commit annulé."
+    return
+  fi
 
   git add -A
   git commit -m "$msg"
 
   branch=$(git branch --show-current)
   remote=$(git remote | head -n 1)
+
+  check_ssh_key || return
+  fix_remote_if_https "$remote"
 
   echo "⬆️ Push automatique..."
   git push "$remote" "$branch"
@@ -284,12 +331,14 @@ turbo_commit() {
 # ============================
 
 turbo_branch_creator() {
-  echo -e "${YELLOW}🌱 TURBO BRANCH CREATOR${RESET}"
+  echo "🌱 TURBO BRANCH CREATOR"
   read -p "Nom de la nouvelle branche : " newb
 
   git checkout -b "$newb"
 
   remote=$(git remote | head -n 1)
+  fix_remote_if_https "$remote"
+
   git push -u "$remote" "$newb"
 
   echo "✅ Branche '$newb' créée et poussée."
@@ -300,7 +349,7 @@ turbo_branch_creator() {
 # ============================
 
 turbo_clean() {
-  echo -e "${YELLOW}🧹 TURBO CLEAN — Nettoyage avancé${RESET}"
+  echo "🧹 TURBO CLEAN — Nettoyage avancé"
 
   current=$(git branch --show-current)
 
@@ -322,7 +371,7 @@ turbo_clean() {
 # ============================
 
 turbo_merge() {
-  echo -e "${YELLOW}🔀 TURBO MERGE — Fusion Express${RESET}"
+  echo "🔀 TURBO MERGE — Fusion Express"
 
   current=$(git branch --show-current)
   echo "📌 Branche actuelle : $current"
@@ -348,6 +397,7 @@ turbo_merge() {
   case "$pushok" in
     y|Y|yes|YES)
       remote=$(git remote | head -n 1)
+      fix_remote_if_https "$remote"
       git push "$remote" "$current"
       echo "🚀 Fusion poussée."
       ;;
@@ -362,7 +412,7 @@ turbo_merge() {
 # ============================
 
 turbo_deploy() {
-  echo -e "${YELLOW}🚀 TURBO DEPLOY — Déploiement automatique${RESET}"
+  echo "🚀 TURBO DEPLOY — Déploiement automatique"
   echo "────────────────────────────────────────────"
 
   echo "1) Lancer deploy.sh local"
@@ -409,7 +459,7 @@ turbo_deploy() {
 # ============================
 
 turbo_backup() {
-  echo -e "${YELLOW}💾 TURBO BACKUP — Sauvegarde rapide${RESET}"
+  echo "💾 TURBO BACKUP — Sauvegarde rapide"
   echo "────────────────────────────────────────────"
 
   ts=$(date +"%Y-%m-%d_%H-%M-%S")
@@ -427,7 +477,7 @@ turbo_backup() {
 # ============================
 
 turbo_fix() {
-  echo -e "${YELLOW}🛠️ TURBO FIX — Résolution automatique des conflits${RESET}"
+  echo "🛠️ TURBO FIX — Résolution automatique des conflits"
   echo "────────────────────────────────────────────"
 
   echo "1) Garder version locale (ours)"
@@ -466,7 +516,7 @@ turbo_fix() {
 # ============================
 
 turbo_restore() {
-  echo -e "${YELLOW}♻️ TURBO RESTORE — Retour rapide${RESET}"
+  echo "♻️ TURBO RESTORE — Retour rapide"
   echo "────────────────────────────────────────────"
 
   echo "1) Revenir au commit précédent (HEAD~1)"
@@ -504,6 +554,10 @@ turbo_restore() {
     *) echo "❌ Option inconnue." ;;
   esac
 }
+
+
+
+
 
 
 

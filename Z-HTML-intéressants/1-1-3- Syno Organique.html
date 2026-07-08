@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Architecture KING-AO – 3 groupes</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    h1 {
+      margin-bottom: 0.5rem;
+      font-size: 1.8rem;
+      color: #facc15;
+    }
+
+    h2 {
+      margin-top: 2rem;
+      font-size: 1.3rem;
+      color: #38bdf8;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+
+    .card {
+      background: #020617;
+      border-radius: 0.75rem;
+      border: 1px solid #1f2937;
+      padding: 1rem 1.2rem;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #f97316;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      background: #1e293b;
+      color: #cbd5f5;
+      margin-bottom: 0.5rem;
+    }
+
+    ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 0.4rem 0 0;
+      font-size: 0.9rem;
+    }
+
+    ul li::before {
+      content: "•";
+      color: #22c55e;
+      margin-right: 0.4rem;
+    }
+
+    .tree {
+      margin-top: 2rem;
+      background: #020617;
+      border-radius: 0.75rem;
+      border: 1px solid #1f2937;
+      padding: 1rem 1.2rem;
+      font-family: "JetBrains Mono", "Fira Code", monospace;
+      font-size: 0.85rem;
+      color: #9ca3af;
+      overflow-x: auto;
+    }
+
+    .tree code {
+      white-space: pre;
+      display: block;
+    }
+
+    .section-label {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #6b7280;
+      margin-bottom: 0.4rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>🛠️ 3. Tout doit être écrit quelque part</h1>
+  <p>
+    Architecture KING‑AO en trois groupes distincts, chacun clairement défini et versionné.
+  </p>
+
+  <h2>Les 3 groupes KING‑AO</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="card-title">EPARVIERS METIER (C#)</div>
+      <span class="badge">Groupe 1 – Métier</span>
+      <ul>
+        <li>Code C# (.NET) métier</li>
+        <li>Image Docker <strong>eparvier-metier:latest</strong></li>
+        <li>Scripts <code>actions/metier/*.sh</code></li>
+        <li>Menu cockpit « EPARVIER METIER »</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">KINGDOMAINE (C#)</div>
+      <span class="badge">Groupe 2 – Domaine</span>
+      <ul>
+        <li>Entités, agrégats, repositories</li>
+        <li>Image Docker <strong>kingdomaine:latest</strong></li>
+        <li>Scripts <code>actions/kingdomaine/*.sh</code></li>
+        <li>Menu cockpit « KINGDOMAINE »</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <div class="card-title">KING‑AO Orchestrateur</div>
+      <span class="badge">Groupe 3 – Orchestration</span>
+      <ul>
+        <li>Shell + Docker uniquement</li>
+        <li>Menus ACTIONS et cockpit</li>
+        <li>Scripts <code>actions/orchestrator/*.sh</code></li>
+        <li>Pilotage des images et des logs</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="tree">
+    <div class="section-label">Arborescence écrite et versionnée</div>
+    <code>
+KING-AO/
+ ├── actions/
+ │     ├── metier/
+ │     │      ├── start.sh
+ │     │      ├── stop.sh
+ │     │      ├── status.sh
+ │     │      ├── logs.sh
+ │     │      ├── rebuild.sh
+ │     │      └── sync.sh
+ │     ├── kingdomaine/
+ │     │      ├── start.sh
+ │     │      ├── stop.sh
+ │     │      ├── status.sh
+ │     │      ├── logs.sh
+ │     │      ├── rebuild.sh
+ │     │      └── sync.sh
+ │     └── orchestrator/
+ │            ├── menu.sh
+ │            ├── cockpit.sh
+ │            └── utils.sh
+ ├── modules/
+ │     ├── eparvier-metier/
+ │     │      └── Dockerfile
+ │     └── kingdomaine/
+ │            └── Dockerfile
+ ├── logs/
+ ├── config/
+ └── KING-AO.sh
+    </code>
+  </div>
+</body>
+</html>

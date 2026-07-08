@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Cockpit KINGDOMAINE</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #0f172a;
+            color: #e5e7eb;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #facc15;
+            margin-bottom: 20px;
+        }
+
+        .panel {
+            background: #020617;
+            border: 1px solid #1f2937;
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .panel h2 {
+            margin-top: 0;
+            color: #38bdf8;
+        }
+
+        button {
+            background: #1e293b;
+            color: #e5e7eb;
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: 1px solid #334155;
+            cursor: pointer;
+            margin-right: 8px;
+            margin-top: 8px;
+        }
+
+        button:hover {
+            background: #334155;
+        }
+
+        .status-ok { color: #22c55e; }
+        .status-warn { color: #facc15; }
+        .status-ko { color: #ef4444; }
+    </style>
+</head>
+<body>
+
+<h1>🏰 Cockpit KINGDOMAINE</h1>
+
+<!-- SYNCHRO -->
+<div class="panel">
+    <h2>Synchronisation des domaines</h2>
+    <p>Dernière synchro : <strong>29/06/2026 23:15</strong></p>
+    <p class="status-ok">Statut : OK — 124 domaines traités</p>
+
+    <button>Lancer une synchro</button>
+    <button>Voir historique</button>
+</div>
+
+<!-- CHECK -->
+<div class="panel">
+    <h2>Contrôles de cohérence</h2>
+    <p>Incohérences détectées : <strong>3</strong></p>
+    <p class="status-warn">Avertissements présents</p>
+
+    <button>Voir le détail</button>
+    <button>Lancer un contrôle</button>
+</div>
+
+<!-- FLUX -->
+<div class="panel">
+    <h2>Flux entrants / sortants</h2>
+    <p>Entrants : <strong>5</strong> — Sortants : <strong>4</strong></p>
+    <p class="status-ok">Tous les flux sont opérationnels</p>
+
+    <button>Tableau de bord flux</button>
+    <button>Inspecter les flux</button>
+</div>
+
+<!-- ADMIN -->
+<div class="panel">
+    <h2>Administration KINGDOMAINE</h2>
+
+    <button>Purge fichiers temporaires</button>
+    <button>Afficher statistiques</button>
+    <button>Voir logs</button>
+</div>
+
+</body>
+</html>
