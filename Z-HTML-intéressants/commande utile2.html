@@ -149,3 +149,40 @@ docker rm solaize-api solaize-mongo grafana prometheus nginx
 ---------------
 EN C SHARP
 dotnet new webapi -n SolaizeApi
+
+----------------------------
+
+1) Supprimer tous les containers
+
+Tu utilises :
+Code
+
+docker ps -aq | xargs docker rm -f
+
+Ça supprime tous les containers, même ceux arrêtés.
+2) Supprimer toutes les images
+
+Tu utilises :
+Code
+
+docker images -aq | xargs docker rmi -f
+
+-------------------------------
+POUR LANCER ORCHESTRATEUR  STATRT-----------
+
+🟩 Commande exacte à lancer
+
+Tu es dans /opt/KING-AO/…, donc tu fais simplement :
+Code
+
+./KING-AO.sh
+
+Ou si tu veux directement lancer PORTAL :
+Code
+
+./KING-AO.sh start PORTAL
+
+Et si tu veux tout reconstruire :
+Code
+
+./KING-AO.sh start all
