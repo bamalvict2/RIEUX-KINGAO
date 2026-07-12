@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Carte des modules KING‑AO</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #0f172a;
+            color: #e5e7eb;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #facc15;
+            margin-bottom: 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 16px;
+        }
+
+        .panel {
+            background: #020617;
+            border: 1px solid #1f2937;
+            padding: 16px;
+            border-radius: 10px;
+        }
+
+        .panel h2 {
+            margin-top: 0;
+            color: #38bdf8;
+            font-size: 1.1rem;
+        }
+
+        .tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            margin-right: 6px;
+        }
+
+        .tag-func { background: #1e3a8a; }
+        .tag-core { background: #064e3b; }
+        .tag-ext  { background: #7c2d12; }
+
+        .label {
+            font-size: 0.8rem;
+            color: #9ca3af;
+        }
+
+        .value {
+            font-size: 0.9rem;
+            margin-bottom: 4px;
+        }
+
+        ul {
+            padding-left: 18px;
+            margin: 6px 0 0;
+            font-size: 0.85rem;
+        }
+
+        li {
+            margin-bottom: 2px;
+        }
+
+        .section-title {
+            margin-top: 24px;
+            margin-bottom: 8px;
+            color: #a5b4fc;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+        }
+
+        .footer {
+            margin-top: 24px;
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+
+<h1>🧭 PRINCIPE LOGIQUE KING‑AO</h1>
+
+<div class="section-title">Modules métier</div>
+<div class="grid">
+
+    <!-- METIER -->
+    <div class="panel">
+        <h2>METIER</h2>
+        <div>
+            <span class="tag tag-func">Module fonctionnel</span>
+            <span class="tag">C# + Docker</span>
+        </div>
+        <p class="value"><span class="label">Rôle :</span> API métier EPARVIER regroupées en un module logique.</p>
+        <p class="value"><span class="label">Pilotage KING‑AO :</span> start / stop / status METIER.</p>
+        <ul>
+            <li>actions/metier/start.sh</li>
+            <li>actions/metier/stop.sh</li>
+            <li>actions/metier/status.sh</li>
+        </ul>
+    </div>
+
+    <!-- KINGDOMAINE -->
+    <div class="panel">
+        <h2>KINGDOMAINE</h2>
+        <div>
+            <span class="tag tag-func">Module fonctionnel</span>
+            <span class="tag">Shell (non Docker)</span>
+        </div>
+        <p class="value"><span class="label">Rôle :</span> domaines, synchro, cohérence, flux, administration.</p>
+        <p class="value"><span class="label">Pilotage KING‑AO :</span> start / stop / status KINGDOMAINE.</p>
+        <ul>
+            <li>actions/kingdomaine/start.sh</li>
+            <li>actions/kingdomaine/stop.sh</li>
+            <li>actions/kingdomaine/status.sh</li>
+        </ul>
+    </div>
+
+</div>
+
+<div class="section-title">Modules d’interface</div>
+<div class="grid">
+
+    <!-- PORTAL -->
+    <div class="panel">
+        <h2>PORTAL</h2>
+        <div>
+            <span class="tag tag-func">Portail</span>
+            <span class="tag">HTML + Docker</span>
+        </div>
+        <p class="value"><span class="label">Rôle :</span> cockpit principal, navigation KING‑AO.</p>
+        <ul>
+            <li>modules/portal/www/</li>
+            <li>modules/portal/Dockerfile</li>
+        </ul>
+    </div>
+
+    <!-- Cockpits -->
+    <div class="panel">
+        <h2>Cockpits HTML</h2>
+        <div>
+            <span class="tag tag-func">Interfaces</span>
+            <span class="tag">HTML + JS</span>
+        </div>
+        <p class="value"><span class="label">Rôle :</span> pilotage humain via fetch() et NGINX.</p>
+        <ul>
+            <li>cockpit/metier.html</li>
+            <li>cockpit/kingdomaine.html</li>
+            <li>cockpit/portal.html</li>
+        </ul>
+    </div>
+
+</div>
+
+<div class="section-title">Modules cœur du système</div>
+<div class="grid">
+
+    <!-- CORE -->
+    <div class="panel">
+        <h2>CORE / Orchestrateur</h2>
+        <div>
+            <span class="tag tag-core">Cœur système</span>
+            <span class="tag">Shell</span>
+        </div>
+        <p class="value"><span class="label">Rôle :</span> chef d’orchestre, routage des commandes.</p>
+        <ul>
+            <li>orchestrator.sh</li>
+            <li>portal-orchestrator.sh</li>
+            <li>STYLE-ORCH-KING-AO.sh</li>
+        </ul>
+    </div>
+
+    <!-- MONGODB -->
+    <div class="panel">
+        <h2>MONGODB</h2>
+        <div>
+            <span class="tag tag-core">Base de données</span>
+            <span class="tag">Docker</span>
+        </div>
+        <p class="value"><span class="label">Rôle :</span> stockage des données KING‑AO.</p>
+        <ul>
+            <li>modules/mongodb/docker-compose.yml</li>
+            <li>modules/mongodb/start.sh</li>
+            <li>modules/mongodb/healthcheck.sh</li>
+        </ul>
+    </div>
+
+    <!-- MONITORING -->
+    <div class="panel">
+        <h2>MONITORING</h2>
+        <div>
+            <span class="tag tag-core">Supervision</span>
+            <span class="tag">Docker</span>
+        </div>
+        <p class="value"><span class="label">Rôle :</span> Prometheus, Grafana, métriques.</p>
+        <ul>
+            <li>modules/monitoring/docker-compose.yml</li>
+        </ul>
+    </div>
+
+</div>
+
+<div class="footer">
+    Carte logique des modules KING‑AO — METIER, KINGDOMAINE, PORTAL, COCKPIT, CORE, MONGODB, MONITORING.<br>
+    Vue cockpit pour garder la structure en tête.
+</div>
+
+</body>
+</html>

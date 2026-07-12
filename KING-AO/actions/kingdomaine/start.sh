@@ -7,6 +7,11 @@ IMAGE=$(grep IMAGE $CONFIG | cut -d '=' -f2)
 PORT=$(grep PORT $CONFIG | cut -d '=' -f2)
 
 echo "🚀 Démarrage du module KINGDOMAINE : $NAME"
+
+# Nettoyage ancien conteneur
+docker rm -f "$NAME" 2>/dev/null
+
+# Lancement du conteneur
 docker run -d --name "$NAME" -p "$PORT:$PORT" "$IMAGE"
 
 echo "✅ Module KINGDOMAINE lancé."

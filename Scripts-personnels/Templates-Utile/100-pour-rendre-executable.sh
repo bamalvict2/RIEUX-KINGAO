@@ -12,6 +12,9 @@ gne# ▶️ Lancer lancer un SH  -tous -ou un répertoire
 chmod +x *.sh
 chmod +x create-kingao.sh  nom du fichier à rendre exécutable
 
+sudo chmod +x /opt/KING-AO/test-nginx.sh
+
+
 
 # ########            . ~/.bashrc ### POUR rendre mon bashrc actif dans le terminal
 

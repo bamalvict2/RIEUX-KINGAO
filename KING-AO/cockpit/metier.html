@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Cockpit METIER</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            margin: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: #0f172a;
+            color: #e5e7eb;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #facc15;
+            margin-bottom: 20px;
+        }
+
+        .panel {
+            background: #020617;
+            border: 1px solid #1f2937;
+            padding: 16px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .panel h2 {
+            margin-top: 0;
+            color: #38bdf8;
+        }
+
+        button {
+            background: #1e293b;
+            color: #e5e7eb;
+            padding: 8px 14px;
+            border-radius: 6px;
+            border: 1px solid #334155;
+            cursor: pointer;
+            margin-right: 8px;
+            margin-top: 8px;
+        }
+
+        button:hover {
+            background: #334155;
+        }
+
+        .status-ok { color: #22c55e; }
+        .status-warn { color: #facc15; }
+        .status-ko { color: #ef4444; }
+    </style>
+</head>
+<body>
+
+<h1>⚙️ Cockpit METIER</h1>
+
+<!-- SERVICE -->
+<div class="panel">
+    <h2>Service METIER</h2>
+    <p>Statut actuel : <strong class="status-ok">En fonctionnement</strong></p>
+    <p>Dernier démarrage : <strong>29/06/2026 22:41</strong></p>
+
+    <button>Démarrer METIER</button>
+    <button>Arrêter METIER</button>
+    <button>Redémarrer METIER</button>
+</div>
+
+<!-- TRAITEMENTS -->
+<div class="panel">
+    <h2>Traitements METIER</h2>
+    <p>Traitements en cours : <strong>2</strong></p>
+    <p class="status-ok">Aucun blocage détecté</p>
+
+    <button>Voir les traitements</button>
+    <button>Lancer un traitement</button>
+</div>
+
+<!-- DONNÉES -->
+<div class="panel">
+    <h2>Données METIER</h2>
+    <p>Objets en base : <strong>12 842</strong></p>
+    <p class="status-warn">3 anomalies mineures</p>
+
+    <button>Inspecter les données</button>
+    <button>Exporter les données</button>
+</div>
+
+<!-- ADMIN -->
+<div class="panel">
+    <h2>Administration METIER</h2>
+
+    <button>Purge fichiers temporaires</button>
+    <button>Afficher statistiques</button>
+    <button>Voir logs</button>
+</div>
+
+</body>
+</html>
+
+
+</body>
+</html>
+
+<script>
+    function startMetier() {
+        fetch("/king-ao/metier/start")
+            .then(r => r.text())
+            .then(t => console.log("METIER démarré :", t));
+    }
+
+    function stopMetier() {
+        fetch("/king-ao/metier/stop")
+            .then(r => r.text())
+            .then(t => console.log("METIER arrêté :", t));
+    }
+
+    function restartMetier() {
+        fetch("/king-ao/metier/restart")
+            .then(r => r.text())
+            .then(t => console.log("METIER redémarré :", t));
+    }
+</script>

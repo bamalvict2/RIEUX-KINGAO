@@ -24,6 +24,36 @@
 
 # ============================
 
+
+
+# ============================
+# 🔢 Hash Git — pratique
+# ============================
+# Voir le hash du dernier commit :
+#   git rev-parse --short HEAD
+#
+# Créer un nouveau hash :
+#   git add -A
+#   git commit -m "Message"
+#   git push
+#
+# 👉 Chaque commit crée un nouveau hash.
+# ============================
+        # git status → propre
+
+        # git add -A (si besoin)
+
+        # git commit -m "Message" → crée un NOUVEAU hash
+
+        # git rev-parse --short HEAD → voir le hash
+
+        # git push → envoyer le hash sur GitHub
+
+# ============================
+
+
+
+
 # Vérifier si on est dans un dépôt Git
 if ! git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     echo "❌ Ce dossier n'est pas un dépôt Git."
