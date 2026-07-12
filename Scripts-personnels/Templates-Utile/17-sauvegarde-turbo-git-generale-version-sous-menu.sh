@@ -49,6 +49,12 @@
 
         # git push → envoyer le hash sur GitHub
 
+        # 5ca9550..61f3630  Start-Orchestration -> Start-Orchestration
+
+        #5ca9550 = ancien hash
+
+        #61f3630 = nouveau hash que TU viens de créer avec ton commit
+
 # ============================
 
 
