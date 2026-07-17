@@ -82,5 +82,5 @@ clean-all:
 
 hard-reset:
 	@echo -e "$(RED)[DANGER] Hard reset complet du Docker Engine$(NC)"
-	docker stop $$(docker ps -aq) || true
+	docker stop $$(docker ps a-q) || true
 	docker system prune -a --volumes -f

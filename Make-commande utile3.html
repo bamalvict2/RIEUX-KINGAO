@@ -118,10 +118,6 @@ docker compose down --remove-orphans
 docker compose build --no-cache 
 docker compose build
 
- Tu es maintenant dans l’état parfait pour relancer la stack
-
-docker compose down -v
-docker compose up -d
 
 
 docker compose down -v
@@ -201,58 +197,12 @@ docker network rm rieux-net
 docker network rm infra-net
 
 
-
-
-
-
-solaizeapi:
-  build:
-    context: .
-    dockerfile: SolaizeApi/Dockerfile
-  image: eparvier-solaize-api
-  container_name: solaizeapi
-  restart: always
-  environment:
-    ASPNETCORE_URLS: http://0.0.0.0:5010
-  ports:
-    - "5010:5010"
-  depends_on:
-    - mongo
-  networks:
-    - eparvier-net
-
-
-blazor:
-  build:
-    context: .
-    dockerfile: SolaizeCockpit/Dockerfile
-  image: eparvier-solaize-blazor-server
-  container_name: blazor
-  restart: always
-  environment:
-    ASPNETCORE_URLS: http://0.0.0.0:5110
-  ports:
-    - "5110:5110"
-  depends_on:
-    - solaizeapi
-  networks:
-    - eparvier-net
-
-
 tout nettoyer:
 docker container prune
 docker compose down
 docker compose up -d
 docker system prune
 docker system prune -a
-
-
-
-
-
-
-
-
 
 Grafana → http://localhost:3000
 
@@ -328,12 +278,6 @@ cd Nana5
 git clone -b fin-compile git@github.com:bamalvict2/EPAR-API-SERVER.git .
 
 Et tu récupères tout ton projet complet, comme sur GitHub.
-
-
-
-
-
-
 
 
 

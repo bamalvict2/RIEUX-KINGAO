@@ -8,7 +8,7 @@ set -e
 MOUNT_ROOT="/mnt/hgfs"
 SHARE_NAME="Nana4"
 SRC_WIN="$MOUNT_ROOT/$SHARE_NAME"
-DEST_UBU="$HOME/Nana4"
+DEST_UBU="/opt/Nana4"
 
 CYAN='\033[1;36m'
 GREEN='\033[1;32m'
@@ -139,15 +139,15 @@ check_windows_folder() {
 
 reset_ubuntu_folder() {
   step "Préparation du dossier Ubuntu Nana4"
-  rm -rf "$DEST_UBU"
-  mkdir -p "$DEST_UBU"
+  sudo rm -rf "$DEST_UBU"
+  sudo mkdir -p "$DEST_UBU"
   ok "Dossier Ubuntu prêt"
   read -p "Appuie sur Entrée..."
 }
 
 copy_win_to_ubuntu() {
   step "Copie Windows → Ubuntu"
-  cp -r "$SRC_WIN/"* "$DEST_UBU/"
+  sudo cp -r "$SRC_WIN/"* "$DEST_UBU/"
   ok "Import terminé"
   read -p "Appuie sur Entrée..."
 }

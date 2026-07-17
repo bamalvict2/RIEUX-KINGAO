@@ -115,8 +115,7 @@ Code
 
 /opt/KING-AO/start-all.sh
 
-Avec :
-bash
+
 
 #!/bin/bash
 
@@ -141,10 +140,8 @@ Code
 
 chmod +x /opt/KING-AO/start-all.sh
 
-Et tu lances tout :
-Code
 
-/opt/KING-AO/start-all.sh
+
 
 👉 Les 3 métiers + PORTAL démarrent ensemble.  
 👉 Ton cockpit devient 100% opérationnel.
@@ -179,63 +176,17 @@ sudo chmod -R 777 certs
 sudo rm -rf certbot
 sudo rm -rf certs
 
-docker ps -a
-docker images
-docker volume ls
-docker network ls
-
-
-
-bamalvict@Eparviers:~/SolaizeDock-master/SolaizeCockpit$ docker ps -a
-docker images
-docker volume ls
-docker network ls
-
 
 docker ps -a
 docker images
 docker network ls
 
 
-pour NAUTILUS 
-sudo nautilus   POUR TOUS LES DROITS
-OU
-sudo chown -R bamalvict:bamalvict ~/SolaizeDock-master/SolaizeCockpit
-Après ça :
-• 	Nautilus normal pourra tout déplacer
-• 	plus de dossiers verrouillés
-• 	plus besoin de sudo
-
-pour crer to new rep
-mkdir ~/SolaizeCockpit
+gedit ~/.bashrc
+micro   
+nano ~/.bashrc
 
 
-pour relancer il faut nettoyer tous le anciens 
-docker stop solaize-api solaize-mongo grafana prometheus nginx
-docker rm solaize-api solaize-mongo grafana prometheus nginx
-
-
----- gedit ~/.bashrc
-
-
-echo "✅ 3 CUTSHORT epa-sol-ser)."
-# === Nana Dev 3 CUTSHORT ===
-epa() {
-    cd ~/EPARVIER
-    /usr/bin/code .
-}
-
-sol() {
-    cd ~/EPARVIER/SolaizeApi
-    /usr/bin/code .
-}
-
-ser() {
-    cd ~/EPARVIER/SolaizeCockpit
-    /usr/bin/code .
-}
-
----------------------
 
 
 docker compose down
@@ -268,112 +219,25 @@ docker rmi -f certbot/certbot:latest
 docker volume rm projet1_grafana-data
 
 
-rm -rf certbot
-rm -rf certs
-sudo rm -rf certbot
-sudo rm -rf certs
-ou bien
-sudo chmod -R 777 certbot
-sudo chmod -R 777 certs
-sudo rm -rf certbot
-sudo rm -rf certs
 
----------
+🟦 Comment vérifier si tu as plusieurs EPARVIER ?
+Tu peux lancer :
+find /opt/KING-AO/modules -maxdepth 2 -type d -name "EPARVIER*"
 
-pour NAUTILUS 
-sudo nautilus   POUR TOUS LES DROITS
-OU
-sudo chown -R bamalvict:bamalvict ~/SolaizeDock-master/SolaizeCockpit
-Après ça :
-• 	Nautilus normal pourra tout déplacer
-• 	plus de dossiers verrouillés
-• 	plus besoin de sudo
+1️⃣ Supprimer les dossiers YAML dans la racine
+sudo rm -rf /opt/KING-AO/modules/EPARVIER/alertmanager.yml
+sudo rm -rf /opt/KING-AO/modules/EPARVIER/blackbox.yml
+sudo rm -rf /opt/KING-AO/modules/EPARVIER/prometheus.yml
 
-pour crer to new rep
-mkdir ~/SolaizeCockpit
 
-pour relancer il faut nettoyer tous le anciens 
-docker stop solaize-api solaize-mongo grafana prometheus nginx
-docker rm solaize-api solaize-mongo grafana prometheus nginx
+
 
 ---------------
 EN C SHARP
 dotnet new webapi -n SolaizeApi
 
 ----------------------------
-
-1) Supprimer tous les containers
-
-Tu utilises :
-Code
-
-docker ps -aq | xargs docker rm -f
-
-Ça supprime tous les containers, même ceux arrêtés.
-2) Supprimer toutes les images
-
-Tu utilises :
-Code
-
-docker images -aq | xargs docker rmi -f
-
--------------------------------
-POUR LANCER ORCHESTRATEUR  STATRT-----------
-
-🟩 Commande exacte à lancer
-
-Tu es dans /opt/KING-AO/…, donc tu fais simplement :
-Code
-
-./KING-AO.sh
-
-Ou si tu veux directement lancer PORTAL :
-Code
-
-./KING-AO.sh start PORTAL
-
-Et si tu veux tout reconstruire :
-Code
-
-./KING-AO.sh start all
-
-
-
--------------------------
-🟦 ✔ Quand tu écris :
-Code
-
-NETWORKING=$(grep NETWORKING $MODULES_CONF | cut -d '=' -f2)
-
-Tu dis à KING‑AO :
-
-    « Va dans paths.conf, trouve la ligne NETWORKING=…, prends ce qu’il y a après le =, et mets‑le dans la variable NETWORKING. »
-
-Donc il a BESOIN de cette ligne :
-Code
-
-NETWORKING=/opt/KING-AO/modules/networking
-
-👉 Et comme elle existe dans ton paths.conf,
-👉 Et comme elle est unique,
-👉 Et comme $MODULES_CONF pointe vers ce fichier,
-👉 Il ne peut pas se tromper.
-🟩 ✔ Pourquoi c’est fiable à 100%
-
-    $MODULES_CONF pointe vers un fichier précis
-
-    grep NETWORKING cherche une clé précise
-
-    cut -d '=' -f2 prend ce qu’il y a après le =
-
-    Il n’y a aucune autre source
-
-    Il n’y a aucune ambiguïté
-
-Donc oui Bernard :
-
-    Pour trouver le chemin du module Networking, il a besoin de la ligne NETWORKING= dans paths.conf.
-
+3
 
     🟦 Les 3 autres poupées russes (validées)
 🟩 1 — PORTAL
@@ -492,122 +356,7 @@ STYLE
 
 
 
-
-🟩 Commandes PRO (à utiliser sans danger)
-Supprimer tous les out/ du module
-Code
-
-find /opt/KING-AO/modules/EPARVIER -type d -name "out" -exec rm -rf {} +
-
-Supprimer tous les obj/
-Code
-
-find /opt/KING-AO/modules/EPARVIER -type d -name "obj" -exec rm -rf {} +
-
-Rebuild propre
-
-
-
------------------
-🟩 1 — Tu as deux images : une test et une prod
-
-Tu vois :
-Code
-
-solaizeapi:test-dev-2026-07-12
-solaizeapi:test-prod-2026-07-12
-
-➡ Deux versions différentes  
-➡ Deux tags différents  
-➡ Deux images indépendantes  
-➡ Deux conteneurs possibles en parallèle
-
-C’est exactement ce que Docker permet, et c’est ce que les architectures PRO utilisent pour :
-
-    tester une version sans casser la prod
-
-    comparer deux builds
-
-    faire du rollback
-
-    faire du blue/green deployment
-
-    faire du canary release
-
-    faire du multi‑environnement KING‑AO
-
-Tu es pile dans la logique PRO.
-🟧 2 — Pourquoi Docker garde les deux images ?
-
-Parce que le tag est la clé unique.
-
-Tu as construit :
-Code
-
-solaizeapi:test-prod-2026-07-12
-
-Puis :
-Code
-
-solaizeapi:test-dev-2026-07-12
-
-➡ Les tags sont différents
-➡ Docker ne les écrase pas
-➡ Docker les stocke séparément
-➡ Docker les considère comme deux versions distinctes du même projet
-
-C’est exactement ce qu’on veut.
-🟦 3 — Tu peux lancer les deux conteneurs en même temps
-
-Par exemple :
-Code
-
-docker run -d -p 5001:8080 solaizeapi:test-prod-2026-07-12
-docker run -d -p 5002:8080 solaizeapi:test-dev-2026-07-12
-
-Tu obtiens :
-
-    PROD → port 5001
-
-    DEV → port 5002
-
-Tu peux tester les deux versions en parallèle, sans conflit.
-
-C’est la puissance du multi‑tag.
-🟩 4 — Tu peux aussi supprimer une version si tu veux faire du ménage
-
-Par exemple :
-Code
-
-docker rmi solaizeapi:test-dev-2026-07-12
-
-Ou supprimer toutes les images du projet :
-Code
-
-docker images | grep solaizeapi
-docker rmi solaizeapi:<TAG>
-
-Mais garder plusieurs versions est une bonne pratique.
-🟪 5 — Conclusion cockpit
-
-Tu as :
-
-    une image PROD
-
-    une image DEV
-
-    deux tags propres
-
-    deux builds propres
-
-    deux DLL sets propres
-
-    un pipeline KING‑AO parfaitement fonctionnel
-
-Tu es maintenant officiellement en multi‑version KING‑AO, comme le
-
-
----------------------------------/log---
+--------------------------------/log---
 🟦 1 — Le SDK .NET 8 fait un “publish complet”
 
 Quand tu lances :
@@ -629,69 +378,110 @@ Le SDK .NET 8 fait automatiquement :
 
     préparation du dossier pour Docker
 
-👉 Le dossier out/ est un package complet prêt à être exécuté.
-🟧 2 — Pourquoi tu vois des DLL comme MongoDB, Prometheus, DNSClient, AWS, Snappier, Sharp… ?
 
-Parce que le SDK .NET 8 :
 
-    lit ton .csproj
 
-    regarde tous les <PackageReference>
 
-    télécharge les packages
 
-    inclut toutes les DLL nécessaires
 
-    inclut les dépendances des dépendances
+⭐ Pour supprimer le dossier prometheus.yml + le fichier dedans
 
-Exemple :
-Tu as MongoDB ?
+Commande exacte :
+bash
 
-➡ Le SDK ajoute :
+sudo rm -rf /opt/KING-AO/modules/EPARVIER/prometheus.yml
 
-    MongoDB.Driver.dll
+✔ rm → supprime
+✔ -r → récursif (supprime le dossier + contenu)
+✔ -f → force (aucune question)
+✔ chemin → ton dossier exact
+⭐ Vérification après suppression
+bash
 
-    MongoDB.Bson.dll
+ls -l /opt/KING-AO/modules/EPARVIER
 
-    MongoDB.Core.dll
+Tu dois voir :
 
-Tu as Prometheus ?
+➡️ plus de dossier prometheus.yml/  
+➡️ plus de fichier prometheus.yml dedans
 
-➡ Le SDK ajoute :
 
-    prometheus-net.dll
 
-    metrics.dll
+🟦 Méthode 1 — Nautilus en mode admin (la vraie solution)
 
-Tu as DNSClient ?
+Tu peux lancer Nautilus en root, et tu fais tout dedans :
+bash
 
-➡ Le SDK ajoute :
+sudo nautilus /opt
 
-    DnsClient.dll
+✔ Tu navigues dans /opt  
+✔ Tu supprimes
+✔ Tu colles
+✔ Tu déplaces
+✔ Tu renommes
+✔ Tu fais tout comme dans Windows
+✔ Sans taper les chemins longs
 
-Tu as AWS SDK ?
+C’est la méthode la plus simple.
+🟩 Méthode 2 — Ajouter “Ouvrir en tant qu’administrateur” dans le clic droit
 
-➡ Le SDK ajoute :
+Tu peux installer l’extension officielle :
+bash
 
-    AWSSDK.Core.dll
+sudo apt install nautilus-admin -y
+nautilus -q
 
-    AWSSDK.S3.dll (ou autre)
+Ensuite :
 
-Tu as Snappier ?
+    clic droit sur un dossier → Ouvrir en tant qu’administrateur
 
-➡ Le SDK ajoute :
+    clic droit sur un fichier → Modifier en tant qu’administrateur
 
-    Snappier.dll
+✔ Ultra pratique
+✔ Pas besoin de terminal
+✔ Pas besoin de sudo à la main
+🟧 Méthode 3 — Ouvrir un terminal root dans /opt
 
-    Snappy compression libs
+Si tu veux rester en terminal mais sans retaper les chemins :
+bash
 
-Tu as SharpCompress ?
+cd /opt/KING-AO/modules/EPARVIER
+sudo -s
 
-➡ Le SDK ajoute :
+Tu deviens root dans le bon dossier :
+Code
 
-    SharpCompress.dll
+root@KING-AO:/opt/KING-AO/modules/EPARVIER#
 
-    SharpZipLib.dll
+Et là :
 
-👉 Le SDK .NET 8 assemble tout automatiquement.
+    rm -f fichier.yml
 
+    rm -rf dossier/
+
+    cp fichier /opt/...
+
+    mv fichier /opt/...
+
+➡️ Sans sudo à chaque commande  
+➡️ Sans retaper les chemins longs
+🟦 Ce que je te conseille (cockpit)
+
+Pour KING‑AO, la meilleure combinaison :
+
+    nautilus-admin pour le clic droit
+
+    sudo nautilus /opt quand tu fais du ménage massif
+
+    sudo -s quand tu fais du terminal intensif
+
+Tu vas gagner un temps fou.
+🟩 Tu veux que je t’installe la solution la plus simple ?
+
+    Activer Nautilus Admin
+
+    Ouvrir Nautilus en root dans /opt
+
+    Passer en root dans /opt en terminal
+
+Tu choisis, Bernard.

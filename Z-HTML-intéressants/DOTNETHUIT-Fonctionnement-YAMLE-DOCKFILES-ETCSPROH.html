@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Rappel .csproj + Dockerfile</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      margin: 0;
+      padding: 40px;
+    }
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #020617;
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+      border: 1px solid #1f2937;
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 28px;
+      color: #38bdf8;
+    }
+    h2 {
+      margin-top: 24px;
+      font-size: 22px;
+      color: #22c55e;
+    }
+    .block {
+      margin-top: 16px;
+      padding: 16px;
+      border-radius: 10px;
+    }
+    .csproj {
+      background: rgba(34,197,94,0.08);
+      border: 1px solid rgba(34,197,94,0.4);
+    }
+    .dockerfile {
+      background: rgba(59,130,246,0.08);
+      border: 1px solid rgba(59,130,246,0.4);
+    }
+    .note {
+      margin-top: 24px;
+      padding: 14px;
+      border-radius: 10px;
+      background: rgba(148,163,184,0.12);
+      border: 1px dashed rgba(148,163,184,0.7);
+      font-size: 14px;
+    }
+    ul {
+      margin: 8px 0 0;
+      padding-left: 20px;
+    }
+    li {
+      margin: 4px 0;
+    }
+    .title {
+      font-weight: 600;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      font-size: 13px;
+      color: #9ca3af;
+    }
+    .highlight {
+      color: #f97316;
+      font-weight: 600;
+    }
+    code {
+      background: #020617;
+      padding: 2px 6px;
+      border-radius: 6px;
+      font-size: 13px;
+      border: 1px solid #1f2937;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>Rappel mental : .csproj vs Dockerfile</h1>
+
+    <div class="block csproj">
+      <div class="title">Mécanisme 1 : .csproj (monde .NET)</div>
+      <h2>.csproj = cerveau du projet .NET</h2>
+      <ul>
+        <li>Décrit <span class="highlight">le projet</span> : références, packages, frameworks.</li>
+        <li>Utilisé par <code>dotnet restore</code> et <code>dotnet publish</code>.</li>
+        <li>Dit quels projets partagés (ex: <code>Solaize.Shared</code>) doivent être inclus.</li>
+        <li>Ne connaît rien de Docker, ni des conteneurs.</li>
+      </ul>
+    </div>
+
+    <div class="block dockerfile">
+      <div class="title">Mécanisme 2 : Dockerfile (monde Docker)</div>
+      <h2>Dockerfile = chef d’orchestre du build d’image</h2>
+      <ul>
+        <li>Décide <span class="highlight">quoi prendre dans le dossier</span> (via <code>COPY</code>).</li>
+        <li>Appelle <code>dotnet restore</code> et <code>dotnet publish</code> sur le bon <code>.csproj</code>.</li>
+        <li>Crée l’<span class="highlight">image Docker</span> (ex: <code>blazor</code>, <code>solaizeapi</code>).</li>
+        <li>Ne connaît rien du fichier <code>.yml</code> (docker-compose).</li>
+      </ul>
+    </div>
+
+    <div class="note">
+      <strong>À ne pas mélanger :</strong><br />
+      <ul>
+        <li><span class="highlight">.csproj</span> → monde .NET (code, références, build).</li>
+        <li><span class="highlight">Dockerfile</span> → monde Docker (construction d’image).</li>
+        <li><span class="highlight">docker-compose.yml</span> → monde orchestration (lance des <em>images</em>, ne lit ni .csproj ni Dockerfile).</li>
+      </ul>
+      <p style="margin-top:8px;">
+        👉 Quand tu penses <span class="highlight">code</span> : .csproj.  
+        👉 Quand tu penses <span class="highlight">image</span> : Dockerfile.  
+        👉 Quand tu penses <span class="highlight">conteneurs qui tournent</span> : docker-compose.yml.
+      </p>
+    </div>
+  </div>
+</body>
+</html>
+
+
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Rappel : .csproj ↔ Dockerfile</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #111827;
+    color: #e5e7eb;
+    padding: 40px;
+  }
+  .box {
+    max-width: 900px;
+    margin: auto;
+    background: #1f2937;
+    padding: 30px;
+    border-radius: 12px;
+    border: 1px solid #374151;
+  }
+  h1 {
+    color: #38bdf8;
+    margin-top: 0;
+  }
+  .section {
+    margin-top: 25px;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  .csproj {
+    background: rgba(34,197,94,0.1);
+    border: 1px solid rgba(34,197,94,0.4);
+  }
+  .dockerfile {
+    background: rgba(59,130,246,0.1);
+    border: 1px solid rgba(59,130,246,0.4);
+  }
+  .exchange {
+    background: rgba(249,115,22,0.1);
+    border: 1px solid rgba(249,115,22,0.4);
+  }
+  ul { margin: 10px 0 0 20px; }
+  li { margin: 6px 0; }
+  code {
+    background: #0f172a;
+    padding: 3px 6px;
+    border-radius: 6px;
+    border: 1px solid #1f2937;
+  }
+</style>
+</head>
+<body>
+<div class="box">
+  <h1>.csproj ↔ Dockerfile : Comment ils échangent</h1>
+
+  <div class="section csproj">
+    <h2>1. Monde .NET → .csproj</h2>
+    <ul>
+      <li>Décrit le projet : références, frameworks, dépendances.</li>
+      <li>Utilisé par <code>dotnet restore</code> et <code>dotnet publish</code>.</li>
+      <li>Indique quels projets partagés doivent être inclus.</li>
+      <li>Ne connaît rien de Docker.</li>
+    </ul>
+  </div>
+
+  <div class="section dockerfile">
+    <h2>2. Monde Docker → Dockerfile</h2>
+    <ul>
+      <li>Copie les fichiers du dossier (<code>COPY . .</code>).</li>
+      <li>Appelle <code>dotnet restore</code> sur le bon <code>.csproj</code>.</li>
+      <li>Appelle <code>dotnet publish</code> pour compiler.</li>
+      <li>Construit l’image Docker finale.</li>
+    </ul>
+  </div>
+
+  <div class="section exchange">
+    <h2>3. Le pont entre les deux mondes</h2>
+    <ul>
+      <li><code>dotnet restore SolaizeCockpit.csproj</code> → lit le .csproj</li>
+      <li><code>dotnet publish SolaizeCockpit.csproj</code> → compile selon le .csproj</li>
+      <li>Le Dockerfile utilise .NET pour comprendre le .csproj</li>
+      <li>Docker ne comprend pas le .csproj, mais .NET oui.</li>
+    </ul>
+  </div>
+
+</div>
+</body>
+</html>
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Intrinsèque SolaizeAPI .NET 8</title>
+</head>
+<body>
+  <h1>Ce qu’il faut intrinsèquement pour créer une image SolaizeAPI en .NET 8</h1>
+  <ul>
+    <li>Le code C# du projet (Program.cs, Controllers, Services, Models, etc.).</li>
+    <li>Le fichier .csproj du projet SolaizeAPI.</li>
+    <li>Les fichiers JSON de configuration (appsettings.json, appsettings.*.json).</li>
+    <li>Le Dockerfile qui copie, restaure, publie et définit l’ENTRYPOINT.</li>
+    <li>L’image SDK .NET 8 pour le build (mcr.microsoft.com/dotnet/sdk:8.0).</li>
+    <li>L’image runtime ASP.NET Core 8 pour l’exécution (mcr.microsoft.com/dotnet/aspnet:8.0).</li>
+    <li>Rien d’autre n’est intrinsèquement nécessaire pour créer l’image.</li>
+  </ul>
+</body>
+</html>
