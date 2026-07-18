@@ -14,3 +14,19 @@ services:
 networks:
   kingao-net:
     driver: bridge
+version: '3.8'
+
+services:
+
+  kingdomaine:
+    image: kingdomaine
+    container_name: kingdomaine
+    restart: unless-stopped
+    ports:
+      - "5020:80"
+    networks:
+      - kingao-net
+
+networks:
+  kingao-net:
+    external: true

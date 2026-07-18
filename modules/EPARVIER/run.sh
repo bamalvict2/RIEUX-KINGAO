@@ -17,4 +17,4 @@ echo "🚀 EPARVIER — Lancement cockpitifié"
 /usr/bin/docker compose -f /opt/KING-AO/modules/EPARVIER/docker-compose.yml up -d
 #!/bin/bash
 echo "🚀 EPARVIER : lancement cockpitifié"
-docker compose -f /opt/KING-AO/modules/EPARVIER/docker/docker-compose.yml up -d
+docker compose -f /opt/KING-AO/modules/EPARVIER/docker-compose.yml up -d
