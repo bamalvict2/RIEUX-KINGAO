@@ -11,9 +11,9 @@ services:
     networks:
       - kingao-net
 
-  eparvier-blazor:
-    image: blazor
-    container_name: eparvier-blazor
+  eparvier-cockpit:
+    image: solaizecockpit
+    container_name: eparvier-cockpit
     restart: unless-stopped
     ports:
       - "5011:80"

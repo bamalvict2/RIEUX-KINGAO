@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+
+  kingdomaine:
+    image: kingdomaine
+    container_name: kingdomaine
+    restart: unless-stopped
+    ports:
+      - "5020:80"
+    networks:
+      - kingao-net
+
+  blackbox:
+    image: prom/blackbox-exporter
+    container_name: kingdomaine-blackbox
+    volumes:
+      - ./blackbox.yml:/etc/blackbox_exporter/config.yml
+    ports:
+      - "9116:9115"
+    networks:
+      - kingao-net
+
+  prometheus:
+    image: prom/prometheus
+    container_name: kingdomaine-prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9091:9090"
+    networks:
+      - kingao-net
+
+networks:
+  kingao-net:
+    external: true

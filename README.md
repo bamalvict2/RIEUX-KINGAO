@@ -134,3 +134,19 @@ Android pointe toujours vers le même host / même version.
 - Construire un dashboard Grafana “Infra + DNS” pour voir la santé globale.
 - Définir les 3 réplicats (Android, Prod, Dev) et leurs URLs.
 - Documenter cette feuille de route comme référence KINGDOMAINE.
+
+
+
+## Mémo express
+
+    Build API → docker build -t solaizeapi -f Dockerfile.Api .
+
+    Run API → docker compose -f compose-api.yml up -d
+
+    Build KINGDOMAINE → docker build -t kingdomaine -f Dockerfile.Api .
+
+    Run KINGDOMAINE → docker compose -f compose-kingdomaine.yml up -d
+
+    Build PORTAL → docker build -t portal -f Dockerfile.Portal .
+
+    Run PORTAL → docker compose -f compose-portal.yml up -d
