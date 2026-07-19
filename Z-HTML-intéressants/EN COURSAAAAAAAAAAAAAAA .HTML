@@ -1,76 +1,50 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-<meta charset="UTF-8">
-<title>Récap Monitoring KING-AO</title>
-<style>
-body { font-family: Arial; background: #f4f4f4; padding: 20px; }
-h1 { color: #333; }
-.section { background: #fff; padding: 15px; margin-bottom: 20px; border-radius: 8px; }
-h2 { color: #444; }
-ul { line-height: 1.6; }
-.code { background: #eee; padding: 10px; border-radius: 5px; }
-</style>
-</head>
-<body>
 
-<h1>Récap Monitoring KING-AO</h1>
+bamalvict@KING-AO:/opt/KING-AO$ docker images
+                                                                                                                                                                    i Info →   U  In Use
+IMAGE                             ID             DISK USAGE   CONTENT SIZE   EXTRA
+bitnami/mongodb-exporter:latest   c4d9b2dc918f        174MB         46.9MB    U   
+gcr.io/cadvisor/cadvisor:latest   3de2bd520312        107MB         30.8MB    U   
+grafana/grafana:latest            121a7a9ece6d       1.58GB          378MB    U   
+grafana/loki:2.9.3                eb92f1a43917        101MB         24.6MB    U   
+grafana/promtail:latest           6cfa64ec432b        283MB         67.3MB    U   
+kingdomaine-cockpit:latest        1eee7d0e59b4        321MB         90.5MB    U   
+kingdomaine:latest                120a74f26b33        371MB          108MB    U   
+mongo:latest                      951c2ff9fc6b        1.3GB          339MB    U   
+nginx:latest                      5a88c9c45479        241MB           66MB    U   
+portal-cockpit:latest             b7cdea520aeb        321MB         90.5MB    U   
+portal:latest                     b05d1a078ce3        371MB          108MB    U   
+prom/alertmanager:latest          9e082985f56f        121MB         39.8MB    U   
+prom/blackbox-exporter:latest     e753ff9f3fc4         57MB         17.6MB    U   
+prom/node-exporter:latest         1b4e4438faca         41MB         13.4MB    U   
+prom/prometheus:latest            3c42b892cf72        359MB          107MB    U   
+solaizeapi:latest                 f9b3ba0c7aea        371MB          108MB    U   
+solaizecockpit:latest             3e162cba329c        321MB         90.5MB    U   
+bamalvict@KING-AO:/opt/KING-AO$ 
 
-<div class="section">
-<h2>📦 Conteneurs actifs</h2>
-<ul>
-<li>Grafana — Port 3000 — <strong>Up</strong></li>
-<li>Prometheus — Port 9090 — <strong>Up</strong></li>
-<li>cAdvisor — Port 8080 — <strong>Up</strong></li>
-<li>Promtail — Agent de logs — <strong>Up</strong></li>
-<li>Loki 2.9.3 — Port 3100 — <strong>Up</strong></li>
-</ul>
-</div>
 
-<div class="section">
-<h2>🗄 Backend Loki</h2>
-<ul>
-<li>Version : <strong>2.9.3 (stable)</strong></li>
-<li>Backend : <strong>boltdb-shipper</strong></li>
-<li>Schema : <strong>v11</strong></li>
-<li>Storage : <strong>filesystem</strong></li>
-<li>Compactor : <strong>simple</strong></li>
-</ul>
-</div>
 
-<div class="section">
-<h2>📡 Flux de logs</h2>
-<ul>
-<li>Promtail → Loki (HTTP)</li>
-<li>Loki → Grafana (datasource)</li>
-<li>Grafana → Explore → Logs OK</li>
-</ul>
-</div>
 
-<div class="section">
-<h2>📊 Monitoring système</h2>
-<ul>
-<li>cAdvisor → Prometheus</li>
-<li>Prometheus → Grafana (dashboards)</li>
-</ul>
-</div>
 
-<div class="section">
-<h2>🔒 Sécurité / Reverse Proxy</h2>
-<p>Pas de Nginx pour l’instant — accès direct aux ports locaux.</p>
-</div>
 
-<div class="section">
-<h2>🚀 Prochaines étapes possibles</h2>
-<ul>
-<li>Ajouter Nginx pour un portail unique</li>
-<li>Ajouter HTTPS</li>
-<li>Installer Loki 3.x + TSDB quand la release sera officielle</li>
-<li>Créer un dashboard Grafana complet pour les logs</li>
-</ul>
-</div>
 
-</body>
-</html>
+
+
+
+bamalvict@KING-AO:/opt/KING-AO$ docker ps
+CONTAINER ID   IMAGE                             COMMAND                  CREATED          STATUS                      PORTS                                             NAMES
+e68c78b8f3b3   gcr.io/cadvisor/cadvisor:latest   "/usr/bin/cadvisor -…"   45 seconds ago   Up 41 seconds (healthy)     0.0.0.0:8080->8080/tcp, [::]:8080->8080/tcp       kingao-cadvisor
+74e3b7755018   prom/prometheus:latest            "/bin/prometheus --c…"   45 seconds ago   Up 41 seconds               0.0.0.0:9090->9090/tcp, [::]:9090->9090/tcp       kingao-prometheus
+28fdf646d831   grafana/grafana:latest            "/run.sh"                45 seconds ago   Up 41 seconds               0.0.0.0:3000->3000/tcp, [::]:3000->3000/tcp       kingao-grafana
+a40eb493865a   grafana/loki:2.9.3                "/usr/bin/loki -conf…"   45 seconds ago   Up 41 seconds               0.0.0.0:3100->3100/tcp, [::]:3100->3100/tcp       kingao-loki
+6af5d3e672ea   grafana/promtail:latest           "/usr/bin/promtail -…"   45 seconds ago   Up 41 seconds                                                                 kingao-promtail
+4b5a81dd1bb4   prom/node-exporter:latest         "/bin/node_exporter"     23 minutes ago   Up 23 minutes                                                                 node_exporter
+cfc5c14674bb   prom/blackbox-exporter:latest     "/bin/blackbox_expor…"   23 minutes ago   Up 23 minutes               0.0.0.0:9115->9115/tcp, [::]:9115->9115/tcp       blackbox_exporter
+faca5b2dc1fa   bitnami/mongodb-exporter:latest   "mongodb_exporter"       23 minutes ago   Up 23 minutes               0.0.0.0:9216->9216/tcp, [::]:9216->9216/tcp       mongodb_exporter
+6d97639134af   mongo:latest                      "docker-entrypoint.s…"   43 minutes ago   Up 43 minutes               0.0.0.0:27017->27017/tcp, [::]:27017->27017/tcp   mongo_eparvier
+d887f1db3a86   solaizeapi:latest                 "dotnet SolaizeApi.d…"   43 minutes ago   Up 43 minutes (unhealthy)   0.0.0.0:5000->5000/tcp, [::]:5000->5000/tcp       solaizeapi
+2a19fe7fd38c   solaizeapi                        "dotnet SolaizeApi.d…"   48 minutes ago   Up 48 minutes               0.0.0.0:5010->80/tcp, [::]:5010->80/tcp           eparvier-api
+564941b01aeb   solaizecockpit                    "dotnet SolaizeCockp…"   48 minutes ago   Up 48 minutes               0.0.0.0:5011->80/tcp, [::]:5011->80/tcp           eparvier-cockpit
+bamalvict@KING-AO:/opt/KING-AO$ 
+</title>
 
 

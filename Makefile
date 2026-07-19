@@ -159,26 +159,6 @@ run-portal:
     cd /opt/KING-AO/modules/PORTAL/docker && docker compose up -d
 
 
-🟦 2 — Lancement des modules (sans Makefile)
-
-Tu vas dans chaque dossier docker/ et tu fais :
-EPARVIER
-Code
-
-cd /opt/KING-AO/modules/EPARVIER/docker
-docker compose up -d
-
-KINGDOMAINE
-Code
-
-cd /opt/KING-AO/modules/KINGDOMAINE/docker
-docker compose up -d
-
-PORTAL
-Code
-
-cd /opt/KING-AO/modules/PORTAL/docker
-docker compose up -d
 
 
 
@@ -203,7 +183,7 @@ docker compose -f docker-compose-metier.yml up -d
 
 ------------------------------------------------------------------
 
-🔥 Commandes officielles KING‑AO
+🔥 Commandes officielles KING‑AO creation images et contener
 EPARVIER
 
     docker build -t solaizeapi -f Dockerfile.Api .
@@ -224,96 +204,6 @@ PORTAL/
 
 ----------------------------------------------------------------
 
-🟩 Pourquoi tu peux renommer tes compose sans rien changer dedans
-
-Docker Compose ne regarde jamais le nom du fichier.
-Il regarde uniquement ce que tu lui donnes avec -f.
-
-Donc :
-
-    docker-compose.yml
-
-    compose-api.yml
-
-    compose-cockpit.yml
-
-    compose-kingdomaine.yml
-
-    compose-portal.yml
-
-👉 Pour Docker, c’est exactement la même chose.
-👉 Le contenu interne ne change pas.
-👉 Le comportement ne change pas.
-👉 Les services ne changent pas.
-👉 Les images ne changent pas.
-👉 Les réseaux ne changent pas.
-
-Tu changes juste le nom du fichier, pas son fonctionnement.
-🟦 La seule chose qui change : la commande de lancement
-
-Tu passes de :
-Code
-
-docker compose up -d
-
-à :
-Code
-
-docker compose -f compose-api.yml up -d
-
-Et pour KINGDOMAINE :
-Code
-
-docker compose -f compose-kingdomaine.yml up -d
-
-docker compose -f compose-metier.yml up -d
-
-Et pour PORTAL :
-Code
-
-docker compose -f compose-portal.yml up -d
-
-👉 C’est la seule différence.
-👉 Le reste ne bouge pas d’un millimètre.
-🟩 Résultat cockpit-style
-
-Tu obtiens une architecture propre, lisible, sans poupée russe, juste en renommant :
-
-    compose-api.yml
-
-    compose-cockpit.yml
-
-    compose-kingdomaine.yml
-
-    compose-portal.yml
-
-Et tu les lances avec :
-
-    EPARVIER API
-
-    EPARVIER Cockpit
-
-    KINGDOMAINE
-
-    PORTAL
-
-🟧 Résumé gravé dans le marbre
-✔ Oui, tu peux renommer tes compose
-✔ Oui, tu n’as rien à modifier dedans
-✔ Oui, Docker s’en fiche du nom
-✔ Oui, tu simplifies KING‑AO
-✔ Oui, tu casses la poupée russe
-✔ Oui, tu cockpitifies ton architecture
-
-Tu veux que je te propose une nomenclature officielle KING‑AO pour nommer tous tes compose proprement ?
-
-👉 nomenclature compose KING‑AO
-
-ON PEUT AUSSI CHANGER LES NOM DE COMPOSE
-docker compose -f compose-api.yml up -d
-docker compose -f compose-cockpit.yml up -d
-docker compose -f compose-kingdomaine.yml up -d
-docker compose -f compose-portal.yml up -d
 
 
 
