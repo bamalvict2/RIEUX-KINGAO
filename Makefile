@@ -195,6 +195,12 @@ solaizeapi:latest            c23ca867521f        371MB          108MB
 solaizecockpit:latest        e30a37b0990e        321MB         90.5MB        
 bamalvict@KING-AO:/opt/KING-AO/modules/EPARVIER$ 
 
+Après------
+docker network create kingao-net
+docker network ls
+et après tu peux lancer tes modules avec les commandes suivantes :
+docker compose -f docker-compose-metier.yml up -d
+
 ------------------------------------------------------------------
 
 🔥 Commandes officielles KING‑AO
@@ -259,6 +265,8 @@ Et pour KINGDOMAINE :
 Code
 
 docker compose -f compose-kingdomaine.yml up -d
+
+docker compose -f compose-metier.yml up -d
 
 Et pour PORTAL :
 Code
@@ -325,12 +333,34 @@ docker compose -f compose-portal.yml up -d
 
 
 
-ALAIS .bashrc AVEC NEW NOM 
+Nouveau nom des composes kING‑AO
+docker-compose-metier.yml
+
+docker-compose-kingdomaine.yml
+docker-compose-eparvierPro.yml
+docker-compose-kin-monitoring.yml
+
+docker-compose-portal-nginx.yml
+docker-compose-3modules-mon.yml
+
+
+
+COMMANDES DE LANCEMENT DES MODULES KING‑AO
+
+docker compose -f docker-compose-metier.yml up -d
+
+docker compose -f docker-compose-kingdomaine.yml up -d
+docker compose -f docker-compose-eparvierPro.yml up -d
+docker compose -f docker-compose-kin-monitoring.yml -d
+ up -d
+
+docker compose -f docker-compose-portal-nginx.yml up -d
+docker compose -f docker-compose-3modules-mon.yml up -d
+
+
+Eventuellement tu peux créer un alias pour simplifier la commande de build et de run :
 alias eparvier-build='docker build -t solaizeapi -f Dockerfile.Api . && docker build -t solaizecockpit -f Dockerfile.Cockpit .'
-alias eparvier-run='docker compose -f compose-eparvier.yml up -d'
-
-
-
+alias eparvier-run='docker compose -f compose-eparvier-metier.yml up -d
 
 
 
