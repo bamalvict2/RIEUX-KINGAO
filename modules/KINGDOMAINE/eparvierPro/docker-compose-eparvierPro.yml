@@ -1,56 +1,48 @@
 version: "3.9"
 
 services:
+  mongo_eparvier:
+    image: mongo:latest
+    container_name: mongo_eparvier
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_eparvier_data:/data/db
+    networks:
+      - kingao-net
 
-  solaizeapi:
+  eparvier-api:
     image: solaizeapi:latest
-    container_name: solaizeapi
-    restart: unless-stopped
+    container_name: eparvier-api
+    restart: always
+    depends_on:
+      - mongo_eparvier
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - MONGO_URL=mongodb://mongo_eparvier:27017
     ports:
       - "5000:5000"
-    environment:
-      ASPNETCORE_ENVIRONMENT: "Production"
-    networks:
-      - eparvier_net
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
       interval: 10s
       timeout: 5s
       retries: 5
+    networks:
+      - kingao-net
 
-  solaizecockpit:
+  eparvier-cockpit:
     image: solaizecockpit:latest
-    container_name: solaizecockpit
-    restart: unless-stopped
+    container_name: eparvier-cockpit
+    restart: always
     ports:
-      - "5100:5100"
-    environment:
-      ASPNETCORE_ENVIRONMENT: "Production"
+      - "5011:80"
     networks:
-      - eparvier_net
-    depends_on:
-      solaizeapi:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5100"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  mongo:
-    image: mongo:latest
-    container_name: mongo_eparvier
-    restart: unless-stopped
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-    networks:
-      - eparvier_net
-
-networks:
-  eparvier_net:
+      - kingao-net
 
 volumes:
-  mongo_data:
+  mongo_eparvier_data:
 
+networks:
+  kingao-net:
+    external: true

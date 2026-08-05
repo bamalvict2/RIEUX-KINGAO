@@ -204,15 +204,6 @@ PORTAL/
 
 ----------------------------------------------------------------
 
-
-
-
-## Mémo express
-
-    Build API → docker build -t solaizeapi -f Dockerfile.Api .
-
-    Run API → docker compose -f compose-api.yml up -d
-
     Build KINGDOMAINE → docker build -t kingdomaine -f Dockerfile.Api .
 
     Run KINGDOMAINE → docker compose -f compose-kingdomaine.yml up -d
@@ -222,9 +213,35 @@ PORTAL/
     Run PORTAL → docker compose -f compose-portal.yml up -d
 
 
+docker compose -f docker-compose-kingdomaine-api.yml up -d
+
+docker compose -f docker-compose-kingdomaine-cockpit.yml up -d
+
+
+
+
+
+
+
+
+
+
 
 Nouveau nom des composes kING‑AO
-docker-compose-metier.yml
+## Mémo express
+
+    Build API → docker build -t solaizeapi -f Dockerfile.Api .
+
+    Run API → docker compose -f compose-api.yml up -d
+
+
+		docker compose -f docker-compose-kingdomaine-api.yml up -d
+
+		docker compose -f docker-compose-kingdomaine-cockpit.yml up -d
+
+
+
+
 
 docker-compose-kingdomaine.yml
 docker-compose-eparvierPro.yml
@@ -238,14 +255,82 @@ docker-compose-3modules-mon.yml
 COMMANDES DE LANCEMENT DES MODULES KING‑AO
 
 docker compose -f docker-compose-metier.yml up -d
-
 docker compose -f docker-compose-kingdomaine.yml up -d
 docker compose -f docker-compose-eparvierPro.yml up -d
-docker compose -f docker-compose-kin-monitoring.yml -d
- up -d
-
+docker compose -f docker-compose-kin-monitoring.yml up -d
 docker compose -f docker-compose-portal-nginx.yml up -d
 docker compose -f docker-compose-3modules-mon.yml up -d
+
+PETIT MÉMO POUR SE CONNECTER 
+docker exec -it mongo_eparvier mongosh
+curl http://localhost:5000/health
+docker exec -it eparvier-api netstat -tln
+docker exec -it eparvier-api busybox netstat -tln
+docker exec -it eparvier-api /bin/busybox netstat -tln
+docker exec -it eparvier-api sh -c "busybox netstat -tln"
+
+🟩 Méthode cockpit : utiliser dotnet pour afficher les ports ouverts
+
+Toutes les images ASP.NET contiennent dotnet.
+Donc on peut inspecter le serveur Kestrel directement.
+
+Essaie ceci :
+Code
+
+docker exec -it eparvier-api sh -c "dotnet --info"
+
+
+🟧 3 — Test interne avec wget (qui existe dans ASP.NET)
+
+Essaie :
+Code
+
+docker exec -it eparvier-api sh -c "wget -qO- http://localhost/health"
+
+
+🟩 2 — Test cockpit depuis l’hôte (à faire maintenant)
+
+Essaye :
+Code
+
+curl http://localhost:5010/health
+
+Pourquoi 5010 ?
+Parce que ton conteneur expose :
+Code
+
+5010:80
+
+Donc si ton API écoute sur 80 → elle répond sur 5010 côté hôte.
+
+🟦 2 — Vérifier les endpoints disponibles (méthode .NET pure)
+
+Ton image n’a pas wget, pas curl, pas busybox →
+Mais elle a PowerShell Core (inclus dans ASP.NET 8).
+
+Teste :
+Code
+
+docker exec -it eparvier-api sh -c "pwsh -c \"Invoke-WebRequest http://localhost\""
+
+Puis :
+Code
+
+docker exec -it eparvier-api sh -c "pwsh -c \"Invoke-WebRequest http://localhost/api
+
+
+refaire le 2 compose metiers API ET COCKPIT
+🟩 Commandes cockpit pour lancer les modules
+API
+Code
+
+docker compose -f docker-compose-kingdomaine-api.yml up -d
+
+Cockpit
+Code
+
+docker compose -f docker-compose-kingdomaine-cockpit.yml up -d
+
 
 
 Eventuellement tu peux créer un alias pour simplifier la commande de build et de run :

@@ -1,19 +1,12 @@
 version: "3.9"
 
 services:
-  kingdomaine:
-    image: kingdomaine:latest
-    container_name: kingdomaine
-    restart: always
-    ports:
-      - "5010:80"
-    networks:
-      - kingao-net
-
   kingdomaine-cockpit:
     image: kingdomaine-cockpit:latest
     container_name: kingdomaine-cockpit
     restart: always
+    environment:
+      - ASPNETCORE_URLS=http://0.0.0.0:80
     ports:
       - "5011:80"
     networks:

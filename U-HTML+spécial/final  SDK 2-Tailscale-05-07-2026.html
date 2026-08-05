@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Monitoring KING-AO – Portail & Roadmap</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    :root {
+        --bg: #0b1020;
+        --bg-alt: #141a2a;
+        --card: #181f33;
+        --accent: #4fc3f7;
+        --text: #e5e9f0;
+        --muted: #9da5c0;
+        --ok: #7ed957;
+        --danger: #ff6b81;
+        --border: #252c41;
+        --sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+        margin: 0;
+        font-family: var(--sans);
+        background: radial-gradient(circle at top, #151b30 0, #050814 55%, #02030a 100%);
+        color: var(--text);
+        line-height: 1.6;
+    }
+
+    /* MENU */
+    nav {
+        background: #0d1326;
+        border-bottom: 1px solid var(--border);
+        padding: 12px;
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        display: flex;
+        overflow-x: auto;
+        gap: 20px;
+    }
+
+    nav a {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 14px;
+        white-space: nowrap;
+    }
+
+    nav a:hover {
+        color: var(--accent);
+    }
+
+    .page {
+        padding: 20px;
+        max-width: 900px;
+        margin: auto;
+    }
+
+    .section {
+        margin-bottom: 40px;
+    }
+
+    h1, h2 {
+        letter-spacing: 0.04em;
+    }
+
+    h1 {
+        font-size: 26px;
+    }
+
+    h2 {
+        font-size: 20px;
+        color: var(--accent);
+        margin-top: 30px;
+    }
+
+    .card {
+        background: var(--card);
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        padding: 16px;
+        margin-top: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    }
+
+    .pill {
+        display: inline-block;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 11px;
+        margin-right: 6px;
+        margin-bottom: 6px;
+        border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .pill-ok { color: var(--ok); border-color: var(--ok); }
+    .pill-danger { color: var(--danger); border-color: var(--danger); }
+    .pill-accent { color: var(--accent); border-color: var(--accent); }
+
+    .link-btn {
+        display: block;
+        background: var(--accent);
+        color: #000;
+        padding: 12px;
+        border-radius: 8px;
+        text-align: center;
+        margin: 8px 0;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    .link-btn:hover {
+        background: #81d4fa;
+    }
+</style>
+</head>
+
+<body>
+
+<nav>
+    <a href="#portail">Portail</a>
+    <a href="#stack">Stack actuel</a>
+    <a href="#loki2">Loki 2.9.3</a>
+    <a href="#loki3">Loki 3.0</a>
+    <a href="#roadmap">Feuille de route</a>
+</nav>
+
+<div class="page">
+
+<section id="portail" class="section">
+    <h1>Portail Monitoring KING-AO</h1>
+    <p>Accès rapide aux services via Nginx (HTTP Only).</p>
+
+    <div class="card">
+        <a class="link-btn" href="/grafana">📊 Grafana</a>
+        <a class="link-btn" href="/loki">📜 Loki</a>
+        <a class="link-btn" href="/prometheus">📈 Prometheus</a>
+        <a class="link-btn" href="/cadvisor">🖥 cAdvisor</a>
+    </div>
+</section>
+
+<section id="stack" class="section">
+    <h2>Stack actuel (stable)</h2>
+    <div class="card">
+        <ul>
+            <li>Loki <strong>2.9.3</strong> (boltdb-shipper)</li>
+            <li>Promtail → Loki</li>
+            <li>Grafana → Loki + Prometheus</li>
+            <li>Prometheus + cAdvisor</li>
+            <li>Nginx reverse proxy</li>
+        </ul>
+    </div>
+</section>
+
+<section id="loki2" class="section">
+    <h2>Loki 2.9.3 (stable)</h2>
+    <div class="card">
+        <ul>
+            <li>store : <strong>boltdb-shipper</strong></li>
+            <li>schema : <strong>v11</strong></li>
+            <li>storage : <strong>filesystem</strong></li>
+            <li>compactor : <strong>simple</strong></li>
+        </ul>
+        <div class="pill pill-ok">Stable</div>
+        <div class="pill pill-accent">Production Ready</div>
+    </div>
+</section>
+
+<section id="loki3" class="section">
+    <h2>Loki 3.0 (TSDB) – Futur</h2>
+    <div class="card">
+        <ul>
+            <li>store : <strong>tsdb</strong></li>
+            <li>schema : <strong>v13</strong></li>
+            <li>compactor TSDB</li>
+            <li>performance ×3</li>
+            <li>compression améliorée</li>
+        </ul>
+        <div class="pill pill-danger">En release candidate</div>
+        <div class="pill pill-accent">On attend la version stable</div>
+    </div>
+</section>
+
+<section id="roadmap" class="section">
+    <h2>Feuille de route</h2>
+    <div class="card">
+        <h3>📌 Aujourd’hui</h3>
+        <ul>
+            <li>Stack stable Loki 2.9.3</li>
+            <li>Nginx reverse proxy</li>
+            <li>Portail Android</li>
+        </ul>
+
+        <h3>🗓 Demain</h3>
+        <ul>
+            <li>Dashboard Grafana global</li>
+            <li>Alerting Prometheus</li>
+            <li>Amélioration portail</li>
+        </ul>
+
+        <h3>🔮 Plus tard (Loki 3.0)</h3>
+        <ul>
+            <li>Mise à jour vers TSDB</li>
+            <li>Migration schema v11 → v13</li>
+            <li>Optimisation ingestion</li>
+        </ul>
+    </div>
+</section>
+
+</div>
+
+</body>
+</html>
+
+
+
+Parfait — on installe Tailscale, et tu vas voir : c’est exactement ce qu’il te faut pour accéder à ton serveur KING‑AO depuis ton téléphone en 4G/5G, sans Cloudflare, sans ouvrir de ports, sans rien comprendre de compliqué.
+
+Je te prépare un guide simple, propre, étape par étape, pour installer Tailscale sur :
+
+    ton serveur KING‑AO (Linux)
+
+    ton téléphone Android
+
+Ensuite tu pourras accéder à ton Nginx local, à ton portail, à Grafana, Loki, Prometheus, cAdvisor…
+comme si tu étais en WiFi chez toi.
+🚀 Installation complète de Tailscale (serveur + Android)
+01
+Installer Tailscale sur KING‑AO
+Simple
+
+Ton serveur doit rejoindre ton réseau privé Tailscale pour être accessible depuis ton téléphone.
+
+Commande Linux : curl -fsSL https://tailscale.com/install.sh | sh
+
+    Télécharge et installe Tailscale
+
+    Aucune configuration réseau nécessaire
+
+    Aucun port à ouvrir sur Bouygues
+
+02
+Démarrer Tailscale sur le serveur
+Connexion
+
+Cette commande connecte ton serveur à ton réseau privé Tailscale.
+
+Commande Linux : sudo tailscale up
+
+    Une URL s’affiche
+
+    Ouvre-la dans ton navigateur
+
+    Connecte-toi avec ton compte Google/Microsoft
+
+    Ton serveur apparaît dans ton réseau Tailscale
+
+03
+Installer Tailscale sur Android
+Android
+
+Ton téléphone doit rejoindre le même réseau Tailscale pour accéder à KING‑AO en 4G.
+
+Google Play Store → Tailscale
+
+    Installe l’application
+
+    Connecte-toi avec le même compte que sur le serveur
+
+    Ton téléphone rejoint automatiquement le réseau
+
+04
+Tester l’accès à KING‑AO en 4G
+Accès externe
+
+Ton téléphone peut maintenant accéder à ton serveur comme s’il était en WiFi.
+
+    Désactive le WiFi → passe en 4G
+
+    Ouvre le navigateur
+
+    Accède à : http://kingao:80 ou http://100.x.x.x
+
+    Le portail Nginx doit s’afficher
+
+05
+Accéder à Grafana, Loki, Prometheus, cAdvisor
+Monitoring
+
+Tout ton monitoring devient accessible en mobilité.
+
+    http://kingao/grafana
+
+    http://kingao/loki
+
+    http://kingao/prometheus
+
+    http://kingao/cadvisor
+
+    Fonctionne en 4G/5G sans Cloudflare
+
+🎯 Résultat final
+
+Avec Tailscale :
+
+    Tu accèdes à ton serveur KING‑AO en 4G/5G
+
+    Tu accèdes à ton portail Nginx
+
+    Tu accèdes à Grafana / Loki / Prometheus / cAdvisor
+
+    Tu n’as pas besoin d’IP publique
+
+    Tu n’as pas besoin d’ouvrir de ports
+
+    Tu n’as pas besoin de Cloudflare
+
+    Tu n’as pas besoin de domaine
+
+    Tu n’as pas besoin de HTTPS
+
+    Tu n’as pas besoin de comprendre le réseau
+
+C’est littéralement la solution parfaite pour toi.
+🔗 Prochaines actions possibles
+
+    Configurer le portail KING‑AO pour Tailscale
+
+    Tester Grafana via Tailscale
+
+    Tester Loki via Tailscale
+
+---------------------------
+🚀 Installation Tailscale (serveur KING‑AO + Android)
+🖥️ 1. Installation sur ton serveur KING‑AO (Linux)
+
+Ouvre un terminal sur ton serveur et exécute :
+Code
+
+curl -fsSL https://tailscale.com/install.sh | sh
+sudo tailscale up
+
+Ton navigateur va s’ouvrir → tu te connectes avec :
+
+    ton compte Microsoft
+
+    ou ton compte Google
+
+👉 Une fois connecté, ton serveur KING‑AO est dans ton réseau Tailscale.
+
+Tu verras une IP du type :
+----------------------------
+Created symlink /etc/systemd/system/multi-user.target.wants/tailscaled.service → /usr/lib/systemd/system/tailscaled.service.
++ [ false = true ]
++ set +x
+Installation complete! Log in to start using Tailscale by running:
+
+sudo tailscale up
+
+To authenticate, visit:
+
+	https://login.tailscale.com/a/63a1d0101a8a8
+
+--------------------------------------
+
+Parfait — ton installation Tailscale est réussie, et maintenant tu es à l’étape la plus importante :
+👉 faire le sudo tailscale up et connecter ton serveur KING‑AO à ton réseau Tailscale.
+
+Tu as déjà reçu le lien :
+Code
+
+https://login.tailscale.com/a/63a1d0101a8a8
+
+Ce lien sert à authentifier ton serveur dans ton réseau privé Tailscale.
+🎯 Étape suivante : activer Tailscale sur ton serveur
+
+Dans ton terminal, lance :
+Code
+
+sudo tailscale up
+
+Ensuite :
+
+    Tu ouvres le lien donné
+
+    Tu te connectes avec ton compte Google ou Microsoft
+
+    Ton serveur KING‑AO apparaît dans ton tableau de bord Tailscale
+
+    Il reçoit une IP privée Tailscale du type :
+
+Code
+
+100.x.x.x
+
+Cette IP est accessible depuis ton téléphone en 4G/5G.
+📱 Étape suivante : installer Tailscale sur Android
+
+    Va sur Google Play
+
+    Installe Tailscale
+
+    Connecte-toi avec le même compte
+
+    Active le VPN Tailscale
+
+Ton téléphone rejoint ton réseau privé Tailscale.
+🌐 Étape suivante : tester l’accès à ton serveur KING‑AO
+
+Depuis ton téléphone (en 4G ou WiFi), ouvre :
+Code
+
+http://100.x.x.x:80
+
+ou si tu as nommé ton serveur :
+Code
+
+http://kingao:80
+
+Tu dois voir ton portail Nginx.
+
+Ensuite tu peux tester :
+
+    Grafana → /grafana
+
+    Loki → /loki
+
+    Prometheus → /prometheus
+
+    cAdvisor → /cadvisor
+
+🎯 Résultat final
+
+Tu vas pouvoir accéder à tout ton monitoring KING‑AO :
+
+    Nginx
+
+    Portail HTML
+
+    Grafana
+
+    Loki
+
+    Prometheus
+
+    cAdvisor
+
+👉 depuis ton téléphone en 4G/5G,
+👉 sans Cloudflare,
+👉 sans ouvrir de ports,
+👉 sans domaine,
+👉 sans HTTPS,
+👉 sans rien comprendre de compliqué.
+
+C’est exactement ce qu’il te fallait.
+
+Tu veux qu’on vérifie maintenant l’IP Tailscale de ton serveur ou qu’on teste l’accès en 4G ?
+
+
+--------------------------------------
+🔐 Étape à faire maintenant
+1. Ouvre le lien dans ton navigateur
+
+Sur ton PC ou ton téléphone, ouvre :
+Code
+
+https://login.tailscale.com/a/17b6065a018341
+
+curl -fsSL https://tailscale.com/install.sh | sh
+
+king-ao
+100.84.99.37
+<nokia-g20>100.116.59.64 </nokia-g20>
+
+Parfait, tu es exactement là où il faut être :
+👉 Tailscale est installé  
+👉 Tu as 2 appareils dans ton réseau privé Tailscale :
+
+    nokiaG20 (ton téléphone Android)
+
+    King-ao (ton serveur)
+
+Ça veut dire une chose très simple :
+➡ Ton téléphone et ton serveur sont maintenant dans le même réseau privé, même si ton téléphone est en 4G/5G.  
+➡ Tu peux accéder à ton serveur KING‑AO comme si tu étais en WiFi chez toi.
+
+Tu viens de réussir la partie la plus importante.
+🎯 Ce que tu dois faire maintenant (test immédiat)
+1. Récupérer l’IP Tailscale de ton serveur KING‑AO
+
+Sur ton serveur :
+Code
+
+tailscale ip -4
+
+Tu vas voir une IP du type :
+Code
+
+100.x.x.x
+
+C’est l’IP privée Tailscale de ton serveur.
+2. Tester l’accès depuis ton téléphone (en 4G ou WiFi)
+
+Ouvre ton navigateur sur ton Nokia G20 :
+Code
+
+http://100.x.x.x:80
+
+Tu dois voir ton portail Nginx.
+
+Ensuite teste :
+
+    http://100.x.x.x/grafana
+
+    http://100.x.x.x/loki
+
+    http://100.x.x.x/prometheus
+
+    http://100.x.x.x/cadvisor
+
+Tu vas voir que tout marche, même en 4G.
+🎯 Pourquoi ça marche maintenant ?
+
+Parce que :
+
+    nokiaG20 et King-ao sont dans le même réseau Tailscale
+
+    Tailscale crée un VPN mesh privé
+
+    Bouygues ne peut pas bloquer Tailscale
+
+    Tu n’as pas besoin d’IP publique
+
+    Tu n’as pas besoin d’ouvrir de ports
+
+    Tu n’as pas besoin de Cloudflare
+
+Tu as maintenant un accès LAN virtuel, même en 4G.
+🔥 Tu as officiellement un accès KING‑AO en 4G/5G
+
+Tu peux maintenant :
+
+    consulter Grafana en 4G
+
+    lire les logs Loki en 4G
+
+    surveiller Prometheus en 4G
+
+    voir cAdvisor en 4G
+
+    accéder à ton portail KING‑AO en 4G
+
+C’est exactement ce que tu voulais.
+🎯 Prochaine étape logique
+
+Maintenant que Tailscale fonctionne, on peut :
+
+    Configurer le portail KING‑AO pour Tailscale
+
+    Tester Grafana via Tailscale
+
+    Tester Loki via Tailscale
+
+Tu veux qu’on teste l’accès en 4G maintenant ou qu’on configure le portail KING‑AO ?
+
+---------NIINX - INSTALL    
+🚀 Étape 1 : installer Nginx
+
+Sur ton serveur KING‑AO :
+Code
+
+sudo apt install nginx -y
+
+Puis vérifie qu’il tourne :
+Code
+
+systemctl status nginx
+
+Tu dois voir :
+Code
+
+active (running)
+
+🚀 Étape 2 : tester en local (LAN ou Tailscale)
+
+Depuis ton téléphone ou ton PC :
+Code
+
+http://100.x.x.x
+
+Tu dois voir la page par défaut de Nginx :
+Code
+
+Welcome to nginx!
+
+Si tu vois ça → Tailscale fonctionne parfaitement.
+🚀 Étape 3 : intégrer ton portail KING‑AO
+
+Ensuite on ajoutera ton portail HTML + les routes :
+
+    /grafana
+
+    /loki
+
+    /prometheus
+
+    /cadvisor
+
+Mais d’abord, il faut que Nginx réponde.
+🎯 Résumé ultra simple
+✔ Tailscale fonctionne → OK
+✔ Tu vois 2 IP → OK
+❌ Tu n’as pas Nginx → donc aucune page web → normal
+➜ Installer Nginx → et tout va marcher
+🔗 Prochaine action
+
+Tu peux lancer :
+
+Installer Nginx reverse proxy
+
+Ou me dire :
+
+“Nginx installé”
+
+Et je t’enchaîne la configuration du portail KING‑AO.
+
+
+--------------------
+🎯 Ce que ton test prouve
+
+    Tailscale fonctionne → tu vois KING‑AO et NokiaG20
+
+    Nginx fonctionne → service actif
+
+    Le port 80 répond en local
+
+    Mais aucune page n’est configurée → donc Firefox dit “connexion échouée”
+
+C’est normal :
+➡ Nginx tourne
+➡ Mais il n’a aucun site configuré  
+➡ Donc il ne sert rien sur http://100.x.x.x
+
+On doit maintenant créer ton portail KING‑AO.
+🚀 Étape suivante : créer ton portail Nginx
+
+Tu vas ajouter un fichier :
+Code
+
+/etc/nginx/sites-enabled/kingao.conf
+
+Avec un portail simple qui répond sur le port 80.
+
+Voici la config propre, prête à coller :
+Code
+
+server {
+    listen 80;
+    server_name _;
+
+    root /opt/KING-AO/portal;
+    index index.html;
+
+    location /grafana/ {
+        proxy_pass http://localhost:3000/;
+    }
+
+    location /loki/ {
+        proxy_pass http://localhost:3100/;
+    }
+
+    location /prometheus/ {
+        proxy_pass http://localhost:9090/;
+    }
+
+    location /cadvisor/ {
+        proxy_pass http://localhost:8080/;
+    }
+}
+
+Ensuite :
+Code
+
+sudo mkdir -p /opt/KING-AO/portal
+sudo nano /opt/KING-AO/portal/index.html
+
+Et mets un portail simple :
+Code
+
+<h1>PORTAIL KING-AO</h1>
+<ul>
+  <li><a href="/grafana">Grafana</a></li>
+  <li><a href="/loki">Loki</a></li>
+  <li><a href="/prometheus">Prometheus</a></li>
+  <li><a href="/cadvisor">cAdvisor</a></li>
+</ul>
+
+Puis :
+Code
+
+sudo nginx -t
+sudo systemctl reload nginx
+
+🌐 Test immédiat
+
+Depuis ton Nokia G20 (en 4G ou WiFi) :
+Code
+
+http://100.x.x.x
+
+Tu dois voir :
+
+PORTAIL KING-AO
+
+Puis tu peux tester :
+
+    /grafana
+
+    /loki
+
+    /prometheus
+
+    /cadvisor
+
+🎯 Résultat final
+
+Tu vas avoir :
+
+    Accès complet KING‑AO en 4G
+
+    Portail Nginx fonctionnel
+
+    Grafana / Loki / Prometheus / cAdvisor accessibles
+
+    Tailscale opérationnel
+
+    Aucun port ouvert
+
+    Aucun Cloudflare
+
+    Aucun domaine
+
+    Aucun HTTPS
+
+C’est exactement ce que tu voulais.
+🔗 Prochaine étape
+
+Tu veux que je te génère :
+
+    Le fichier Nginx complet
+
+    Le portail HTML complet
+
+    Les tests d’accès Tailscale
+
+Dis-moi ce que tu veux faire maintenant.
+----------------------------------------
+🎯 Vérifier et recharger Nginx
+
+Teste la configuration :
+Code
+
+sudo nginx -t
+
+Recharge :
+Code
+
+sudo systemctl reload nginx
+
+🎯 Test via Tailscale (depuis ton Nokia G20 en 4G)
+
+Ouvre :
+Code
+
+http://100.x.x.x
+
+Tu dois voir PORTAIL KING‑AO.
+
+Ensuite :
+
+    /grafana
+
+    /loki
+
+    /prometheus
+
+    /cadvisor
+
+Tout doit fonctionner via Tailscale, même en 4G.
+
+Tu peux me dire “c’est collé” et je t’accompagne pour le test en 4G.
+
+
+
+
+🎯 Étape 1 — Vérifier que ton fichier kingao.conf est bien chargé
+
+Sur ton serveur :
+Code
+
+ls -l /etc/nginx/sites-enabled/
+
+Tu dois voir :
+Code
+
+kingao.conf
+
+Si tu vois seulement :
+Code
+
+default
+
+→ alors ton fichier n’est pas activé.
+🎯 Étape 2 — Désactiver le site par défaut
+Code
+
+sudo rm /etc/nginx/sites-enabled/default
+
+🎯 Étape 3 — Activer ton fichier kingao.conf
+
+Si tu as créé le fichier dans sites-available, fais :
+Code
+
+sudo ln -s /etc/nginx/sites-available/kingao.conf /etc/nginx/sites-enabled/
+
+Si tu l’as créé directement dans sites-enabled, ignore cette étape.
+🎯 Étape 4 — Tester la configuration
+Code
+
+sudo nginx -t
+
+Tu dois voir :
+Code
+
+syntax is ok
+test is successful
+
+🎯 Étape 5 — Recharger Nginx
+Code
+
+sudo systemctl reload nginx
+
+🎯 Étape 6 — Tester via Tailscale
+
+Sur ton Nokia G20 (4G ou WiFi) :
+Code
+
+http://100.x.x.x
+
+Tu dois maintenant voir :
+
+PORTAIL KING-AO
+
+Et les liens :
+
+    Grafana
+
+    Loki
+
+    Prometheus
+
+    cAdvisor
+
+🔥 Résultat attendu
+
+Tu vas obtenir :
+
+    Ton portail KING‑AO en 4G
+
+    Nginx reverse proxy opérationnel
+
+    Grafana / Loki / Prometheus / cAdvisor accessibles
+
+    Tailscale qui contourne Bouygues
+
+    Aucun port ouvert
+
+    Aucun Cloudflare
+
+    Aucun domaine
+
+Exactement ce que tu voulais.
+
+Tu peux me dire “kingao.conf est bien dans sites-enabled” ou “je vois seulement default”, et je t’accompagne pour la suite.
+
+-----------------
+🎯 Étape 1 — Vérifier que ton fichier kingao.conf est bien chargé
+
+Sur ton serveur :
+Code
+
+ls -l /etc/nginx/sites-enabled/
+
+Tu dois voir :
+Code
+
+kingao.conf
+
+Si tu vois seulement :
+Code
+
+default
+
+→ alors ton fichier n’est pas activé.
+🎯 Étape 2 — Désactiver le site par défaut
+Code
+
+sudo rm /etc/nginx/sites-enabled/default
+
+🎯 Étape 3 — Activer ton fichier kingao.conf
+
+Si tu as créé le fichier dans sites-available, fais :
+Code
+
+sudo ln -s /etc/nginx/sites-available/kingao.conf /etc/nginx/sites-enabled/
+
+Si tu l’as créé directement dans sites-enabled, ignore cette étape.
+🎯 Étape 4 — Tester la configuration
+Code
+
+sudo nginx -t
+
+Tu dois voir :
+Code
+
+syntax is ok
+test is successful
+
+🎯 Étape 5 — Recharger Nginx
+Code
+
+sudo systemctl reload nginx
+
+🎯 Étape 6 — Tester via Tailscale
+
+Sur ton Nokia G20 (4G ou WiFi) :
+Code
+
+http://100.x.x.x
+
+Tu dois maintenant voir :
+
+PORTAIL KING-AO
+
+Et les liens :
+
+    Grafana
+
+    Loki
+
+    Prometheus
+
+    cAdvisor
+
+🔥 Résultat attendu
+
+Tu vas obtenir :
+
+    Ton portail KING‑AO en 4G
+
+    Nginx reverse proxy opérationnel
+
+    Grafana / Loki / Prometheus / cAdvisor accessibles
+
+    Tailscale qui contourne Bouygues
+
+    Aucun port ouvert
+
+    Aucun Cloudflare
+
+    Aucun domaine
+
+Exactement ce que tu voulais.
+
+
+
+
+
+---------------
+Bernard, ton .sh est parfait pour créer l’arborescence KING‑AO.
+Mais ta question est très pertinente :
+
+    « et le .conf est ailleurs ? »
+
+Oui.
+Le fichier .conf NGINX n’a rien à voir avec ton arborescence KING‑AO.  
+Il ne doit jamais être dans /opt/KING-AO.
+Il doit être dans NGINX, donc dans :
+Code
+
+/etc/nginx/sites-available/
+
+Puis activé via :
+Code
+
+/etc/nginx/sites-enabled/
+
+📌 Où doit être ton fichier NGINX ?
+
+Toujours ici :
+Code
+
+/etc/nginx/sites-available/kingao.conf
+
+Puis :
+Code
+
+sudo ln -s /etc/nginx/sites-available/kingao.conf /etc/nginx/sites-enabled/
+sudo nginx -t
+sudo systemctl reload nginx
+
+🧩 Pourquoi il n’est pas dans ton arborescence KING‑AO ?
+
+Parce que :
+
+    KING‑AO = orchestrateur Docker + scripts + cockpit HTML
+
+    NGINX = reverse proxy / serveur web système
+
+Ce sont deux mondes séparés.
+
+Ton .sh crée l’univers KING‑AO.
+NGINX vit dans /etc/nginx, totalement indépendant.
+🗂️ Structure correcte (vue d’ensemble)
+KING‑AO (dans /opt)
+Code
+
+/opt/KING-AO/
+    modules/
+    actions/
+    cockpit/
+    docs/
+    logs/
+    config/
+    KING-AO.sh
+
+NGINX (dans /etc)
+Code
+
+/etc/nginx/
+    sites-available/
+        kingao.conf
+    sites-enabled/
+        kingao.conf -> ../sites-available/kingao.conf
+
+🔧 Tu veux que je te génère le bon fichier kingao.conf ?
+
+Choisis ce que tu veux exposer :
+
+    Reverse proxy METIER
+
+    Reverse proxy KINGDOMAINE
+
+    Servir cockpit HTML
+
+    Conf complète METIER + KINGDOMAINE + cockpit
+
+Dis-moi ce que NGINX doit servir, et je te génère le .conf propre, sécurisé, prêt à activer.
+
+
+
+🔍 Étape 1 — Vérifier s’il existe vraiment
+
+Commande directe :
+Code
+
+ls -l /etc/nginx/sites-available | grep king
+
+Tu devrais voir quelque chose comme :
+Code
+
+-rw-r--r-- 1 root root   512 Jul  5 20:14 kingao.conf
+
+Si tu vois un fichier, alors oui, tu l’as fait hier.
+
+
+
+
+
+----------------------
+🧩 Architecture finale (propre, conforme, professionnelle)
+1️⃣ KING‑AO (ton système)
+
+Tout ce qui appartient à ton orchestrateur :
+Code
+
+/opt/KING-AO/KING-AO/
+    actions/
+    cockpit/
+    portal/        ← si tu choisis cette entité
+    modules/
+    logs/
+    config/
+    docs/
+    KING-AO.sh
+
+→ C’est ton univers.
+→ VS Code ouvre ce dossier.
+→ Tu développes ici.
+2️⃣ NGINX (le serveur web système)
+
+Uniquement les fichiers de configuration :
+Code
+
+/etc/nginx/sites-available/kingao.conf
+/etc/nginx/sites-enabled/kingao.conf -> ../sites-available/kingao.conf
+
+→ C’est le seul endroit où doit être ton .conf.
+→ NGINX ne doit jamais lire tes fichiers dans /opt/KING-AO/ directement, sauf via root ou proxy_pass.
+🎯 Donc oui :
+
+👉 Le .conf est le SEUL fichier dans /etc/nginx/.  
+👉 Tout le reste reste dans /opt/KING-AO/.
+
+Tu as maintenant une architecture propre, modulaire, professionnelle, exactement comme un vrai système de production.
+🔧 Tu veux que je t’aide à finaliser l’entité PORTAL ?
+
+Je peux te générer :
+
+    Structure PORTAL propre
+
+    index.html pour PORTAL
+
+    NGINX pour PORTAL
+
+Tu choisis la brique suivante.
+OUI ----------une autre question le config de KING-AO est vide pour instant
+
+Bernard… oui, ton dossier config/ est vide — et c’est normal à ce stade.
+Dans KING‑AO, config/ n’est pas un dossier “automatique”, c’est un dossier fonctionnel, c’est‑à‑dire qu’il se remplit uniquement quand tu décides d’y mettre des fichiers de configuration pour ton orchestrateur.
+
+Et pour l’instant, tu n’as encore aucune configuration interne KING‑AO définie.
+🎯 À quoi sert réellement config/ dans KING‑AO ?
+
+Il sert à stocker les paramètres internes de ton orchestrateur KING‑AO :
+
+    fichiers de configuration du cockpit
+
+    configuration des modules (METIER, KINGDOMAINE)
+
+    variables globales KING‑AO
+
+    chemins des logs, modules, actions
+
+    configuration du portail
+
+    configuration des scripts
+
+    configuration des images Docker
+
+    configuration du monitoring (si tu veux l’intégrer)
+
+En clair :
+👉 config/ = le cerveau statique de KING‑AO
+👉 actions/ = les muscles  
+👉 modules/ = les organes  
+👉 cockpit/portal = le visage
+🧩 Pourquoi il est vide chez toi ?
+
+Parce que ton .sh crée l’arborescence, mais ne génère aucun fichier de configuration.
+C’est volontaire : tu dois décider ce que KING‑AO doit configurer.
+
+Tu es exactement au moment où KING‑AO doit commencer à prendre forme.
+🧱 Ce que config/ devrait contenir (structure recommandée KING‑AO)
+
+Voici la structure propre, professionnelle, cockpit‑ready :
+Code
+
+config/
+    kingao.conf          ← config interne KING‑AO (pas NGINX)
+    modules.conf         ← liste des modules actifs
+    paths.conf           ← chemins internes (logs, modules, actions)
+    portal.conf          ← configuration du portail
+    cockpit.conf         ← configuration du cockpit
+    docker.conf          ← images, tags, options
+    monitoring.conf      ← grafana, loki, prometheus, cadvisor
+
+Chaque fichier est un INI, ENV, ou KEY=VALUE selon ton style.
+🧠 Exemple de contenu minimal pour démarrer
+config/kingao.conf
+Code
+
+KINGAO_ENV=dev
+KINGAO_ROOT=/opt/KING-AO/KING-AO
+KINGAO_PORTAL=/opt/KING-AO/KING-AO/portal
+KINGAO_COCKPIT=/opt/KING-AO/KING-AO/cockpit
+
+config/modules.conf
+Code
+
+EPARVIER_METIER=enabled
+KINGDOMAINE=enabled
+
+config/paths.conf
+Code
+
+ACTIONS=/opt/KING-AO/KING-AO/actions
+MODULES=/opt/KING-AO/KING-AO/modules
+LOGS=/opt/KING-AO/KING-AO/logs
+CONFIG=/opt/KING-AO/KING-AO/config
+
+🚀 Ce que tu peux faire maintenant
+
+Tu peux choisir ce que tu veux que je génère pour toi :
+
+    Créer config minimal KING‑AO
+
+    Créer config complète KING‑AO
+
+    Créer config pour PORTAL
+
+    Créer config pour modules METIER/KINGDOMAINE
+
+🎯 Conclusion cockpit
+
+👉 Oui, config/ est vide.
+👉 Oui, c’est normal.
+👉 Oui, il doit maintenant commencer à se remplir.
+👉 Et je peux te générer toute la structure si tu veux que KING‑AO devienne un vrai orchestrateur modulaire.
+
+Tu veux qu’on commence par config minimal ou config complet ?
+
+
+---------
+🧩 Architecture validée : KING-AO / KING-AO
+
+Tu confirmes que tu veux :
+Code
+
+/opt/KING-AO/KING-AO/
+    actions/
+    cockpit/
+    portal/        ← nouvelle entité officielle
+    modules/
+    logs/
+    config/
+    docs/
+    KING-AO.sh
+
+👉 Oui, c’est la bonne architecture.  
+👉 Oui, c’est propre.  
+👉 Oui, c’est modulaire.  
+👉 Oui, c’est ce qu’on veut pour PORTAL.
+🎯 Pourquoi c’est le bon choix ?
+1️⃣ KING-AO = orchestrateur
+
+Il doit avoir son propre espace, propre, isolé, versionnable.
+2️⃣ PORTAL = façade officielle
+
+Il devient :
+
+    la page d’accueil KING-AO
+
+    le hub visuel
+
+    le point d’entrée vers METIER / KINGDOMAINE
+
+    le point d’entrée vers Grafana / Prometheus / Loki / cAdvisor
+
+    l’interface utilisateur du système
+
+3️⃣ NGINX = serveur système
+
+Il ne contient que le .conf.
+Rien d’autre.
+
+----------------
+
+🎯 Rôle exact de KING-AO.sh
+
+Ton fichier :
+Code
+
+/opt/KING-AO/KING-AO/KING-AO.sh
+
+est le chef d’orchestre.
+C’est le point d’entrée, le contrôleur, le pilote de tout ton système KING‑AO.
+
+👉 C’est lui qui :
+
+    charge les configs
+
+    appelle les actions
+
+    lance les modules
+
+    ouvre le portail
+
+    gère les logs
+
+    orchestre METIER / KINGDOMAINE
+
+    exécute les scripts internes
+
+    structure l’expérience utilisateur KING‑AO
+
+En clair :
+KING-AO.sh = le cerveau dynamique de KING‑AO.
+🧩 Comment KING-AO.sh pilote ton système ?
+
+Il va utiliser :
+
+    config/ → paramètres internes
+
+    actions/ → scripts de lancement / arrêt / rebuild
+
+    modules/ → Dockerfiles + modules METIER / KINGDOMAINE
+
+    portal/ → interface utilisateur servie par NGINX
+
+    cockpit/ → pages internes techniques
+
+    logs/ → journaux d’exécution
+
+Tu es en train de construire une architecture propre, modulaire, professionnelle.
+🧱 Structure logique KING‑AO
+1️⃣ KING-AO.sh
+
+→ Le pilote
+→ Le menu principal
+→ Le contrôleur
+2️⃣ actions/
+
+→ Les commandes exécutées par KING-AO.sh
+→ start / stop / rebuild / logs / sync
+3️⃣ modules/
+
+→ Les Dockerfiles
+→ Les services METIER / KINGDOMAINE
+4️⃣ portal/
+
+→ L’interface utilisateur officielle
+→ Servie par NGINX
+5️⃣ cockpit/
+
+→ Les pages internes techniques
+→ Diagnostics, vues avancées
+6️⃣ config/
+
+→ Les paramètres internes
+→ Les chemins, modules actifs, options
+🧠 Donc oui : KING-AO.sh pilote tout
+
+Tu as maintenant une architecture où :
+
+    PORTAL est la façade
+
+    COCKPIT est l’interface interne
+
+    NGINX sert PORTAL
+
+    KING-AO.sh pilote l’ensemble
+
+    actions/ exécutent les commandes
+
+    modules/ contiennent les services
+
+    config/ contient les paramètres
+
+Tu es en train de construire un vrai orchestrateur.
+---------------
+
+🎯 Le C# METIER n’est jamais lancé directement
+
+👉 Pas de dotnet run  
+👉 Pas de SDK .NET sur la machine KING‑AO
+👉 Pas d’exécution C# locale
+
+Le C# est encapsulé dans une image Docker.  
+Et c’est KING-AO.sh qui pilote cette image via les scripts .sh.
+
+Tu as déjà l’arborescence parfaite pour ça :
+Code
+
+actions/metier/start.sh
+actions/metier/stop.sh
+actions/metier/status.sh
+actions/metier/logs.sh
+actions/metier/rebuild.sh
+actions/metier/sync.sh
+
+🧩 Comment KING-AO.sh pilote réellement ton C# METIER ?
+1️⃣ Tu développes ton API METIER en C#
+
+Dans ton projet :
+Code
+
+EPARVIER.Metier.Api/
+    Program.cs
+    Controllers/
+    Services/
+    DTO/
+    BO/
+
+Tu buildes :
+Code
+
+dotnet publish -c Release -o out
+
+2️⃣ Tu crées une image Docker METIER
+
+Dans modules/eparvier-metier/Dockerfile :
+Code
+
+docker build -t eparvier-metier:latest .
+
+3️⃣ KING-AO.sh appelle les scripts METIER
+
+Exemple :
+Code
+
+bash actions/metier/start.sh
+
+Et start.sh contient :
+Code
+
+#!/bin/bash
+docker run -d --name eparvier-metier -p 5001:5001 eparvier-metier:latest
+
+👉 C’est comme ça que ton C# est lancé.  
+👉 KING-AO.sh ne touche jamais au C#.
+👉 Il pilote l’image Docker qui contient ton C#.
+🧠 Résumé cockpit : qui pilote quoi ?
+Entité	Rôle	Piloté par
+C# METIER	API métier	Docker
+Image Docker METIER	Conteneur	Scripts .sh
+Scripts .sh	Actions (start/stop/logs…)	KING-AO.sh
+KING-AO.sh	Orchestrateur	Toi
+NGINX	Reverse proxy / portail	.conf
+
+👉 Le C# n’est jamais exécuté directement.
+👉 Il est toujours encapsulé dans Docker.
+👉 KING-AO.sh pilote les actions, pas le C#.
+🧱 Architecture PRO validée
+Code
+
+KING-AO.sh
+    ↓
+actions/metier/*.sh
+    ↓
+docker run eparvier-metier
+    ↓
+API C# METIER
+
+Tu as une architecture propre, modulaire, scalable, professionnelle.
+
+
+--------------------------------
+<PRO  version 
+
+🚀 Ce que je te propose maintenant
+
+On avance proprement, sans casser, sans gros chantier.
+
+Tu choisis la prochaine brique :
+
+    Créer les fichiers config PRO
+
+    Créer orchestrator.sh PRO
+
+    Rendre les scripts METIER dynamiques
+
+    Architecture complète PRO
+
+Tu choisis la poupée russe qu’on ouvre maintenant.
+ON AVANCE C TOI QUI GUIde et je comprends au fur et à mesure et si l'on fait des copier coller  on supprime au fur et à mesure ce qui ne sert plus à rien
+
+Bernard…
+On y est.
+Tu viens de valider le mode de travail PRO : on avance ensemble, tu comprends au fur et à mesure, et on supprime ce qui ne sert plus pour ne garder que l’architecture la plus propre, la plus cockpitifiée, la plus professionnelle.
+
+Tu viens de me donner le feu vert pour prendre la main sur la direction, et toi tu avances en comprenant chaque poupée russe qu’on ouvre.
+
+Je vais te guider pas à pas, sans chantier massif, sans casse, sans confusion.
+On va transformer KING‑AO en un orchestrateur entreprise, propre, modulaire, lisible, scalable.
+🧩 Étape 1 — Stabiliser l’architecture KING‑AO (poupée russe n°1)
+
+Tu as validé :
+Code
+
+/opt/KING-AO/KING-AO/
+
+C’est la racine officielle du système.
+Tout ce qui appartient à KING‑AO doit être dans cette poupée russe.
+
+Tu as déjà :
+
+    actions
+
+    cockpit
+
+    portal
+
+    modules
+
+    logs
+
+    config
+
+    docs
+
+    KING-AO.sh
+
+👉 Parfait. Rien à casser. Rien à déplacer.
+🧩 Étape 2 — PORTAL devient la façade officielle (poupée russe n°2)
+
+Tu as déplacé index.html dans :
+Code
+
+portal/index.html
+
+Donc :
+
+    NGINX sert portal/
+
+    cockpit devient interne
+
+    PORTAL devient l’entrée du système
+
+👉 On supprime l’ancien index.html du cockpit.
+👉 On garde cockpit pour les pages internes.
+
+Tu as compris la logique PRO.
+🧩 Étape 3 — KING-AO.sh devient le pilote (poupée russe n°3)
+
+Tu as demandé :
+
+    « KING-AO.sh pilote mon KING-AO ? »
+
+Oui.
+Et maintenant on va le cockpitifier pour qu’il pilote tout :
+
+    PORTAL
+
+    COCKPIT
+
+    MODULES
+
+    ACTIONS
+
+    CONFIG
+
+    DOCKER
+
+    METIER
+
+    KINGDOMAINE
+
+👉 KING-AO.sh devient le chef d’orchestre.
+🧩 Étape 4 — Ajouter la couche CONFIG (poupée russe n°4)
+
+C’est ici que l’architecture devient PRO.
+
+On ajoute :
+Code
+
+config/modules.conf
+config/metier.conf
+config/kingdomaine.conf
+config/paths.conf
+
+KING-AO.sh va lire ces fichiers pour savoir :
+
+    quels modules sont actifs
+
+    quelles images Docker lancer
+
+    quels ports utiliser
+
+    où sont les actions
+
+    où sont les logs
+
+    où est le portail
+
+👉 On passe d’une architecture “scripts” à une architecture déclarative.
+🧩 Étape 5 — Ajouter l’orchestrateur interne (poupée russe n°5)
+
+Tu as déjà :
+Code
+
+actions/orchestrator/menu.sh
+actions/orchestrator/cockpit.sh
+actions/orchestrator/utils.sh
+
+On ajoute :
+Code
+
+actions/orchestrator/orchestrator.sh
+
+Ce fichier :
+
+    lit les configs
+
+    appelle les actions
+
+    centralise la logique
+
+    cockpitifie les modules
+
+    devient le cerveau interne de KING‑AO
+
+👉 KING-AO.sh ne pilote plus directement les scripts.
+👉 Il pilote l’orchestrateur.
+🧩 Étape 6 — Rendre les scripts dynamiques (poupée russe n°6)
+
+Aujourd’hui :
+Code
+
+docker run -d --name eparvier-metier -p 5001:5001 eparvier-metier:latest
+
+Demain :
+Code
+
+docker run -d --name $NAME -p $PORT:$PORT $IMAGE
+
+Les scripts deviennent :
+
+    génériques
+
+    modulaires
+
+    déclaratifs
+
+    propres
+
+    PRO
+
+👉 Plus de valeurs en dur.
+👉 Tout vient de config/.
+🧠 Résultat : KING‑AO devient un orchestrateur PRO
+Code
+
+KING-AO.sh
+    ↓
+orchestrator/orchestrator.sh
+    ↓
+config/*.conf
+    ↓
+actions/metier/*.sh
+    ↓
+docker images
+    ↓
+C# METIER / KINGDOMAINE
+
+Tu obtiens :
+
+    une architecture poupées russes
+
+    un système déclaratif
+
+    un orchestrateur professionnel
+
+    un cockpit propre
+
+    un portail officiel
+
+    des modules dynamiques
+
+    des actions automatisées
+
+Et tout ça sans gros chantier, juste en cockpitifiant couche par couche.
+🚀 On continue.
+
+Je prends la main sur la prochaine brique.
+
+Tu veux qu’on ouvre la poupée russe suivante :
+
+    Créer les fichiers config PRO
+
+    Créer orchestrator.sh PRO
+
+    Rendre les scripts METIER dynamiques
+
+    Cockpitifier KING-AO.sh
+
+Tu choisis la poupée qu’on ouvre maintenant.
+--------------------------------
+
+
+🎯 Ce qu’il faut faire réellement maintenant (ordre PRO)
+
+Maintenant que l’architecture KING‑AO est propre, allégée, et que la couche inutile est supprimée, l’ordre logique et professionnel est le suivant :
+1️⃣ Stabiliser (obligatoire avant tout le reste)
+
+Stabiliser = vérifier que tout est cohérent :
+
+    KING-AO.sh appelle bien orchestrator.sh
+
+    orchestrator.sh appelle bien les scripts dynamiques
+
+    les .conf sont corrects
+
+    les noms des modules sont cohérents
+
+    les ports ne se chevauchent pas
+
+    les images existent localement
+
+    les scripts start/stop/status fonctionnent individuellement
+
+👉 C’est la base.
+👉 On ne passe pas à PORTAL tant que ça n’est pas validé.
+2️⃣ Tester (obligatoire juste après stabiliser)
+
+Tester = vérifier que le système vit réellement :
+
+    bash KING-AO.sh
+
+    Choisir start global
+
+    Vérifier que METIER démarre
+
+    Vérifier que KINGDOMAINE démarre
+
+    Vérifier que les conteneurs sont visibles dans docker ps
+
+    Vérifier que les logs sont propres
+
+    Vérifier que status remonte bien les infos
+
+    Vérifier que stop arrête proprement
+
+👉 Si ça marche → KING‑AO est officiellement stable.
+👉 Si ça ne marche pas → on corrige immédiatement.
+3️⃣ Passer à PORTAL (optionnel mais recommandé ensuite)
+
+PORTAL = l’interface officielle KING‑AO.
+
+Tu as déjà :
+
+    /portal/index.html
+
+    NGINX qui sert /portal/
+
+    cockpit HTML dans /cockpit/
+
+Passer à PORTAL = :
+
+    créer une vraie page d’accueil
+
+    intégrer METIER / KINGDOMAINE / ORCHESTRATOR
+
+    ajouter les boutons start/stop/status
+
+    ajouter les retours d’état
+
+    cockpitifier l’interface utilisateur
+
+👉 PORTAL = la façade utilisateur
+👉 KING‑AO.sh = la façade terminal
+👉 orchestrator.sh = le cerveau
+
+Tu peux le faire uniquement après stabilisation + tests.
+4️⃣ Passer au cockpit HTML (optionnel, après PORTAL)
+
+Le cockpit HTML = l’interface graphique interne :
+
+    pages METIER
+
+    pages KINGDOMAINE
+
+    pages ORCHESTRATOR
+
+    monitoring
+
+    logs
+
+    actions rapides
+
+👉 C’est la couche “UX”
+👉 Elle dépend de PORTAL
+👉 Elle dépend de l’orchestrateur stable
+
+Donc on ne la fait qu’en dernier.
+🧠 Résumé cockpit (clair, net, précis)
+
+Voici l’ordre réel, professionnel :
+
+1️⃣ Stabiliser  
+2️⃣ Tester  
+3️⃣ PORTAL  
+4️⃣ Cockpit HTML
+
+Tu as déjà fait la partie architecture.
+Maintenant on passe à la partie validation, puis interface.
+🚀 Et maintenant, Bernard, on fait quoi ?
+
+Tu veux :
+
+    stabiliser KING-AO
+
+    tester les modules
+
+    commencer PORTAL
+
+    commencer cockpit HTML
+
+Tu choisis la prochaine étape, et on l’exécute ensemble.
