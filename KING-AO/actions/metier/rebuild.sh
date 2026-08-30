@@ -1,9 +1,14 @@
 #!/bin/bash
 
-echo "🔧 Rebuild de l'image EPARVIER METIER..."
+echo "[KING-AO] Rebuild METIER (EPARVIER)..."
 
-cd ../../modules/eparvier-metier
+# Build API
+/opt/KING-AO/modules/EPARVIER/SolaizeApi/build.sh
 
-docker build -t eparvier-metier:latest .
+# Build Cockpit
+/opt/KING-AO/modules/EPARVIER/SolaizeCockpit/build.sh
 
-echo "✅ Image EPARVIER METIER rebuild."
+# Restart METIER
+./start.sh
+
+echo "[KING-AO] METIER (EPARVIER) reconstruit et relancé."

@@ -1587,3 +1587,128 @@ Et tu me dis simplement :
     Stabiliser tout le stack
 
 Relance, et dis-moi ce que donne docker ps.
+
+
+
+#+ arborescence 
+#!/bin/bash
+
+echo "📁 Création arborescence KING-AO..."
+
+# Racine
+mkdir -p KING-AO
+cd KING-AO
+
+# Modules
+mkdir -p modules/eparvier-metier
+mkdir -p modules/kingdomaine
+
+touch modules/eparvier-metier/Dockerfile
+touch modules/kingdomaine/Dockerfile
+touch modules/kingdomaine/README.md
+
+# Actions METIER
+mkdir -p actions/metier
+touch actions/metier/start.sh
+touch actions/metier/stop.sh
+touch actions/metier/status.sh
+touch actions/metier/logs.sh
+touch actions/metier/rebuild.sh
+touch actions/metier/sync.sh
+
+# Actions KINGDOMAINE
+mkdir -p actions/kingdomaine
+touch actions/kingdomaine/start.sh
+touch actions/kingdomaine/stop.sh
+touch actions/kingdomaine/status.sh
+touch actions/kingdomaine/logs.sh
+touch actions/kingdomaine/rebuild.sh
+touch actions/kingdomaine/sync.sh
+
+# Actions orchestrateur
+mkdir -p actions/orchestrator
+touch actions/orchestrator/menu.sh
+touch actions/orchestrator/cockpit.sh
+touch actions/orchestrator/utils.sh
+
+# Cockpit HTML
+mkdir -p cockpit
+touch cockpit/index.html
+touch cockpit/kingdomaine.html
+touch cockpit/metier.html
+
+# Docs
+mkdir -p docs
+touch docs/kingdomaine-plan.md
+touch docs/architecture.md
+
+# Logs + config
+mkdir -p logs
+mkdir -p config
+
+# Script principal KING-AO
+touch KING-AO.sh
+
+echo "✅ Arborescence KING-AO + KINGDOMAINE créée."
+
+
+KING-AO/
+ ├── monitoring/
+ │     ├── docker-compose.yml
+ │     ├── prometheus.yml
+ │     ├── loki-config.yml
+ │     └── promtail-config.yml
+
+
+
+
+
+🎯 Takeaway
+Tu peux mettre ta config KING‑AO dans l’un des deux emplacements valides :
+
+✔ /etc/nginx/nginx.conf
+(le fichier principal)
+
+✔ /etc/nginx/conf.d/kingao.conf
+(fichier dédié, recommandé)
+
+👉 Les deux fonctionnent.
+👉 Le plus propre = conf.d.
+
+🧩 Méthode recommandée (PRO)
+1️⃣ Créer ton fichier KING‑AO dédié
+Code
+sudo nano /etc/nginx/conf.d/kingao.conf
+Tu colles la config KING‑AO dedans.
+
+2️⃣ Vérifier la syntaxe
+Code
+sudo nginx -t
+Tu dois voir :
+
+Code
+syntax is ok
+test is successful
+3️⃣ Recharger NGINX
+Code
+sudo systemctl reload nginx
+🟦 Méthode alternative (si ton NAS utilise un fichier unique)
+Si ton système utilise un seul fichier :
+
+Code
+sudo nano /etc/nginx/nginx.conf
+Tu ajoutes le bloc server KING‑AO à la fin du fichier.
+
+🟩 Résumé cockpit-grade
+Emplacement	Avantage	Commande
+/etc/nginx/conf.d/kingao.conf	propre, modulaire, pro	nano /etc/nginx/conf.d/kingao.conf
+/etc/nginx/nginx.conf	fichier unique	nano /etc/nginx/nginx.conf
+
+
+👉 Les deux sont valides.
+👉 conf.d est la méthode KING‑AO recommandée.
+
+
+
+
+

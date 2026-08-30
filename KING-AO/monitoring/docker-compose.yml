@@ -1,0 +1,33 @@
+services:
+  prometheus:
+    image: prom/prometheus
+    container_name: kingao-prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - kingao-net
+    ports:
+      - "9090:9090"
+
+  blackbox:
+    image: prom/blackbox-exporter
+    container_name: kingao-blackbox
+    networks:
+      - kingao-net
+    ports:
+      - "9115:9115"
+
+  grafana:
+    image: grafana/grafana
+    container_name: kingao-grafana
+    networks:
+      - kingao-net
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SERVER_ROOT_URL=http://localhost/grafana
+      - GF_SERVER_SERVE_FROM_SUB_PATH=true
+
+networks:
+  kingao-net:
+    external: true

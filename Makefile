@@ -85,6 +85,21 @@ hard-reset:
 	docker stop $$(docker ps -aq) || true
 	docker system prune -a --volumes -f
 
+
+
+Pour arrêter tous les conteneurs Docker en cours d'exécution :
+
+Shell
+1
+docker stop $(docker ps -q)
+Afficher plus de lignes
+
+Pour arrêter et supprimer tous les conteneurs :
+
+Shell
+1
+docker rm -f $(docker ps -aq)
+
 ------------------------------------------------------------------------------
 
 LANCEMENT DES MODULES EPARVIER-KINGDOMAINE-PORTAL

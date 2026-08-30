@@ -218,71 +218,121 @@
 
 
 
-#+ arborescence 
-#!/bin/bash
-
-echo "📁 Création arborescence KING-AO..."
-
-# Racine
-mkdir -p KING-AO
-cd KING-AO
-
-# Modules
-mkdir -p modules/eparvier-metier
-mkdir -p modules/kingdomaine
-
-touch modules/eparvier-metier/Dockerfile
-touch modules/kingdomaine/Dockerfile
-touch modules/kingdomaine/README.md
-
-# Actions METIER
-mkdir -p actions/metier
-touch actions/metier/start.sh
-touch actions/metier/stop.sh
-touch actions/metier/status.sh
-touch actions/metier/logs.sh
-touch actions/metier/rebuild.sh
-touch actions/metier/sync.sh
-
-# Actions KINGDOMAINE
-mkdir -p actions/kingdomaine
-touch actions/kingdomaine/start.sh
-touch actions/kingdomaine/stop.sh
-touch actions/kingdomaine/status.sh
-touch actions/kingdomaine/logs.sh
-touch actions/kingdomaine/rebuild.sh
-touch actions/kingdomaine/sync.sh
-
-# Actions orchestrateur
-mkdir -p actions/orchestrator
-touch actions/orchestrator/menu.sh
-touch actions/orchestrator/cockpit.sh
-touch actions/orchestrator/utils.sh
-
-# Cockpit HTML
-mkdir -p cockpit
-touch cockpit/index.html
-touch cockpit/kingdomaine.html
-touch cockpit/metier.html
-
-# Docs
-mkdir -p docs
-touch docs/kingdomaine-plan.md
-touch docs/architecture.md
-
-# Logs + config
-mkdir -p logs
-mkdir -p config
-
-# Script principal KING-AO
-touch KING-AO.sh
-
-echo "✅ Arborescence KING-AO + KINGDOMAINE créée."
 
 
-KING-AO/
- ├── monitoring/
- │     ├── docker-compose.yml
- │     ├── prometheus.yml
- │     ├── loki-config.yml
- │     └── promtail-config.yml
+
+
+
+ <!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Feuille de route KING-AO / DTOS</title>
+    <style>
+        body { font-family: Arial, sans-serif; background:#111; color:#eee; margin:20px; }
+        h1, h2 { color:#ffd700; }
+        .step { margin-bottom:18px; padding:10px; border-left:4px solid #ffd700; background:#1b1b1b; }
+        .tag { display:inline-block; padding:2px 6px; margin-right:6px; border-radius:4px; font-size:11px; }
+        .core { background:#ffd700; color:#000; }
+        .net { background:#4caf50; }
+        .mon { background:#03a9f4; }
+        .app { background:#e91e63; }
+        .sec { background:#9c27b0; }
+        code { background:#000; padding:2px 4px; border-radius:3px; }
+    </style>
+</head>
+<body>
+
+<h1>Feuille de route KING-AO / DTOS</h1>
+<p>Objectif : repartir de zéro et obtenir un KING-AO complet, accessible via Tailscale, avec NGINX, Grafana et Razor.</p>
+
+<div class="step">
+    <h2>1. Base système & réseau</h2>
+    <span class="tag core">CORE</span><span class="tag net">NET</span>
+    <ul>
+        <li>Installer Docker + docker-compose sur le NAS.</li>
+        <li>Créer le réseau applicatif :
+            <br><code>docker network create kingao-net</code>
+        </li>
+        <li>Installer et connecter Tailscale sur le NAS (IP privée 100.x.x.x).</li>
+    </ul>
+</div>
+
+<div class="step">
+    <h2>2. NGINX front-end KING-AO</h2>
+    <span class="tag core">CORE</span><span class="tag sec">SEC</span>
+    <ul>
+        <li>Installer NGINX sur le NAS (hors Docker ou via Docker dédié).</li>
+        <li>Configurer les locations :
+            <br><code>/grafana</code>, <code>/razor</code>, <code>/orchestrator</code>, <code>/metier</code>, <code>/kingdomaine</code>, <code>/cockpit</code>.
+        </li>
+        <li>Définir les upstreams vers :
+            <br>Grafana (3000), Razor (5003), APIs EPARVIER/KINGDOMAINE (8080), cockpit HTML.</li>
+    </ul>
+</div>
+
+<div class="step">
+    <h2>3. Monitoring : Prometheus + Grafana</h2>
+    <span class="tag mon">MONITORING</span>
+    <ul>
+        <li>Créer un dossier <code>/opt/KING-AO/monitoring</code> avec :
+            <br>prometheus.yml, alertmanager.yml, blackbox.yml.</li>
+        <li>Écrire un <code>docker-compose.monitoring.yml</code> pour :
+            <br>Prometheus, Blackbox, Alertmanager, Grafana (réseau <code>kingao-net</code>).</li>
+        <li>Ajouter les dashboards et datasources Grafana (Prometheus, Blackbox).</li>
+    </ul>
+</div>
+
+<div class="step">
+    <h2>4. Modules métier : EPARVIER & KINGDOMAINE</h2>
+    <span class="tag app">APPS</span>
+    <ul>
+        <li>Créer la structure :
+            <br><code>/opt/KING-AO/modules/EPARVIER</code> et <code>/opt/KING-AO/modules/KINGDOMAINE</code>.</li>
+        <li>Pour chaque module :
+            <br>Dockerfile API, Dockerfile Cockpit, docker-compose dédié, scripts <code>build.sh</code> et <code>start.sh</code>.</li>
+        <li>Connecter les services au réseau <code>kingao-net</code> et à NGINX (reverse proxy).</li>
+    </ul>
+</div>
+
+<div class="step">
+    <h2>5. Orchestrator & menu shell</h2>
+    <span class="tag core">CORE</span>
+    <ul>
+        <li>Finaliser <code>START-KING-AO.sh</code> (lecture des confs, start/stop/status des modules).</li>
+        <li>Créer un menu shell :
+            <br>Build images, Start/Stop modules, Start monitoring, Status global.</li>
+        <li>Option dans le menu pour lancer l’orchestrator :
+            <br><code>bash START-KING-AO.sh start</code>.</li>
+    </ul>
+</div>
+
+<div class="step">
+    <h2>6. Razor (maintenance) & intégration NGINX</h2>
+    <span class="tag app">APPS</span><span class="tag sec">SEC</span>
+    <ul>
+        <li>Créer une petite appli Razor (.NET) :
+            <br>pages Start/Stop/Status, Build, Logs, vue modules.</li>
+        <li>La faire tourner sur <code>http://localhost:5003</code> (Kestrel).</li>
+        <li>Configurer NGINX :
+            <br><code>location /razor { proxy_pass http://localhost:5003; }</code></li>
+    </ul>
+</div>
+
+<div class="step">
+    <h2>7. DTOS via Tailscale</h2>
+    <span class="tag net">NET</span><span class="tag sec">SEC</span>
+    <ul>
+        <li>Tester l’accès en 4G via l’IP Tailscale :
+            <br><code>http://100.x.x.x/grafana</code>, <code>/razor</code>, <code>/orchestrator</code>.</li>
+        <li>Valider :
+            <br>monitoring OK, modules OK, orchestrator OK, NGINX OK.</li>
+        <li>Documenter les URLs et ports dans un petit README KING-AO.</li>
+    </ul>
+</div>
+
+</body>
+</html>
+
+
+
