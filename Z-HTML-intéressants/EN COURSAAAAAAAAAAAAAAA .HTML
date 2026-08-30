@@ -1,79 +1,12 @@
-OK ON REPREND DEMAIN donc si l'on modifie C# on remouline à chaque entité metier build et contener docker
-Bernard…
-Oui, on reprend demain, et tu as parfaitement résumé la logique KING‑AO :
+Ton module KINGDOMAINE est prêt pour Docker, prêt pour compose, prêt pour KING‑AO, prêt pour Cockpit.
 
-Si l’on modifie du C#, on remouline à chaque entité : build + conteneurs Docker.
+🟦 Étape suivante logique
+Tu veux maintenant :
 
-Et je te confirme ça proprement, cockpit‑grade, pour que demain tu sois prêt à avancer sans réfléchir.
+Créer build.sh KINGDOMAINE Cockpit
 
-🎯 Takeaway
-👉 Chaque entité (METIER, KINGDOMAINE, etc.) a son propre pipeline :
+Créer compose KINGDOMAINE Cockpit
 
-build API
+Créer KINGDOMAINE METIER
 
-build Cockpit
-
-build Shared
-
-build image Docker
-
-tag latest + hash Git
-
-restart conteneurs via compose
-
-👉 KING‑AO orchestre tout ça automatiquement.
-
-Tu modifies du C# → KING‑AO reconstruit → KING‑AO relance → KING‑AO remet en ligne.
-
-🟦 Ce que tu as déjà terminé (METIER / EPARVIER)
-✔ build API METIER
-
-✔ build Cockpit METIER
-
-✔ rebuild METIER dans KING‑AO
-
-✔ start/stop/status METIER via compose
-
-✔ conteneurs METIER automatisés
-
-👉 METIER est 100% automatisé.
-
-🟩 Ce qu’on va finir demain (KINGDOMAINE)
-Tu l’as dit toi‑même :
-👉 il faut ajouter les deux build images KINGDOMAINE dans modules/  
-👉 et ensuite reconstruire les conteneurs KINGDOMAINE via KING‑AO
-
-Donc demain on fait :
-
-1️⃣ Créer les dossiers KINGDomaineApi et KINGDomaineCockpit
-Dans :
-
-Code
-/opt/KING-AO/modules/KINGDOMAINE/
-2️⃣ Ajouter les deux build.sh
-KINGDomaineApi/build.sh
-
-KINGDomaineCockpit/build.sh
-
-3️⃣ Modifier KING‑AO/actions/kingdomaine/rebuild.sh
-Pour appeler les deux builds.
-
-4️⃣ Modifier start/stop/status KINGDOMAINE
-Pour piloter les compose KINGDOMAINE.
-
-👉 Et KING‑AO deviendra orchestrateur complet de KINGDOMAINE, comme pour METIER.
-
-🟧 Résumé cockpit
-Tu modifies du C# →
-KING‑AO reconstruit l’image →
-KING‑AO relance les conteneurs →
-KING‑AO remet l’entité en ligne.
-
-👉 METIER : OK  
-👉 KINGDOMAINE : on finit demain  
-👉 Architecture PRO, DTOS‑READY
-
-Quand tu reviens demain, tu me dis simplement :
-Continuer KINGDOMAINE
-
-Et on reprend exactement où tu t’es arrêté.
+Tu choisis, Bernard.

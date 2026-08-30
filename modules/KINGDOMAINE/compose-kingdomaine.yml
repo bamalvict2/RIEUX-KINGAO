@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+
+  kingdomaine-api:
+    container_name: kingdomaine-api
+    build:
+      context: ./KINGDomaineApi
+      dockerfile: Dockerfile.Api
+    ports:
+      - "5002:5002"
+    networks:
+      - king-ao-net
+    restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5002/api/domaine/status"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+    volumes:
+      - ./data/uploads:/app/uploads
+
+networks:
+  king-ao-net:
+    driver: bridge
