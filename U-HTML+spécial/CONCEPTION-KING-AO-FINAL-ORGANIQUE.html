@@ -215,3 +215,105 @@
 
 </body>
 </html>
+
+---------------------
+
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Architecture KING‑AO</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #111827;
+      color: #e5e7eb;
+      margin: 0;
+      padding: 2rem;
+    }
+    .layout {
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+      justify-content: center;
+    }
+    .card {
+      background: #1f2937;
+      border-radius: 12px;
+      padding: 1.5rem;
+      width: 320px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+      border: 1px solid #374151;
+    }
+    .card h2 {
+      margin: 0 0 0.75rem;
+      font-size: 1.2rem;
+    }
+    .tag {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .tag-internal { background: #4b5563; color: #e5e7eb; }
+    .tag-exposed { background: #10b981; color: #022c22; }
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      font-size: 0.9rem;
+    }
+    li::before {
+      content: "• ";
+      color: #9ca3af;
+    }
+    .arrow {
+      font-size: 2rem;
+      margin-top: 3rem;
+      color: #9ca3af;
+    }
+    .arrow span {
+      display: block;
+      font-size: 0.8rem;
+      margin-top: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Architecture KING‑AO : moteur vs tableau de bord</h1>
+
+  <div class="layout">
+    <div class="card">
+      <h2>metier (moteur)</h2>
+      <div class="tag tag-internal">INTERNE – ne voyage pas</div>
+      <ul>
+        <li>Models lourds</li>
+        <li>Services métier</li>
+        <li>Interfaces internes</li>
+        <li>Utils internes</li>
+        <li>DTOs internes</li>
+      </ul>
+    </div>
+
+    <div class="arrow">
+      ⟶
+      <span>Ce qui doit voyager passe par Shared</span>
+    </div>
+
+    <div class="card">
+      <h2>Shared (tableau de bord)</h2>
+      <div class="tag tag-exposed">EXPOSÉ – voyage sur le réseau</div>
+      <ul>
+        <li>DTOs légers</li>
+        <li>Models légers</li>
+        <li>Enums exposés</li>
+        <li>Contracts</li>
+        <li>Extensions externes</li>
+      </ul>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,17 +1,77 @@
 {
   "format": 1,
   "restore": {
-    "/opt/KING-AO/modules/KINGDOMAINE/KINGDomaineApi/KINGDomaine.Api/KINGDomaine.Api.csproj": {}
+    "/opt/KING-AO/modules/KINGDOMAINE/KINGDomaineApi/KINGDomaine.Api.csproj": {}
   },
   "projects": {
-    "/opt/KING-AO/modules/KINGDOMAINE/KINGDomaineApi/KINGDomaine.Api/KINGDomaine.Api.csproj": {
+    "/opt/KING-AO/modules/KINGDOMAINE/KINGDomaineApi/KINGDomaine.Api.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/opt/KING-AO/modules/KINGDOMAINE/KINGDomaineApi/KINGDomaine.Api/KINGDomaine.Api.csproj",
+        "projectUniqueName": "/opt/KING-AO/modules/KINGDOMAINE/KINGDomaineApi/KINGDomaine.Api.csproj",
         "projectName": "KINGDomaine.Api",
-        "projectPath": "/opt/KING-AO/modules/KINGDOMAINE/KINGDomaineApi/KINGDomaine.Api/KINGDomaine.Api.csproj",
+        "projectPath": "/opt/KING-AO/modules/KINGDOMAINE/KINGDomaineApi/KINGDomaine.Api.csproj",
         "packagesPath": "/home/bamalvict/.nuget/packages/",
-        "outputPath": "/opt/KING-AO/modules/KINGDOMAINE/KINGDomaineApi/KINGDomaine.Api/obj/",
+        "outputPath": "/opt/KING-AO/modules/KINGDOMAINE/KINGDomaineApi/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/bamalvict/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "/opt/KING-AO/modules/KINGDOMAINE/metier/KINGDomaine.Shared/KINGDomaine.Shared.csproj": {
+                "projectPath": "/opt/KING-AO/modules/KINGDOMAINE/metier/KINGDomaine.Shared/KINGDomaine.Shared.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.AspNetCore.App": {
+              "privateAssets": "none"
+            },
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/lib/dotnet/sdk/8.0.130/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/opt/KING-AO/modules/KINGDOMAINE/metier/KINGDomaine.Shared/KINGDomaine.Shared.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/opt/KING-AO/modules/KINGDOMAINE/metier/KINGDomaine.Shared/KINGDomaine.Shared.csproj",
+        "projectName": "KINGDomaine.Shared",
+        "projectPath": "/opt/KING-AO/modules/KINGDOMAINE/metier/KINGDomaine.Shared/KINGDomaine.Shared.csproj",
+        "packagesPath": "/home/bamalvict/.nuget/packages/",
+        "outputPath": "/opt/KING-AO/modules/KINGDOMAINE/metier/KINGDomaine.Shared/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/home/bamalvict/.nuget/NuGet/NuGet.Config"
@@ -37,16 +97,6 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "dependencies": {
-            "Microsoft.AspNetCore.OpenApi": {
-              "target": "Package",
-              "version": "[8.0.30, )"
-            },
-            "Swashbuckle.AspNetCore": {
-              "target": "Package",
-              "version": "[6.6.2, )"
-            }
-          },
           "imports": [
             "net461",
             "net462",
@@ -59,9 +109,6 @@
           "assetTargetFallback": true,
           "warn": true,
           "frameworkReferences": {
-            "Microsoft.AspNetCore.App": {
-              "privateAssets": "none"
-            },
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
             }

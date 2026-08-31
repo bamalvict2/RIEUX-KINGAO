@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>KING-AO – Pipeline PORTAL / Cockpit / Orchestrator / Modules</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --bg-alt: #020617;
+      --card: #111827;
+      --accent-green: #22c55e;
+      --accent-blue: #3b82f6;
+      --accent-orange: #f97316;
+      --accent-gray: #64748b;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border: #1f2937;
+      --shadow-soft: 0 18px 40px rgba(15, 23, 42, 0.85);
+      --radius-lg: 18px;
+      --radius-md: 12px;
+      --radius-pill: 999px;
+      --font-main: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background: radial-gradient(circle at top, #1e293b 0, #020617 45%, #000 100%);
+      color: var(--text-main);
+      min-height: 100vh;
+      padding: 32px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .layout {
+      max-width: 1200px;
+      width: 100%;
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.2fr);
+      gap: 24px;
+    }
+
+    .panel {
+      background: linear-gradient(145deg, #020617 0, #0b1120 40%, #020617 100%);
+      border-radius: 24px;
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      box-shadow: var(--shadow-soft);
+      padding: 24px 26px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(56, 189, 248, 0.12) 0, transparent 55%),
+        radial-gradient(circle at 100% 0%, rgba(34, 197, 94, 0.12) 0, transparent 55%);
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .panel-title {
+      font-size: 1.1rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--accent-gray);
+    }
+
+    .panel-badge {
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .panel-badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.25);
+    }
+
+    .pipeline {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .node {
+      position: relative;
+      background: radial-gradient(circle at top, #1f2937 0, #020617 60%);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      padding: 14px 12px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-height: 110px;
+    }
+
+    .node-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+    }
+
+    .node-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .node-pill {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      color: var(--text-muted);
+    }
+
+    .node-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    .node-list {
+      list-style: none;
+      font-size: 0.78rem;
+      color: var(--text-main);
+      margin-top: 4px;
+    }
+
+    .node-list li::before {
+      content: "•";
+      margin-right: 6px;
+      color: var(--accent-gray);
+    }
+
+    .node-green {
+      border-color: rgba(34, 197, 94, 0.6);
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.25);
+    }
+
+    .node-blue {
+      border-color: rgba(59, 130, 246, 0.6);
+      box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.25);
+    }
+
+    .node-orange {
+      border-color: rgba(249, 115, 22, 0.7);
+      box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.25);
+    }
+
+    .node-tag {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent-gray);
+      margin-top: auto;
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .flow-arrows {
+      position: relative;
+      z-index: 1;
+      margin-top: 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .flow-arrows span {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px dashed rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.7);
+    }
+
+    .flow-arrows span strong {
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .flow-arrow-icon {
+      font-size: 0.9rem;
+      color: var(--accent-gray);
+    }
+
+    .legend {
+      position: relative;
+      z-index: 1;
+      margin-top: 22px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.75rem;
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: rgba(15, 23, 42, 0.8);
+      color: var(--text-muted);
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .legend-dot.green { background: var(--accent-green); }
+    .legend-dot.blue { background: var(--accent-blue); }
+    .legend-dot.orange { background: var(--accent-orange); }
+
+    /* Right panel: documentation cockpit-style */
+
+    .doc {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .doc-section {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: var(--radius-md);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      padding: 12px 14px;
+    }
+
+    .doc-section-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent-gray);
+      margin-bottom: 6px;
+    }
+
+    .doc-section-body {
+      font-size: 0.8rem;
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+
+    .doc-section-body ul {
+      list-style: none;
+      margin-top: 4px;
+    }
+
+    .doc-section-body li {
+      margin-bottom: 2px;
+    }
+
+    .doc-section-body li::before {
+      content: "▸";
+      margin-right: 6px;
+      color: var(--accent-gray);
+    }
+
+    .doc-highlight {
+      color: var(--accent-green);
+      font-weight: 500;
+    }
+
+    .doc-inline {
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .doc-chip {
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .doc-chip.green { border-color: rgba(34, 197, 94, 0.7); }
+    .doc-chip.blue { border-color: rgba(59, 130, 246, 0.7); }
+    .doc-chip.orange { border-color: rgba(249, 115, 22, 0.7); }
+
+    .doc-footer {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    @media (max-width: 960px) {
+      .layout {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 18px;
+      }
+      .pipeline {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      .pipeline {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <!-- LEFT: Pipeline cockpit -->
+    <section class="panel">
+      <header class="panel-header">
+        <div class="panel-title">KING-AO – Pipeline opérationnel</div>
+        <div class="panel-badge">
+          <span class="panel-badge-dot"></span>
+          <span>Mode Cockpit</span>
+        </div>
+      </header>
+
+      <div class="pipeline">
+        <!-- 1 – PORTAL -->
+        <article class="node node-green">
+          <div class="node-label">🟩 1 — Point d’entrée</div>
+          <div class="node-title">
+            PORTAL
+            <span class="node-pill">Interface web utilisateur</span>
+          </div>
+          <p class="node-desc">
+            L’utilisateur clique, le PORTAL ne fait que déclencher l’adaptateur.
+          </p>
+          <ul class="node-list">
+            <li>aucune logique métier</li>
+            <li>ne parle pas aux modules</li>
+            <li>appelle <strong>portal-orchestrator.sh</strong></li>
+          </ul>
+          <div class="node-tag">👉 PORTAL</div>
+        </article>
+
+        <!-- 2 – portal-orchestrator.sh -->
+        <article class="node node-blue">
+          <div class="node-label">🟦 2 — Adaptateur</div>
+          <div class="node-title">
+            portal-orchestrator.sh
+            <span class="node-pill">Traducteur PORTAL → Cockpit</span>
+          </div>
+          <p class="node-desc">
+            Reçoit l’action utilisateur et prépare le contexte d’exécution.
+          </p>
+          <ul class="node-list">
+            <li>vérifie mode / action / paramètres</li>
+            <li>prépare les variables d’environnement</li>
+            <li>appelle <strong>STYLE-ORCH-KING-AO.sh</strong></li>
+          </ul>
+          <div class="node-tag">👉 portal-orchestrator</div>
+        </article>
+
+        <!-- 3 – STYLE-ORCH-KING-AO.sh -->
+        <article class="node node-green">
+          <div class="node-label">🟩 3 — Cockpit humain</div>
+          <div class="node-title">
+            STYLE-ORCH-KING-AO.sh
+            <span class="node-pill">Interface opérateur</span>
+          </div>
+          <p class="node-desc">
+            Menus, couleurs, confirmations, navigation opérateur.
+          </p>
+          <ul class="node-list">
+            <li>affiche les menus</li>
+            <li>demande les confirmations</li>
+            <li>prépare les commandes finales</li>
+            <li>appelle <strong>orchestrator.sh</strong></li>
+          </ul>
+          <div class="node-tag">👉 STYLE-ORCH</div>
+        </article>
+
+        <!-- 4 – orchestrator.sh -->
+        <article class="node node-blue">
+          <div class="node-label">🟦 4 — Cerveau technique</div>
+          <div class="node-title">
+            orchestrator.sh
+            <span class="node-pill">Chef d’orchestre</span>
+          </div>
+          <p class="node-desc">
+            Aucune UI, uniquement exécution technique et gestion des erreurs.
+          </p>
+          <ul class="node-list">
+            <li>lit les configs KING-AO</li>
+            <li>charge les modules</li>
+            <li>lance les actions techniques</li>
+            <li>gère les erreurs et renvoie les résultats</li>
+          </ul>
+          <div class="node-tag">👉 orchestrator.sh</div>
+        </article>
+
+        <!-- 5 – Modules -->
+        <article class="node node-orange">
+          <div class="node-label">🟩 5 — Modules techniques</div>
+          <div class="node-title">
+            Modules KING-AO
+            <span class="node-pill">METIER / KINGDOMAINE / NETWORKING</span>
+          </div>
+          <p class="node-desc">
+            Briques techniques indépendantes du PORTAL et du Cockpit.
+          </p>
+          <ul class="node-list">
+            <li>API KINGDOMAINE / EPARVIER</li>
+            <li>Services Docker / NGINX</li>
+            <li>Prometheus / Grafana</li>
+            <li>Scripts réseau & métier</li>
+          </ul>
+          <div class="node-tag">👉 Modules</div>
+        </article>
+      </div>
+
+      <!-- Flow arrows -->
+      <div class="flow-arrows">
+        <span>
+          <span class="flow-arrow-icon">⮕</span>
+          <strong>PORTAL</strong> → Adaptateur
+        </span>
+        <span>
+          <span class="flow-arrow-icon">⮕</span>
+          Adaptateur → Cockpit
+        </span>
+        <span>
+          <span class="flow-arrow-icon">⮕</span>
+          Cockpit → Orchestrator
+        </span>
+        <span>
+          <span class="flow-arrow-icon">⮕</span>
+          Orchestrator → Modules → Retour
+        </span>
+      </div>
+
+      <!-- Legend -->
+      <div class="legend">
+        <div class="legend-item">
+          <span class="legend-dot green"></span>
+          <span>UI / Cockpit humain</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot blue"></span>
+          <span>Adaptation / Orchestration technique</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot orange"></span>
+          <span>Modules métier & infra</span>
+        </div>
+        <div class="legend-item">
+          <span>Architecture :</span>
+          <span>propre · lisible · modulaire · scalable · professionnelle</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- RIGHT: Documentation KING-AO -->
+    <section class="panel">
+      <header class="panel-header">
+        <div class="panel-title">Documentation cockpit KING-AO</div>
+        <div class="panel-badge">
+          <span class="panel-badge-dot"></span>
+          <span>Vue pipeline détaillée</span>
+        </div>
+      </header>
+
+      <div class="doc">
+        <div class="doc-section">
+          <div class="doc-section-title">Vue pipeline</div>
+          <div class="doc-section-body">
+            PORTAL
+            <span class="doc-highlight">↓ (action utilisateur)</span><br />
+            portal-orchestrator.sh
+            <span class="doc-highlight">↓ (prépare contexte)</span><br />
+            STYLE-ORCH-KING-AO.sh
+            <span class="doc-highlight">↓ (sélection opérateur)</span><br />
+            orchestrator.sh
+            <span class="doc-highlight">↓ (exécution technique)</span><br />
+            Modules
+            <span class="doc-highlight">↓ (résultat)</span><br />
+            orchestrator.sh
+            <span class="doc-highlight">↓ (formatage)</span><br />
+            STYLE-ORCH-KING-AO.sh
+            <span class="doc-highlight">↓ (affichage)</span><br />
+            PORTAL
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <div class="doc-section-title">Résumé cockpit-style</div>
+          <div class="doc-section-body">
+            <div class="doc-inline">
+              <span class="doc-chip green">PORTAL</span>
+              <span class="doc-chip blue">Adaptateur</span>
+              <span class="doc-chip green">Cockpit</span>
+              <span class="doc-chip blue">Orchestrator</span>
+              <span class="doc-chip orange">Modules</span>
+              <span class="doc-chip green">Retour vers PORTAL</span>
+            </div>
+            <div class="doc-footer">
+              Chaque maillon a un rôle clair, aucune confusion entre UI, orchestration et métier.
+            </div>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <div class="doc-section-title">Principes d’architecture</div>
+          <div class="doc-section-body">
+            <ul>
+              <li><strong>Propre :</strong> séparation stricte UI / orchestration / modules.</li>
+              <li><strong>Lisible :</strong> pipeline linéaire, étapes nommées, scripts dédiés.</li>
+              <li><strong>Modulaire :</strong> modules KING-AO indépendants du PORTAL et du Cockpit.</li>
+              <li><strong>Scalable :</strong> ajout de nouveaux modules sans toucher au PORTAL.</li>
+              <li><strong>Professionnelle :</strong> logique métier encapsulée, cockpit opérateur clair.</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="doc-section">
+          <div class="doc-section-title">Exemples de commandes (vue opérateur)</div>
+          <div class="doc-section-body">
+            <ul>
+              <li>PORTAL → bouton « Déployer KINGDOMAINE »</li>
+              <li>portal-orchestrator.sh → exporte MODE=deploy, TARGET=KINGDOMAINE</li>
+              <li>STYLE-ORCH-KING-AO.sh → affiche menu de confirmation + options (dry-run, verbose)</li>
+              <li>orchestrator.sh → lit configs, lance docker-compose / scripts associés</li>
+              <li>Modules → API KINGDOMAINE + services réseau, retour d’état au Cockpit</li>
+            </ul>
+            <div class="doc-footer">
+              Le Cockpit reste humain, les modules restent techniques — l’orchestrator fait le pont.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

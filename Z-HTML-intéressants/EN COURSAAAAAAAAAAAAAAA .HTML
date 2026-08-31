@@ -1,12 +1,491 @@
-Ton module KINGDOMAINE est prêt pour Docker, prêt pour compose, prêt pour KING‑AO, prêt pour Cockpit.
+🎯 Takeaway
+👉 On doit d’abord finaliser la base C# de KINGDOMAINE :
 
-🟦 Étape suivante logique
-Tu veux maintenant :
+Le .csproj de KINGDomaineApi
 
-Créer build.sh KINGDOMAINE Cockpit
+Le .csproj de KINGDomaineCockpit
 
-Créer compose KINGDOMAINE Cockpit
+Le Shared KINGDOMAINE (DTOs, contrats, modèles communs)
 
-Créer KINGDOMAINE METIER
+La référence croisée entre API / Cockpit / Shared
 
-Tu choisis, Bernard.
+Le Dockerfile qui s’appuie sur cette structure
+
+Le versioning Git pour que KING‑AO puisse builder proprement
+
+👉 Le métier (CRUD, DTOs, pages frontend) viendra après, une fois la base stable.
+
+🟦 1 — Axe .csproj (priorité absolue)
+Tu dois obtenir :
+
+KINGDomaineApi.csproj
+
+KINGDomaineCockpit.csproj
+
+KINGDOMAINE.Shared.csproj
+
+Avec :
+
+<TargetFramework>net8.0</TargetFramework>
+
+Références internes :
+
+API → Shared
+
+Cockpit → Shared
+
+👉 Créer les csproj KINGDOMAINE
+
+🟩 2 — Axe Shared KINGDOMAINE
+Ce dossier va contenir :
+
+DTOs communs
+
+Contrats (interfaces)
+
+Modèles partagés
+
+Enums
+
+Extensions utiles
+
+Structure recommandée :
+
+Code
+KINGDOMAINE.Shared/
+│
+├── DTOs/
+├── Models/
+├── Contracts/
+└── Enums/
+👉 Créer Shared KINGDOMAINE
+
+🟧 3 — Axe Dockerfile
+Une fois les csproj prêts, on génère les Dockerfile :
+
+Dockerfile.api
+
+Dockerfile.cockpit
+
+Avec :
+
+Restore → Build → Publish
+
+ARG pour le hash Git
+
+Tagging automatique
+
+👉 Créer Dockerfile KINGDOMAINE
+
+🟪 4 — Axe versioning Git
+On doit intégrer :
+
+git rev-parse --short HEAD
+
+Tag Docker : kingdomaine-api:<hash>
+
+Tag latest
+
+Commit message standardisé
+
+👉 Mettre en place versioning Git
+
+🟫 5 — Axe workflow KING‑AO
+Une fois les csproj + Dockerfile OK, on finalise :
+
+build.sh API
+
+build.sh Cockpit
+
+rebuild.sh KINGDOMAINE
+
+start.sh / stop.sh / status.sh
+
+Compose API + Compose Cockpit
+
+👉 Finaliser workflow KING-AO
+
+🟦 Synthèse cockpit
+✔ Tu as raison : on ne touche pas encore au métier CRUD/DTO frontend  
+✔ On doit d’abord stabiliser la base C# + Shared + csproj  
+✔ Puis Dockerfile + versioning Git
+✔ Puis workflow KING‑AO
+✔ Ensuite seulement on attaque les pages frontend
+
+Bernard… tu veux qu’on attaque quoi maintenant ?
+👉 csproj KINGDOMAINE  
+👉 Shared KINGDOMAINE  
+👉 Dockerfile  
+👉 Versioning Git  
+👉 Workflow KING-AO
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+------------------------
+
+
+🎯 Takeaway immédiat
+👉 La prochaine étape doit être choisie parmi les 5 axes structurants :
+
+csproj KINGDOMAINE
+
+Shared KINGDOMAINE
+
+Dockerfile
+
+Versioning Git
+
+Workflow KING‑AO
+
+Tu veux que KING‑AO puisse builder KINGDOMAINE → donc API + Cockpit + Shared sont la fondation.
+
+🟦 1 — csproj KINGDOMAINE (priorité absolue)
+Objectif : obtenir les trois projets propres, nets, symétriques :
+
+Code
+KINGDomaineApi/
+│── KINGDomaineApi.csproj
+
+KINGDomaineCockpit/
+│── KINGDomaineCockpit.csproj
+
+metier/KINGDOMAINE.Shared/
+│── KINGDOMAINE.Shared.csproj
+Avec :
+
+<TargetFramework>net8.0</TargetFramework>
+
+API → référence Shared
+
+Cockpit → référence Shared
+
+Structure compatible Docker + KING‑AO
+
+👉 csproj KINGDOMAINE
+
+🟩 2 — Shared KINGDOMAINE (DTOS, contrats, modèles)
+Structure recommandée :
+
+Code
+KINGDOMAINE.Shared/
+│
+├── DTOs/
+├── Models/
+├── Contracts/
+└── Enums/
+Rôle :
+
+DTOs communs API ↔ Cockpit
+
+Modèles partagés
+
+Interfaces métier
+
+Enums transverses
+
+Extensions utiles
+
+👉 Shared KINGDOMAINE
+
+🟧 3 — Dockerfile API + Cockpit
+Une fois les csproj prêts, on génère :
+
+Dockerfile.api
+
+Dockerfile.cockpit
+
+Pipeline PRO :
+
+dotnet restore
+
+dotnet build
+
+dotnet publish -c Release
+
+ARG GIT_HASH
+
+Tag automatique :
+
+kingdomaine-api:<hash>
+
+kingdomaine-api:latest
+
+👉 Dockerfile KINGDOMAINE
+
+🟪 4 — Versioning Git (pour KING‑AO)
+On intègre :
+
+git rev-parse --short HEAD
+
+Tag Docker basé sur le hash
+
+Commit message standardisé
+
+Build reproductible
+
+Traceabilité parfaite dans KING‑AO
+
+👉 Versioning Git
+
+🟫 5 — Workflow KING‑AO
+Une fois csproj + Dockerfile OK :
+
+build.sh API
+
+build.sh Cockpit
+
+rebuild.sh KINGDOMAINE
+
+start.sh / stop.sh / status.sh
+
+Compose API + Compose Cockpit
+
+Intégration dans KING‑AO/actions
+
+👉 Workflow KING-AO
+
+🟦 Synthèse cockpit (ultra‑clair)
+✔ On commence par csproj + Shared  
+✔ Puis Dockerfile  
+✔ Puis versioning Git  
+✔ Puis workflow KING‑AO  
+✔ Le métier CRUD/DTO viendra après, une fois la base stable
+
+Bernard… tu veux qu’on attaque quoi en premier avant que tu partes ?
+👉 csproj KINGDOMAINE  
+👉 Shared KINGDOMAINE  
+👉 Dockerfile  
+👉 Versioning Git  
+👉 Workflow KING-AO
+
+
+
+
+reprise 
+🟦 1 — KINGDomaineApi.csproj
+Voici le csproj PRO, minimal mais complet :
+
+xml
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\KINGDOMAINE.Shared\KINGDOMAINE.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
+🟩 2 — KINGDomaineCockpit.csproj
+Cockpit = WebApp Razor/Blazor/MVC selon ton architecture.
+Version standard MVC :
+
+xml
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\KINGDOMAINE.Shared\KINGDOMAINE.Shared.csproj" />
+  </ItemGroup>
+
+</Project>
+Si Cockpit est Blazor Server, je te génère la variante.
+
+👉 Variante Blazor
+
+🟧 3 — KINGDOMAINE.Shared.csproj
+Le Shared doit être ultra‑propre, sans dépendances inutiles :
+
+xml
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+</Project>
+Structure recommandée :
+
+Code
+KINGDOMAINE.Shared/
+│
+├── DTOs/
+├── Models/
+├── Contracts/
+└── Enums/
+👉 Créer Shared KINGDOMAINE
+
+🟪 4 — Arborescence finale KINGDOMAINE
+Pour que KING‑AO puisse builder proprement :
+
+Code
+modules/KINGDOMAINE/
+│
+├── KINGDomaineApi/
+│   └── KINGDomaineApi.csproj
+│
+├── KINGDomaineCockpit/
+│   └── KINGDomaineCockpit.csproj
+│
+└── KINGDOMAINE.Shared/
+    └── KINGDOMAINE.Shared.csproj
+🟫 5 — Étape suivante
+Maintenant que les csproj sont prêts, on peut enchaîner :
+
+Shared KINGDOMAINE
+
+Dockerfile KINGDOMAINE
+
+Versioning Git
+
+Workflow KING-AO
+
+Bernard… tu veux qu’on passe à Shared, ou tu veux que je t’aide à placer les csproj dans l’arborescence KING‑AO ?
+
+
+
+
+------------------demain 01/09
+🧭 1 — Ce qu’on va faire demain : DTOs exposés KINGDOMAINE
+KINGDOMAINE a deux couches :
+
+🟥 1. DTOs internes (ne voyagent pas)
+lourds
+
+complets
+
+avec logique interne
+
+utilisés par les scripts / orchestrateur / modules internes
+
+🟩 2. DTOs exposés (voyagent)
+légers
+
+propres
+
+sans logique
+
+sans dépendances internes
+
+destinés à Android / Portal / NAS / Cloudflare
+
+Demain, on construit la partie exposée.
+
+🟦 2 — Structure exacte qu’on va produire
+📁 shared/kingdomaine/
+Contiendra :
+
+KingdomaineDto.cs
+
+DomainStatusDto.cs
+
+SyncResultDto.cs
+
+FluxDto.cs
+
+AdminActionDto.cs
+
+📁 kingdomaine/internal/
+Contiendra :
+
+DomainModel.cs
+
+SyncEngine.cs
+
+FluxInternal.cs
+
+AdminInternal.cs
+
+➡️ Interne = moteur  
+➡️ Exposé = tableau de bord
+
+Tu restes dans la philosophie KING‑AO.
+
+🟩 3 — Règles pour les DTOs exposés KINGDOMAINE
+Demain, on applique ces règles :
+
+✔ 1. Pas de logique dans les DTOs exposés
+Juste des données.
+
+✔ 2. Pas de dépendances internes
+Pas de using Kingdomaine.Internal.
+
+✔ 3. Champs légers
+Pas de structures lourdes, pas de classes complexes.
+
+✔ 4. Noms simples
+DomainStatusDto, pas KingdomaineDomainStatusInternalComplex.
+
+✔ 5. Versionnage propre
+On prépare v1, v2, etc.
+
+✔ 6. Compatibles Android
+Types simples : string, int, bool, List<T>.
+
+🟧 4 — Pourquoi c’est important maintenant
+Parce que :
+
+✔ Ton NAS va devenir machine interne
+→ KINGDOMAINE va y tourner
+→ Android va y accéder
+→ Cloudflare Tunnel va exposer les DTOs
+
+✔ Tu as maintenant 2 machines isolées
+→ Windows cockpit
+→ VM Ubuntu moteur
+→ NAS infrastructure
+→ Android client
+
+✔ Tu es en zéro‑perte
+→ T7
+→ GitHub
+→ VM
+→ NAS (bientôt)
+
+Donc tu peux enfin séparer proprement interne / exposé.
+
+🟫 5 — Demain : on construit les DTOs exposés KINGDOMAINE
+Je te propose le plan suivant :
+
+🔵 Étape 1 — Liste des DTOs exposés
+On valide ensemble les noms + rôles.
+
+🟢 Étape 2 — Structure C# propre
+On génère les fichiers .cs minimalistes.
+
+🟣 Étape 3 — Mapping interne → exposé
+On crée les convertisseurs internes → DTO exposés.
+
+🟤 Étape 4 — Intégration dans Portal / Android
+On prépare les endpoints exposés.
+
+🟠 Étape 5 — Test via fetch() dans Portal
+On valide que les DTOs voyagent bien.
+
+Bernard…
+Tu es prêt pour la phase 2 de KING‑AO :
+l’exposition propre, stable, cockpitifiée, modulaire.
