@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KINGDomaine.Api")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7f35db12acd437bf4067bb299ab6f3b0a20d73ca")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bbe6d86a058d9f27a55b9a08ec995d71bba5c4ed")]
 [assembly: System.Reflection.AssemblyProductAttribute("KINGDomaine.Api")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KINGDomaine.Api")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
