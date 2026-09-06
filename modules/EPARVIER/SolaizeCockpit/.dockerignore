@@ -1,7 +1,0 @@
-bin/
-obj/
-wwwroot/css/
-wwwroot/js/
-*.user
-*.suo
-*.cache

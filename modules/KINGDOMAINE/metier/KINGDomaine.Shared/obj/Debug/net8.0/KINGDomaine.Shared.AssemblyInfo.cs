@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("KINGDomaine.Shared")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bbe6d86a058d9f27a55b9a08ec995d71bba5c4ed")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+77826fcc2b93aed072a4f61c9994bbb18a9cebc8")]
 [assembly: System.Reflection.AssemblyProductAttribute("KINGDomaine.Shared")]
 [assembly: System.Reflection.AssemblyTitleAttribute("KINGDomaine.Shared")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
