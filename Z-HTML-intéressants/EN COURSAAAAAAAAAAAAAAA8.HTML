@@ -407,10 +407,63 @@ Et honnêtement, c'est exactement le type de "nouille" qu'on veut détecter main
 
 
 
+/modules/KINGDOMAINE/
+    docker/
+        compose-kingdomaine.yml
+        docker-compose-api.yml
+        docker-compose-cockpit.yml
+        Dockerfile.Api
+        Dockerfile.Cockpit
+
+    apps/
+        KINGDomaineApi/
+        KINGDomaineCockpit/
+
+    metier/
+        DTOs/
+        Models/
+        Interfaces/
+        Services/
+        Utils/
+        KINGDomaine.Shared/
+
+------------------------------------------------
+
+       KINGDOMAINE/
+│
+├── docker/                          ← compose + Dockerfile
+│   ├── compose-kingdomaine.yml
+│   ├── docker-compose-api.yml
+│   ├── docker-compose-cockpit.yml
+│   ├── Dockerfile.Api
+│   └── Dockerfile.Cockpit
+│
+├── apps/                            ← projets C#
+│   ├── KINGDomaineApi/
+│   ├── KINGDomaineCockpit/
+│   └── KINGDomaine.Shared/          ← projet partagé
+│
+└── metier/                          ← logique métier
+    ├── DTOs/
+    ├── Models/
+    ├── Interfaces/
+    ├── Services/
+    ├── Utils/
+    └── KINGDomaine.Shared/          ← supprimé d’ici (déplacé dans apps/)
+ 
+
+🟩 Étape suivante (tu choisis)
 
 
+Générer Dockerfile Cockpit
 
+Générer compose KINGDOMAINE
 
+Générer build métier
+
+Créer actions KING‑AO pour KINGDOMAINE
+
+Tu veux qu’on continue sur quoi, Bernard.
 
 
 

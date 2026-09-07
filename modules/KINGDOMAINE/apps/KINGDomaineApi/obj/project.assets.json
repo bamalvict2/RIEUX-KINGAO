@@ -8,19 +8,19 @@
     "net8.0": []
   },
   "packageFolders": {
-    "/root/.nuget/packages/": {}
+    "/home/bamalvict/.nuget/packages/": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "/opt/KING-AO/modules/KINGDOMAINE/KINGDomaineCockpit/KINGDomaineCockpit.csproj",
-      "projectName": "KINGDomaineCockpit",
-      "projectPath": "/opt/KING-AO/modules/KINGDOMAINE/KINGDomaineCockpit/KINGDomaineCockpit.csproj",
-      "packagesPath": "/root/.nuget/packages/",
-      "outputPath": "/opt/KING-AO/modules/KINGDOMAINE/KINGDomaineCockpit/obj/",
+      "projectUniqueName": "/opt/KING-AO/modules/KINGDOMAINE/apps/KINGDomaineApi/KINGDomaine.Api.csproj",
+      "projectName": "KINGDomaine.Api",
+      "projectPath": "/opt/KING-AO/modules/KINGDOMAINE/apps/KINGDomaineApi/KINGDomaine.Api.csproj",
+      "packagesPath": "/home/bamalvict/.nuget/packages/",
+      "outputPath": "/opt/KING-AO/modules/KINGDOMAINE/apps/KINGDomaineApi/obj/",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "/root/.nuget/NuGet/NuGet.Config"
+        "/home/bamalvict/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"

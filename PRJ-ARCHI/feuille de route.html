@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Feuille de route KING-AO</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-size: 1.9rem;
+      color: #38bdf8;
+      margin-bottom: 0.5rem;
+    }
+
+    p.subtitle {
+      color: #94a3b8;
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #020617;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    thead {
+      background: #1e293b;
+    }
+
+    th, td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #1f2937;
+      font-size: 0.9rem;
+    }
+
+    th {
+      text-align: left;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    tbody tr:nth-child(odd) {
+      background: #030712;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #020617;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .core { background: #0f766e; color: #ecfeff; }
+    .module { background: #1d4ed8; color: #eff6ff; }
+    .dev { background: #7c3aed; color: #f5f3ff; }
+    .network { background: #b91c1c; color: #fef2f2; }
+
+    .step {
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    .step strong {
+      color: #e5e7eb;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Feuille de route KING-AO</h1>
+  <p class="subtitle">Structure consolidée pour suivre l’avancement <strong>step by step</strong>.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Élément</th>
+        <th>Emplacement</th>
+        <th>Technologie</th>
+        <th>Rôle</th>
+        <th>Type</th>
+        <th>Étapes</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr>
+        <td>Portal</td>
+        <td>/opt/KING-AO/portal</td>
+        <td>C#</td>
+        <td>EXE maître, orchestrateur</td>
+        <td><span class="tag core">Core</span></td>
+        <td class="step"><strong>Step 1</strong> – stabiliser Portal (run, config, manifests)</td>
+      </tr>
+
+      <tr>
+        <td>KINGDOMAINE (metier)</td>
+        <td>/opt/KING-AO/modules/KINGDOMAINE/metier</td>
+        <td>C#</td>
+        <td>Logique métier interne</td>
+        <td><span class="tag module">Module runtime</span></td>
+        <td class="step"><strong>Step 2</strong> – consolider Services / Models / DTOs</td>
+      </tr>
+
+      <tr>
+        <td>KINGDomaine.Shared</td>
+        <td>/opt/KING-AO/modules/KINGDOMAINE/KINGDomaine.Shared</td>
+        <td>C#</td>
+        <td>Contrats exposés</td>
+        <td><span class="tag module">Module runtime</span></td>
+        <td class="step"><strong>Step 3</strong> – figer DTOs exposés vers API / Cockpit</td>
+      </tr>
+
+      <tr>
+        <td>KINGDomaineApi</td>
+        <td>/opt/KING-AO/modules/KINGDOMAINE/KINGDomaineApi</td>
+        <td>C#</td>
+
+
+
+
+        -----------------------------------------
+
+
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Feuille de route KING-AO</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+      margin: 0;
+      padding: 2rem;
+    }
+
+    h1 {
+      font-size: 1.9rem;
+      color: #38bdf8;
+      margin-bottom: 0.5rem;
+    }
+
+    p.subtitle {
+      color: #94a3b8;
+      margin-bottom: 2rem;
+      font-size: 0.95rem;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #020617;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    thead {
+      background: #1e293b;
+    }
+
+    th, td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid #1f2937;
+      font-size: 0.9rem;
+    }
+
+    th {
+      text-align: left;
+      font-weight: 600;
+      color: #e2e8f0;
+    }
+
+    tbody tr:nth-child(odd) {
+      background: #030712;
+    }
+
+    tbody tr:nth-child(even) {
+      background: #020617;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .core { background: #0f766e; color: #ecfeff; }
+    .module { background: #1d4ed8; color: #eff6ff; }
+    .dev { background: #7c3aed; color: #f5f3ff; }
+    .network { background: #b91c1c; color: #fef2f2; }
+
+    .step {
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    .step strong {
+      color: #e5e7eb;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Feuille de route KING-AO</h1>
+  <p class="subtitle">Structure consolidée pour suivre l’avancement <strong>step by step</strong>.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Élément</th>
+        <th>Emplacement</th>
+        <th>Technologie</th>
+        <th>Rôle</th>
+        <th>Type</th>
+        <th>Étapes</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <tr>
+        <td>Portal</td>
+        <td>/opt/KING-AO/portal</td>
+        <td>C#</td>
+        <td>EXE maître, orchestrateur</td>
+        <td><span class="tag core">Core</span></td>
+        <td class="step"><strong>Step 1</strong> – Construire PORTAL (cerveau admin)</td>
+      </tr>
+
+      <tr>
+        <td>EPARVIER (metier + API + Cockpit)</td>
+        <td>/home/Nana2/EPARVIER</td>
+        <td>C#</td>
+        <td>Métier API + cockpit (dev)</td>
+        <td><span class="tag dev">Dev workspace</span></td>
+        <td class="step"><strong>Step 2</strong> – Exécuter EPARVIER via Portal (métier C# pur)</td>
+      </tr>
+
+      <tr>
+        <td>EPARVIER (containerisation)</td>
+        <td>/home/Nana2/EPARVIER</td>
+        <td>Docker (optionnel)</td>
+        <td>Préparation future des images</td>
+        <td><span class="tag dev">Dev workspace</span></td>
+        <td class="step"><strong>Step 3</strong> – Préparer containerisation EPARVIER (si nécessaire)</td>
+      </tr>
+
+      <tr>
+        <td>KINGDOMAINE (metier)</td>
+        <td>/opt/KING-AO/modules/KINGDOMAINE/metier</td>
+        <td>C#</td>
+        <td>Logique métier interne</td>
+        <td><span class="tag module">Module runtime</span></td>
+        <td class="step"><strong>Step 4</strong> – Finaliser KINGDOMAINE (métier + API + Cockpit)</td>
+      </tr>
+
+      <tr>
+        <td>Nginx (KINGDOMAINE)</td>
+        <td>/opt/KING-AO/modules/KINGDOMAINE/docker</td>
+        <td>Docker + Nginx</td>
+        <td>Reverse proxy, exposition API/UI</td>
+        <td><span class="tag network">Réseau</span></td>
+        <td class="step"><strong>Step 5</strong> – Exposition finale via Nginx</td>
+      </tr>
+
+    </tbody>
+  </table>
+
+</body>
+</html>
+      

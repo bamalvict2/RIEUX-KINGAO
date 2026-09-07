@@ -1,0 +1,46 @@
+version: "3.9"
+
+services:
+
+  kingdomaine-api:
+    container_name: kingdomaine-api
+
+    build:
+      context: ..
+      dockerfile: docker/dockerfile.Api
+
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+
+    ports:
+      - "5002:5002"
+
+    restart: unless-stopped
+
+    networks:
+      - king-ao-net
+
+    volumes:
+      - ../data/uploads:/app/uploads
+
+  kingdomaine-cockpit:
+    container_name: kingdomaine-cockpit
+
+    build:
+      context: ..
+      dockerfile: docker/dockerfile.Cockpit
+
+    ports:
+      - "8082:80"
+
+    depends_on:
+      - kingdomaine-api
+
+    restart: unless-stopped
+
+    networks:
+      - king-ao-net
+
+networks:
+  king-ao-net:
+    external: true
